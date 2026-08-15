@@ -1,0 +1,5 @@
+node_modules/
+.next/
+.system_generated/
+*.tsbuildinfo
+.DS_Store

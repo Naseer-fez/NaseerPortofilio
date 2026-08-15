@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Desktop & Canvas */
+  --os-bg-desktop: #f5f5f7;
+  
+  /* Top Menu Bar */
+  --os-menubar-bg: rgba(255, 255, 255, 0.72);
+  --os-menubar-border: rgba(0, 0, 0, 0.08);
+  --os-menubar-text: #1d1d1f;
+  --os-menubar-hover: rgba(0, 0, 0, 0.06);
+
+  /* Window Chrome */
+  --os-window-header-bg: rgba(246, 246, 246, 0.88);
+  --os-window-header-border: rgba(0, 0, 0, 0.12);
+  --os-window-body-bg: rgba(255, 255, 255, 0.96);
+  --os-window-text: #1d1d1f;
+  --os-window-text-muted: #6e6e73;
+  --os-window-border: rgba(0, 0, 0, 0.14);
+
+  /* Dock (Base Reference / Light Theme) */
+  --os-dock-bg: rgba(255, 255, 255, 0.35);
+  --os-dock-border: rgba(255, 255, 255, 0.45);
+
+  /* Window Shadows */
+  --os-shadow-window-inactive: 0 10px 30px -5px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  --os-shadow-window-active: 0 25px 50px -12px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(0, 0, 0, 0.12), 0 0 35px rgba(0, 0, 0, 0.15);
+
+  /* Accent & Selection */
+  --os-accent-blue: #0071e3;
+  --os-selection-bg: rgba(0, 113, 227, 0.25);
+  --os-selection-border: rgba(0, 113, 227, 0.5);
+  --os-selection-text: inherit;
+}
+
+.dark {
+  /* Desktop & Canvas */
+  --os-bg-desktop: #000000;
+
+  /* Top Menu Bar */
+  --os-menubar-bg: rgba(26, 26, 26, 0.65);
+  --os-menubar-border: rgba(255, 255, 255, 0.12);
+  --os-menubar-text: #f5f5f7;
+  --os-menubar-hover: rgba(255, 255, 255, 0.12);
+
+  /* Window Chrome */
+  --os-window-header-bg: rgba(36, 36, 40, 0.85);
+  --os-window-header-border: rgba(255, 255, 255, 0.10);
+  --os-window-body-bg: rgba(24, 24, 28, 0.95);
+  --os-window-text: #f5f5f7;
+  --os-window-text-muted: #a1a1a6;
+  --os-window-border: rgba(255, 255, 255, 0.15);
+
+  /* Dock (Dark Theme) */
+  --os-dock-bg: rgba(20, 20, 20, 0.45);
+  --os-dock-border: rgba(255, 255, 255, 0.18);
+
+  /* Window Shadows */
+  --os-shadow-window-inactive: 0 10px 30px -5px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  --os-shadow-window-active: 0 25px 60px -10px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.2), 0 0 40px rgba(0, 0, 0, 0.4);
+
+  /* Accent & Selection */
+  --os-accent-blue: #2997ff;
+  --os-selection-bg: rgba(41, 151, 255, 0.35);
+  --os-selection-border: rgba(41, 151, 255, 0.6);
+  --os-selection-text: #ffffff;
+}
+
+/* Base OS Viewport Reset & Typography Locks */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--os-bg-desktop);
+  color: var(--os-window-text);
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
+
+/* Discreet macOS Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.3);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(128, 128, 128, 0.5);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--os-selection-bg);
+  color: var(--os-selection-text);
+}
+
+/* Kinetic Cursor Hide Rule for Fine Pointers */
+@media (pointer: fine) {
+  body.custom-cursor-active,
+  body.custom-cursor-active * {
+    cursor: none !important;
+  }
+}
