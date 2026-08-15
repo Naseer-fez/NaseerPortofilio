@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect, useRef } from 'react';
 import { CursorPrecisionDot } from './CursorPrecisionDot';
 import { CursorAuraRing } from './CursorAuraRing';

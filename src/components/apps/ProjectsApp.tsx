@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useMemo } from 'react';
 import { PROJECTS, ProjectItem } from '@/data/projects';
 import { GlobalAudioManager } from '@/lib/audio/GlobalAudioManager';

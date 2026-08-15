@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useRef, useEffect } from 'react';
 import { GlobalAudioManager } from '@/lib/audio/GlobalAudioManager';
 import { useMusicStore } from '@/hooks/useMusicStore';

@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { useMusicStore } from '@/hooks/useMusicStore';
 import { VinylDiscAssembly } from './VinylDiscAssembly';

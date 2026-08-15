@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { APPS } from '@/lib/constants/apps';
 import { useOSStore } from '@/hooks/useOSStore';

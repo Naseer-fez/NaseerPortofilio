@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect, useRef } from 'react';
 import { useOSStore } from '@/hooks/useOSStore';
 import { APPS } from '@/lib/constants/apps';

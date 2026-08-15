@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 export const TerminalIcon: React.FC<{ className?: string; size?: number }> = ({

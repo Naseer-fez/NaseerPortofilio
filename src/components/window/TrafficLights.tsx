@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { useOSStore } from '@/hooks/useOSStore';
 import { WindowId } from '@/types/os';

@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useRef, useEffect } from 'react';
 import { SplitText } from './SplitText';
 import { solveEulerStep, calculateGaussianFalloff, SpringState } from '@/lib/physics/eulerSolver';
@@ -5,6 +7,7 @@ import { solveEulerStep, calculateGaussianFalloff, SpringState } from '@/lib/phy
 export interface KineticBrandTitleProps {
   text?: string;
   className?: string;
+  textClassName?: string;
   influenceRadius?: number;
   maxDisplacement?: number;
 }
@@ -12,6 +15,7 @@ export interface KineticBrandTitleProps {
 export function KineticBrandTitle({
   text = 'Naseer.dev',
   className = '',
+  textClassName = 'text-3xl sm:text-4xl md:text-5xl',
   influenceRadius = 240,
   maxDisplacement = 45,
 }: KineticBrandTitleProps) {
@@ -148,14 +152,15 @@ export function KineticBrandTitle({
       ref={containerRef}
       data-testid="lock-screen-brand"
       data-cursor="magnetic"
-      className={`inline-block select-none cursor-pointer py-4 ${className}`}
+      className={`inline-block select-none cursor-pointer py-1 whitespace-nowrap ${className}`}
     >
       <span
-        className="font-serif italic font-light tracking-wide text-6xl sm:text-7xl md:text-8xl text-white drop-shadow-[0_10px_25px_rgba(0,0,0,0.7)]"
+        className={`font-serif italic font-light tracking-wide text-white drop-shadow-[0_8px_20px_rgba(0,0,0,0.6)] whitespace-nowrap ${textClassName}`}
         style={{
           fontFamily: 'Georgia, Cambria, "Times New Roman", Times, serif',
           display: 'inline-flex',
           gap: '0.05em',
+          whiteSpace: 'nowrap',
         }}
       >
         <SplitText text={text} />

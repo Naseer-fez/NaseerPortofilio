@@ -1,5 +1,8 @@
 import { SoundSynthesizer, SoundEffectType } from './SoundSynthesizer';
 
+export type TimeUpdateCallback = (currentTime: number, duration: number) => void;
+export type TrackEndedCallback = () => void;
+
 export class GlobalAudioManager {
   private static instance: GlobalAudioManager | null = null;
 
@@ -12,11 +15,27 @@ export class GlobalAudioManager {
   private mediaSourceNode: MediaElementAudioSourceNode | null = null;
   private synthesizer: SoundSynthesizer | null = null;
 
-  private currentMusicVolume: number = 1.0;
+  private currentMusicVolume: number = 0.8;
   private isDucked: boolean = false;
   private duckRestoreTimeout: any = null;
 
-  private constructor() {}
+  private onTimeUpdateCallback: TimeUpdateCallback | null = null;
+  private onTrackEndedCallback: TrackEndedCallback | null = null;
+  private isInitialized: boolean = false;
+
+  private constructor() {
+    if (typeof window !== 'undefined') {
+      const unlockAudio = () => {
+        this.init();
+        window.removeEventListener('pointerdown', unlockAudio);
+        window.removeEventListener('keydown', unlockAudio);
+        window.removeEventListener('touchstart', unlockAudio);
+      };
+      window.addEventListener('pointerdown', unlockAudio, { passive: true });
+      window.addEventListener('keydown', unlockAudio, { passive: true });
+      window.addEventListener('touchstart', unlockAudio, { passive: true });
+    }
+  }
 
   public static getInstance(): GlobalAudioManager {
     if (!GlobalAudioManager.instance) {
@@ -26,9 +45,7 @@ export class GlobalAudioManager {
   }
 
   public async init(): Promise<void> {
-    if (this.context && this.context.state === 'running') {
-      return;
-    }
+    if (typeof window === 'undefined') return;
 
     try {
       const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
@@ -48,6 +65,7 @@ export class GlobalAudioManager {
 
           this.analyserNode = this.context.createAnalyser();
           this.analyserNode.fftSize = 64;
+          this.analyserNode.smoothingTimeConstant = 0.8;
           this.analyserNode.connect(this.masterGainNode);
 
           this.musicGainNode = this.context.createGain();
@@ -62,8 +80,26 @@ export class GlobalAudioManager {
         }
       }
 
-      if (!this.audioElement && typeof window !== 'undefined') {
+      if (!this.audioElement) {
         this.audioElement = new window.Audio();
+        this.audioElement.preload = 'auto';
+        this.audioElement.crossOrigin = 'anonymous';
+
+        this.audioElement.addEventListener('timeupdate', () => {
+          if (this.onTimeUpdateCallback && this.audioElement) {
+            this.onTimeUpdateCallback(
+              this.audioElement.currentTime,
+              this.audioElement.duration || 0
+            );
+          }
+        });
+
+        this.audioElement.addEventListener('ended', () => {
+          if (this.onTrackEndedCallback) {
+            this.onTrackEndedCallback();
+          }
+        });
+
         if (this.context && this.musicGainNode && !this.mediaSourceNode) {
           try {
             this.mediaSourceNode = this.context.createMediaElementSource(this.audioElement);
@@ -73,9 +109,18 @@ export class GlobalAudioManager {
           }
         }
       }
+      this.isInitialized = true;
     } catch {
       // AudioContext init error handling
     }
+  }
+
+  public setOnTimeUpdate(callback: TimeUpdateCallback | null): void {
+    this.onTimeUpdateCallback = callback;
+  }
+
+  public setOnTrackEnded(callback: TrackEndedCallback | null): void {
+    this.onTrackEndedCallback = callback;
   }
 
   public getAnalyser(): AnalyserNode | null {
@@ -84,6 +129,9 @@ export class GlobalAudioManager {
 
   public setMusicVolume(volume: number): void {
     this.currentMusicVolume = Math.max(0, Math.min(1, volume));
+    if (this.audioElement) {
+      this.audioElement.volume = this.currentMusicVolume;
+    }
     if (this.musicGainNode && this.context && !this.isDucked) {
       this.musicGainNode.gain.setValueAtTime(this.currentMusicVolume, this.context.currentTime);
     }

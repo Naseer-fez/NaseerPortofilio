@@ -44,6 +44,26 @@ export const useMusicStore = create<MusicState>((set, get) => ({
     const audioManager = GlobalAudioManager.getInstance();
     await audioManager.init();
 
+    audioManager.setOnTimeUpdate((currentTime, duration) => {
+      set({
+        currentTime,
+        duration: duration > 0 ? duration : get().duration,
+      });
+    });
+
+    audioManager.setOnTrackEnded(() => {
+      const curState = get();
+      if (curState.repeatMode === 'one') {
+        const am = GlobalAudioManager.getInstance();
+        if (am.audioElement) {
+          am.audioElement.currentTime = 0;
+          am.audioElement.play();
+        }
+      } else {
+        curState.nextTrack();
+      }
+    });
+
     const track = state.playlist[state.currentIndex];
     if (audioManager.audioElement && track) {
       if (!audioManager.audioElement.src || !audioManager.audioElement.src.includes(track.src)) {

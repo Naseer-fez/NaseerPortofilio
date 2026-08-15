@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useRef, useEffect } from 'react';
 import { useOSStore } from '@/hooks/useOSStore';
 import { SplitText } from './SplitText';

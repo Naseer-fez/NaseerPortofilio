@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { PROFILE_DATA } from '@/data/profile';
 import { useOSStore } from '@/hooks/useOSStore';

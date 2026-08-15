@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { GlobalAudioManager } from '@/lib/audio/GlobalAudioManager';
 import { PROFILE_DATA } from '@/data/profile';

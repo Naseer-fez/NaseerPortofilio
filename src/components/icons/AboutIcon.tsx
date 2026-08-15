@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 export const AboutIcon: React.FC<{ className?: string; size?: number }> = ({

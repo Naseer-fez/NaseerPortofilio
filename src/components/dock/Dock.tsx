@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useRef } from 'react';
 import { APPS } from '@/lib/constants/apps';
 import { DockItem } from './DockItem';

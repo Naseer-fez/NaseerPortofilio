@@ -76,6 +76,7 @@ export const TopMenuBar: React.FC = () => {
   const setDesktopMode = useOSStore((state) => state.setDesktopMode);
   const theme = useOSStore((state) => state.theme);
   const toggleTheme = useOSStore((state) => state.toggleTheme);
+  const lock = useOSStore((state) => state.lock);
 
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -181,6 +182,19 @@ export const TopMenuBar: React.FC = () => {
                 <span>Sleep (Ambient Mode)</span>
                 <span className="text-xs opacity-60">⌘⌥M</span>
               </button>
+              <button
+                type="button"
+                data-testid="apple-menu-lock-screen"
+                onClick={() => {
+                  setOpenMenu(null);
+                  if (lock) lock();
+                }}
+                className="w-full text-left px-3 py-1 hover:bg-blue-600 hover:text-white flex items-center justify-between"
+              >
+                <span>Lock Screen</span>
+                <span className="text-xs opacity-60">⌘⌃Q</span>
+              </button>
+              <div className="h-px bg-black/10 dark:bg-white/10 my-1" />
               <button
                 type="button"
                 onClick={() => {

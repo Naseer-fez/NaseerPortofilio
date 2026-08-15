@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useMemo } from 'react';
 import { VFS_FOLDERS, VFS_ITEMS, VFSItem } from '@/data/vfs';
 import { useOSStore } from '@/hooks/useOSStore';

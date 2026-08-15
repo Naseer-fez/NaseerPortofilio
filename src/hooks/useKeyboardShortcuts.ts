@@ -113,6 +113,16 @@ export function useKeyboardShortcuts() {
         state.openWindow('terminal');
         return;
       }
+
+      // 8. Cmd/Ctrl + Ctrl/Alt + Q or Cmd/Ctrl + Alt + L: Lock Screen
+      if (
+        (isCmdOrCtrl && isAltOrOption && (key === 'l' || code === 'KeyL' || key === 'q' || code === 'KeyQ')) ||
+        (e.metaKey && e.ctrlKey && (key === 'q' || code === 'KeyQ'))
+      ) {
+        e.preventDefault();
+        state.lock();
+        return;
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);

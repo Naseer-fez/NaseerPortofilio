@@ -36,13 +36,24 @@ describe('Lock Screen Component', () => {
     expect(date.textContent).toMatch(/^[A-Za-z]+,\s+[A-Za-z]+\s+\d{1,2}$/);
   });
 
-  it('renders "Welcome to" header and "Irfan.dev" script brand title', () => {
+  it('renders "Welcome to" header and "Naseer.dev" brand title and Enter Desktop button', () => {
     render(<LockScreen />);
     expect(screen.getByText(/welcome to/i)).toBeInTheDocument();
 
     const brand = screen.getByTestId('lock-screen-brand');
     expect(brand).toBeInTheDocument();
-    expect(brand.textContent).toContain('Irfan.dev');
+    expect(brand.textContent).toContain('Naseer.dev');
+
+    const unlockBtn = screen.getByTestId('lock-screen-unlock-btn');
+    expect(unlockBtn).toBeInTheDocument();
+  });
+
+  it('dismisses lock screen on Enter Desktop button click', () => {
+    render(<LockScreen />);
+    const unlockBtn = screen.getByTestId('lock-screen-unlock-btn');
+
+    fireEvent.click(unlockBtn);
+    expect(useOSStore.getState().isLocked).toBe(false);
   });
 
   it('updates live clock every second', () => {
