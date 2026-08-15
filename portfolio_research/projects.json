@@ -1,0 +1,372 @@
+{
+  "projects": [
+    {
+      "title": "NasCloud",
+      "category": "CLOUD",
+      "featured": true,
+      "description": "Self-hosted cloud storage platform with streaming I/O, zero-overhead archive generator, and outbound Cloudflare tunneling.",
+      "technologies": [
+        "Python",
+        "Flask",
+        "SQLAlchemy",
+        "Cloudflare Tunnel",
+        "+3"
+      ],
+      "architecture": "Streaming upload and download pipelines with generator-based folder-to-ZIP compression avoiding intermediate disk writes, zero-configuration outbound tunneling without NAT traversal, and cryptographically signed expiration URLs.",
+      "metrics": [
+        "0 Temp Disk Writes",
+        "Zero-Config Tunneling",
+        "Cryptographic Signed URLs"
+      ],
+      "githubUrl": "https://github.com/Naseer-fez/PersonalDrive",
+      "demoUrl": "https://github.com/Naseer-fez/PersonalDrive"
+    },
+    {
+      "title": "apirlpy (API Rate Limiter)",
+      "category": "SYSTEMS",
+      "featured": true,
+      "description": "High-performance pluggable request-throttling engine with interchangeable memory and SQL persistence layers published on PyPI.",
+      "technologies": [
+        "Python",
+        "SQLite",
+        "PostgreSQL",
+        "Threading",
+        "+2"
+      ],
+      "architecture": "Pluggable rate limiting architecture supporting volatile in-memory operation for latency-critical paths and durable SQL storage across restarts, eliminating race conditions under concurrency via reentrant locking with snapshot isolation.",
+      "metrics": [
+        "100,000 Tested Clients",
+        "64-Thread Workload",
+        "PyPI Published Package"
+      ],
+      "githubUrl": "https://github.com/Naseer-fez/Api_RateLimiter",
+      "demoUrl": "https://pypi.org/project/apirlpy/"
+    },
+    {
+      "title": "TapNap Ephemeral Sharing",
+      "category": "FULL STACK",
+      "featured": true,
+      "description": "Code-based ephemeral link and data sharing platform with cryptographic OTP verification and automated TTL lifecycle purging.",
+      "technologies": [
+        "Python",
+        "Flask",
+        "Flask-JWT-Extended",
+        "SQLAlchemy",
+        "+2"
+      ],
+      "architecture": "Ephemeral data lifecycle management with request-time validation and automated background purging, secured by cryptographically random one-time verification codes and JWT authentication.",
+      "metrics": [
+        "500 Concurrent Connections Tested",
+        "Cryptographic TTL Lifecycle",
+        "OTP-Verified Authentication"
+      ],
+      "githubUrl": "https://github.com/Naseer-fez/TapNap-Backend",
+      "demoUrl": "https://github.com/Naseer-fez/TapNap-Backend"
+    },
+    {
+      "title": "macOS Portfolio OS",
+      "category": "CREATIVE",
+      "featured": true,
+      "description": "Interactive web desktop operating system built with semi-implicit Euler physics, parabolic dock magnification, and procedural Web Audio.",
+      "technologies": [
+        "Next.js 14",
+        "TypeScript",
+        "Tailwind CSS",
+        "Framer Motion",
+        "+2"
+      ],
+      "architecture": "Next.js 14 App Router desktop shell with custom semi-implicit Euler ODE solver for kinetic typography, Luca Cosine Bell parabolic dock spring physics, and procedural Web Audio synthesizer with auto-ducking.",
+      "metrics": [
+        "60 FPS ODE Physics Loop",
+        "Procedural Web Audio Engine",
+        "28 Test Suites Passing"
+      ],
+      "githubUrl": "https://github.com/Naseer-fez/NaseerPortofilio",
+      "demoUrl": "https://github.com/Naseer-fez/NaseerPortofilio"
+    },
+    {
+      "title": "Project Jarvis AI Desktop OS",
+      "category": "AI / ML",
+      "featured": true,
+      "description": "Modular autonomous voice assistant and desktop AI OS integrating speech recognition, tool execution, and multi-agent workflows.",
+      "technologies": [
+        "Python",
+        "SpeechRecognition",
+        "Pyttsx3",
+        "PyAudio",
+        "+2"
+      ],
+      "architecture": "Decoupled multi-agent architecture with speech-to-text audio ingestion, regex-based intent parsing, automated OS system control pipelines, and real-time voice feedback.",
+      "metrics": [
+        "Voice Command Event Loop",
+        "Multi-Tool Automation Pipeline",
+        "Modular Agent Architecture"
+      ],
+      "githubUrl": "https://github.com/Naseer-fez/Project_Jarvis",
+      "demoUrl": "https://github.com/Naseer-fez/Project_Jarvis"
+    },
+    {
+      "title": "Credit Score Predictor",
+      "category": "AI / ML",
+      "featured": false,
+      "description": "Machine learning scoring system evaluating creditworthiness using Random Forest regression, fuzzy string matching, and feature engineering.",
+      "technologies": [
+        "Python",
+        "Scikit-Learn",
+        "RapidFuzz",
+        "Pandas",
+        "+1"
+      ],
+      "architecture": "Ensemble Random Forest regression pipeline with RapidFuzz string normalization for messy categorical inputs and financial feature engineering including DTI and utilization ratios.",
+      "metrics": [
+        "Random Forest Regressor",
+        "RapidFuzz Categorical Normalization",
+        "Financial Feature Engineering"
+      ],
+      "githubUrl": "https://github.com/Naseer-fez/Credit_Score_Predictor",
+      "demoUrl": "https://github.com/Naseer-fez/Credit_Score_Predictor"
+    },
+    {
+      "title": "Real Estate Pipeline",
+      "category": "AI / ML",
+      "featured": false,
+      "description": "End-to-end property valuation pipeline featuring a custom closed-form Ridge Regression solver implemented from scratch via matrix inversion.",
+      "technologies": [
+        "Python",
+        "NumPy",
+        "Linear Algebra",
+        "Statistical Modeling",
+        "+1"
+      ],
+      "architecture": "Closed-form regularized Ridge Regression solver (X^T X + lambda I)^(-1) X^T y implemented directly in NumPy without high-level ML dependencies, handling 15+ real-estate features with custom imputation.",
+      "metrics": [
+        "Closed-Form Matrix Inversion",
+        "15+ Engineered Features",
+        "Zero High-Level ML Dependencies"
+      ],
+      "githubUrl": "https://github.com/Naseer-fez/Real-Estate-Pipeline",
+      "demoUrl": "https://github.com/Naseer-fez/Real-Estate-Pipeline"
+    },
+    {
+      "title": "Spotify Music Recommendation Engine",
+      "category": "AI / ML",
+      "featured": false,
+      "description": "Content-based music recommendation engine matching user preference vectors against Spotify audio attributes using multi-dimensional scoring.",
+      "technologies": [
+        "Python",
+        "Pandas",
+        "Scikit-Learn",
+        "NumPy"
+      ],
+      "architecture": "Multi-dimensional attribute scoring using danceability, energy, acousticness, and loudness with recursive best-fit track searching under release era constraints.",
+      "metrics": [
+        "Multi-Dimensional Audio Scoring",
+        "Content-Based Filtering",
+        "Era-Constrained Best-Fit Search"
+      ],
+      "githubUrl": "https://github.com/Naseer-fez/music_rec",
+      "demoUrl": "https://github.com/Naseer-fez/music_rec"
+    },
+    {
+      "title": "Taskbar Engine",
+      "category": "SYSTEMS",
+      "featured": false,
+      "description": "Native Windows shell enhancement and taskbar customization engine with Win32 message hooks, CMake presets, and CI pipelines.",
+      "technologies": [
+        "C++",
+        "Win32 API",
+        "CMake",
+        "Azure Pipelines",
+        "+1"
+      ],
+      "architecture": "Low-level Win32 window message hooks, multi-threaded event dispatching, modular plugin SDK, and automated cross-configuration CMake build presets.",
+      "metrics": [
+        "Win32 Window Message Hooks",
+        "CMake Multi-Preset Build",
+        "Azure Pipelines CI/CD"
+      ],
+      "githubUrl": "https://github.com/Naseer-fez/Taskbarengine",
+      "demoUrl": "https://github.com/Naseer-fez/Taskbarengine"
+    },
+    {
+      "title": "LiveWallpaper Engine",
+      "category": "CREATIVE",
+      "featured": false,
+      "description": "Win32 animated desktop wallpaper engine hijacking the WorkerW window hierarchy for interactive background rendering.",
+      "technologies": [
+        "C++",
+        "Win32 API",
+        "DirectX",
+        "GDI+"
+      ],
+      "architecture": "Direct WorkerW desktop handle hijacking, multi-monitor coordinate virtualization, and low-overhead DirectX rendering loops.",
+      "metrics": [
+        "WorkerW Window Hijacking",
+        "DirectX Hardware Acceleration",
+        "Multi-Monitor Coordinate Virtualization"
+      ],
+      "githubUrl": "https://github.com/Naseer-fez/Livewallpaper",
+      "demoUrl": "https://github.com/Naseer-fez/Livewallpaper"
+    },
+    {
+      "title": "Dates C-Extension Engine",
+      "category": "SYSTEMS",
+      "featured": false,
+      "description": "High-performance date and time manipulation library interfacing Python with a modular C core via Ctypes.",
+      "technologies": [
+        "C",
+        "Python",
+        "Ctypes",
+        "Memory Management"
+      ],
+      "architecture": "Modular C architecture with strict separation of concerns, providing direct memory allocation and zero-overhead date arithmetic for Python.",
+      "metrics": [
+        "Ctypes Foreign Function Interface",
+        "Zero-Overhead Memory Arithmetic",
+        "Modular C Core Architecture"
+      ],
+      "githubUrl": "https://github.com/Naseer-fez/Dates",
+      "demoUrl": "https://github.com/Naseer-fez/Dates"
+    },
+    {
+      "title": "Secure Password Generator",
+      "category": "SYSTEMS",
+      "featured": false,
+      "description": "High-entropy password generation suite featuring dual Python CLI and compiled C binary engines with clipboard integration.",
+      "technologies": [
+        "C",
+        "Python",
+        "NumPy",
+        "Clipboard API"
+      ],
+      "architecture": "Cryptographically randomized index selection avoiding character repetition patterns, wrapped in a memory-safe C buffer pipeline and Python CLI.",
+      "metrics": [
+        "Dual C/Python Engine",
+        "High-Entropy Randomization",
+        "Native Clipboard Integration"
+      ],
+      "githubUrl": "https://github.com/Naseer-fez/Pass_Gen",
+      "demoUrl": "https://github.com/Naseer-fez/Pass_Gen"
+    },
+    {
+      "title": "Phone Contact Manager",
+      "category": "SYSTEMS",
+      "featured": false,
+      "description": "In-memory contact management system in pure C utilizing Doubly Linked Lists and pointer-based dynamic allocation.",
+      "technologies": [
+        "C",
+        "Data Structures",
+        "Pointers",
+        "Doubly Linked Lists"
+      ],
+      "architecture": "Dynamic bidirectional node chaining with manual memory allocation and deallocation, input sanitization, and structured terminal reporting.",
+      "metrics": [
+        "Doubly Linked List Chaining",
+        "Manual Memory Allocation",
+        "Pointer-Safe Traversal"
+      ],
+      "githubUrl": "https://github.com/Naseer-fez/Phone-Contract",
+      "demoUrl": "https://github.com/Naseer-fez/Phone-Contract"
+    },
+    {
+      "title": "DSA Journey",
+      "category": "SYSTEMS",
+      "featured": false,
+      "description": "Algorithmic problem solving and data structures repository implementing optimized competitive programming solutions in C++.",
+      "technologies": [
+        "C++",
+        "Data Structures",
+        "Algorithms",
+        "MySQL"
+      ],
+      "architecture": "Optimized space-time complexity implementations of graph algorithms, dynamic programming, binary search, and SQL optimization patterns.",
+      "metrics": [
+        "Graph & Tree Traversals",
+        "Binary Search Optimization",
+        "Dynamic Programming"
+      ],
+      "githubUrl": "https://github.com/Naseer-fez/DSA-Journey",
+      "demoUrl": "https://github.com/Naseer-fez/DSA-Journey"
+    },
+    {
+      "title": "Student Records System",
+      "category": "DATABASE",
+      "featured": false,
+      "description": "Console-based academic record management engine in C supporting full CRUD operations, dynamic Linked Lists, and file persistence.",
+      "technologies": [
+        "C",
+        "File I/O",
+        "Linked Lists",
+        "CRUD Architecture"
+      ],
+      "architecture": "Dynamic memory-linked node structure paired with formatted flat-file binary persistence, search indexers, and batch deletion safety.",
+      "metrics": [
+        "Dynamic Linked List CRUD",
+        "Structured Flat-File Storage",
+        "Terminal Menu UI"
+      ],
+      "githubUrl": "https://github.com/Naseer-fez/Student_Records",
+      "demoUrl": "https://github.com/Naseer-fez/Student_Records"
+    },
+    {
+      "title": "Hospital Ward Management",
+      "category": "DATABASE",
+      "featured": false,
+      "description": "Hospital bed allocation and occupancy management system in C featuring 2D visual ward matrices and admission analytics.",
+      "technologies": [
+        "C",
+        "2D Arrays",
+        "Systems Programming",
+        "State Management"
+      ],
+      "architecture": "2D matrix bed tracking with real-time occupancy state toggling, patient metadata structs, and statistical ward occupancy reporting.",
+      "metrics": [
+        "100+ Bed Capacity Tracking",
+        "2D Console Grid Visualization",
+        "Occupancy State Analytics"
+      ],
+      "githubUrl": "https://github.com/Naseer-fez/Hosplital_Managment",
+      "demoUrl": "https://github.com/Naseer-fez/Hosplital_Managment"
+    },
+    {
+      "title": "Fitness Tracker CLI & Analytics",
+      "category": "DATABASE",
+      "featured": false,
+      "description": "Structured workout logging and volume progression tracking engine with formatted terminal metrics and JSON/SQLite persistence.",
+      "technologies": [
+        "Python",
+        "SQLite",
+        "CLI",
+        "Data Analysis"
+      ],
+      "architecture": "Relational workout schemas capturing sets, reps, weight, volume calculations over time, and automated summary reporting.",
+      "metrics": [
+        "Volume Progression Calculations",
+        "Structured Workout Schemas",
+        "Formatted Terminal Analytics"
+      ],
+      "githubUrl": "https://github.com/Naseer-fez/Fitness_Tracker",
+      "demoUrl": "https://github.com/Naseer-fez/Fitness_Tracker"
+    },
+    {
+      "title": "My-Codes Multi-Repo Orchestrator",
+      "category": "DEVOPS",
+      "featured": false,
+      "description": "Automated Git submodule synchronization harness managing 16 independent repositories with atomic commits and dynamic documentation.",
+      "technologies": [
+        "PowerShell",
+        "Git",
+        "CI/CD Automation",
+        "Shell Scripting"
+      ],
+      "architecture": "Automated submodule synchronization script (sync_repos.ps1) parsing repository URL manifests, performing atomic submodule additions/commits, and dynamically generating markdown catalog tables.",
+      "metrics": [
+        "16 Submodule Synchronization",
+        "Atomic Git Commit Engine",
+        "Automated Documentation Pipeline"
+      ],
+      "githubUrl": "https://github.com/Naseer-fez/My-Codes",
+      "demoUrl": "https://github.com/Naseer-fez/My-Codes"
+    }
+  ]
+}

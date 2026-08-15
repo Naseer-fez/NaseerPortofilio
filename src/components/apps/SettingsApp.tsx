@@ -443,8 +443,12 @@ export function SettingsApp() {
         {activeSection === 'about' && (
           <div className="space-y-5 max-w-xl">
             <div className="flex items-center space-x-4 p-4 rounded-2xl bg-white/[0.03] border border-white/10">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-2xl font-black text-white shadow-xl">
-                
+              <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center p-2 shadow-xl overflow-hidden">
+                <img
+                  src="/name.png"
+                  alt="Naseer Logo"
+                  className="w-full h-auto object-contain select-none"
+                />
               </div>
               <div>
                 <h3 className="text-lg font-bold text-white">macOS Sonoma Portfolio OS</h3>

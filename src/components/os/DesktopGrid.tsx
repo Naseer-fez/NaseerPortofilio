@@ -4,10 +4,14 @@ import React, { useEffect, useState } from 'react';
 import { useOSStore } from '@/hooks/useOSStore';
 import { DEFAULT_APPS } from '@/lib/constants/apps';
 import { DesktopIcon } from './DesktopIcon';
+import { Position } from '@/types/os';
 
 export const DesktopGrid: React.FC = () => {
   const [selectedIconId, setSelectedIconId] = useState<string | null>(null);
+  const [hoveredAppId, setHoveredAppId] = useState<string | null>(null);
   const selectedIconIds = useOSStore((state) => state.selectedIconIds);
+  const desktopIconPositions = useOSStore((state) => state.desktopIconPositions) || {};
+  const updateIconPosition = useOSStore((state) => state.updateIconPosition);
   const openWindow = useOSStore((state) => state.openWindow);
   const selectIcon = useOSStore((state) => state.selectIcon);
   const clearSelectedIcons = useOSStore((state) => state.clearSelectedIcons);
@@ -21,30 +25,55 @@ export const DesktopGrid: React.FC = () => {
     return () => window.removeEventListener('os:deselect-icons', handleDeselect);
   }, [clearSelectedIcons]);
 
+  // Compute default grid position if not custom positioned
+  const getDefaultPosition = (index: number): Position => {
+    const col = Math.floor(index / 5);
+    const row = index % 5;
+    return {
+      x: 20 + col * 104,
+      y: 20 + row * 118,
+    };
+  };
+
   return (
     <div
       data-testid="desktop-grid"
       style={{ gridAutoFlow: 'column' }}
-      className="hidden md:grid grid-flow-col auto-cols-[92px] grid-rows-[repeat(auto-fill,104px)] gap-y-3 gap-x-2 p-4 h-full w-full pointer-events-none overflow-hidden"
+      onPointerLeave={() => setHoveredAppId(null)}
+      className="hidden md:block absolute inset-0 h-full w-full pointer-events-none overflow-hidden"
     >
-      {DEFAULT_APPS.map((app) => (
-        <DesktopIcon
-          key={app.id}
-          app={app}
-          isSelected={
-            selectedIconIds?.includes(app.id) || selectedIconId === app.id
-          }
-          onSelect={(id) => {
-            setSelectedIconId(id);
-            if (selectIcon) selectIcon(id);
-          }}
-          onOpen={(id) => {
-            setSelectedIconId(null);
-            if (clearSelectedIcons) clearSelectedIcons();
-            if (openWindow) openWindow(id);
-          }}
-        />
-      ))}
+      {DEFAULT_APPS.map((app, index) => {
+        const isThisHovered = hoveredAppId === app.id;
+        const isAnotherHovered = hoveredAppId !== null && !isThisHovered;
+        const currentPos = desktopIconPositions[app.id] || getDefaultPosition(index);
+
+        return (
+          <DesktopIcon
+            key={app.id}
+            app={app}
+            index={index}
+            position={currentPos}
+            onPositionChange={(pos) => {
+              if (updateIconPosition) updateIconPosition(app.id, pos);
+            }}
+            isHovered={isThisHovered}
+            isOtherHovered={isAnotherHovered}
+            onHoverChange={(hovered) => setHoveredAppId(hovered ? app.id : null)}
+            isSelected={
+              selectedIconIds?.includes(app.id) || selectedIconId === app.id
+            }
+            onSelect={(id) => {
+              setSelectedIconId(id);
+              if (selectIcon) selectIcon(id);
+            }}
+            onOpen={(id) => {
+              setSelectedIconId(id);
+              if (selectIcon) selectIcon(id);
+              if (openWindow) openWindow(id);
+            }}
+          />
+        );
+      })}
     </div>
   );
 };

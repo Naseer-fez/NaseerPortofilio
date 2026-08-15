@@ -23,11 +23,11 @@ describe('DesktopGrid Component', () => {
     });
   });
 
-  it('should open window when double clicked from grid', () => {
+  it('should open window when clicked from grid', () => {
     render(<DesktopGrid />);
     const terminalIcon = screen.getByTestId('desktop-icon-terminal');
 
-    fireEvent.doubleClick(terminalIcon);
+    fireEvent.click(terminalIcon);
     expect(useOSStore.getState().windows.terminal.isOpen).toBe(true);
     expect(useOSStore.getState().activeWindowId).toBe('terminal');
   });

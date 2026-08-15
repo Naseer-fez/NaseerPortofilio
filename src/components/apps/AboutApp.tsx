@@ -37,16 +37,16 @@ export function AboutApp() {
       setDownloading(false);
       // Trigger a synthetic download
       const blob = new Blob([
-        `ALEX RIVERA — PRINCIPAL SOFTWARE ENGINEER & SYSTEMS ARCHITECT\n\n` +
+        `${PROFILE_DATA.name.toUpperCase()} — ${PROFILE_DATA.title.toUpperCase()}\n\n` +
         `Location: ${PROFILE_DATA.location}\nEmail: ${PROFILE_DATA.email}\nGitHub: ${PROFILE_DATA.github}\n\n` +
         `SUMMARY:\n${PROFILE_DATA.bio.join('\n\n')}\n\n` +
-        `EXPERIENCE:\n` +
+        `EXPERIENCE & LEADERSHIP:\n` +
         PROFILE_DATA.timeline.map(t => `${t.role} | ${t.company} (${t.year})\n${t.bullets.map(b => `  - ${b}`).join('\n')}`).join('\n\n')
       ], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'Alex_Rivera_Resume_2026.txt';
+      a.download = 'Shaik_Naseer_John_Ahmed_Resume.txt';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -141,10 +141,12 @@ export function AboutApp() {
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 p-5 rounded-2xl bg-white/[0.03] border border-white/10 shadow-lg">
               {/* Avatar with radiant glow */}
               <div className="relative">
-                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl p-0.5 bg-gradient-to-tr from-blue-500 via-indigo-500 to-purple-500 shadow-xl">
-                  <div className="w-full h-full rounded-2xl bg-stone-900 flex items-center justify-center text-2xl font-black text-white">
-                    AR
-                  </div>
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl p-0.5 bg-gradient-to-tr from-blue-500 via-indigo-500 to-purple-500 shadow-xl overflow-hidden">
+                  <img
+                    src="/favicon.png"
+                    alt={PROFILE_DATA.name}
+                    className="w-full h-full object-cover rounded-2xl bg-stone-900"
+                  />
                 </div>
                 <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-stone-900 flex items-center justify-center">
                   <div className="w-2 h-2 rounded-full bg-white animate-pulse" />
@@ -386,8 +388,8 @@ export function AboutApp() {
                 Education
               </h3>
               <div className="flex items-center justify-between font-bold text-white">
-                <span>B.S. in Computer Science (Magna Cum Laude) — UC Berkeley</span>
-                <span className="text-xs text-white/50 font-mono">2014 — 2018</span>
+                <span>B.Tech in CSBS — Vignana Bharathi Institute of Technology (VBIT)</span>
+                <span className="text-xs text-white/50 font-mono">Expected May 2028</span>
               </div>
             </div>
           </div>

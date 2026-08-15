@@ -122,3 +122,28 @@ body {
     cursor: none !important;
   }
 }
+
+/* Parabolic Dock Idle Breathing Animation */
+@keyframes dock-breathe {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-2.5px) scale(1.025);
+  }
+}
+
+.animate-dock-breathe {
+  animation: dock-breathe 4s ease-in-out infinite;
+}
+
+/* Cassette Reel Rotation Animation */
+@keyframes spin-spool-ccw {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+

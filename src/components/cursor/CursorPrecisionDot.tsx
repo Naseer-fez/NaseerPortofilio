@@ -9,7 +9,7 @@ export function CursorPrecisionDot({ x, y }: CursorPrecisionDotProps) {
   return (
     <div
       data-testid="cursor-precision-dot"
-      className="fixed pointer-events-none z-[9999] rounded-full bg-white will-change-transform"
+      className="fixed pointer-events-none z-[10001] rounded-full bg-white will-change-transform"
       style={{
         width: '4px',
         height: '4px',

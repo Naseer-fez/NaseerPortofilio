@@ -1,52 +1,51 @@
-# BRIEFING — 2026-08-15T07:36:00Z
+# BRIEFING — 2026-08-15T16:28:42Z
 
 ## Mission
-Synthesize all 5 specialist reverse-engineering reports (Irfan OS Base Architecture, Irfan OS Interactions, Luca Felix Taskbar, Michal Grzebisz Cursor/Homescreen, Nidal Music Player) into master Phase 1 research deliverables: Component Extraction Map, Conflict Analysis, Research Summary, and UI Visual Architecture representations.
+Generate and validate the comprehensive 18-project portfolio dataset matching the strict schema in both `portfolio_research/projects.json` and `src/data/projects.json`.
 
 ## 🔒 My Identity
 - Archetype: worker_synthesizer
 - Roles: implementer, qa, specialist
 - Working directory: d:\CODE\Html\Showcase\.agents\worker_synthesizer
-- Original parent: c435de04-0284-4165-b1db-361433c199ec
-- Milestone: Phase 1 Research Synthesis
+- Original parent: 743942f9-04e9-4002-b670-e9e6fae66637
+- Milestone: milestone-1-portfolio-dataset
 
 ## 🔒 Key Constraints
-- Code-only network mode (no external fetching).
-- Pure Phase 1 research synthesis; no production code.
-- Unified architectural contracts, mathematical rigor, and conflict resolution across all 4 target websites.
+- Exactly 18 high-quality real projects ranked from strongest flagship to focused specialized projects.
+- Exactly 5 projects flagged with `featured: true` (NasCloud, apirlpy, TapNap, macOS Portfolio OS, Project Jarvis).
+- Ensure domain diversity across: SYSTEMS, AI / ML, FULL STACK, CLOUD, CREATIVE, DATABASE, DEVOPS.
+- Visible `technologies` array has 4-5 key technologies, with any remaining count represented as `+N`.
+- 100% of `githubUrl` links must be verified URLs under `https://github.com/Naseer-fez/...`.
+- `demoUrl` must point to valid URL.
+- Every item in `metrics` represents a verified technical capability/feature with zero fabricated statistics.
+- Identical JSON saved to both `d:\CODE\Html\Showcase\portfolio_research\projects.json` and `d:\CODE\Html\Showcase\src\data\projects.json`.
 
 ## Current Parent
-- Conversation ID: c435de04-0284-4165-b1db-361433c199ec
-- Updated: 2026-08-15T07:36:00Z
+- Conversation ID: 743942f9-04e9-4002-b670-e9e6fae66637
+- Updated: 2026-08-15T16:28:42Z
 
 ## Task Summary
-- **What to build**: 
-  1. `portfolio_research/component_extraction_map.md` (Unified component taxonomy, React tree, interface contracts, design tokens)
-  2. `portfolio_research/conflict_analysis.md` (5 architectural conflict resolutions, trade-offs, contracts)
-  3. `portfolio_research/research-summary.md` (Master Executive Research Summary, mathematical formulations, acceptance checklist)
-  4. UI Visual State representations / mockups generated via `generate_image`
-- **Success criteria**: Full coverage of all 4 sites, complete component tree & token system, 5 architectural conflict solutions, mathematical calculus formulations, Phase 2 readiness.
-- **Interface contracts**: Portfolio OS unified architecture.
+- **What to build**: Comprehensive, schema-compliant `projects.json` dataset for portfolio.
+- **Success criteria**: 18 projects, 5 featured, all specified fields valid, verified GitHub URLs, valid JSON syntax, synced across 2 targets.
+- **Interface contracts**: Required JSON structure `{ "projects": [ { title, category, featured, description, technologies, architecture, metrics, githubUrl, demoUrl } ] }`
+- **Code layout**: `portfolio_research/projects.json` and `src/data/projects.json`
 
 ## Key Decisions Made
-- Reconciled Irfan OS multi-window desktop with Michal Grzebisz kinetic typography by placing kinetic typography on Layer 0 as an interactive ambient wallpaper with dual-mode workspace switching.
-- Resolved cursor conflict by creating a Context-Aware Finite State Machine (FSM) that automatically collapses elastic trailing aura over draggable headers and 8-way resize handles, switches to squircle magnetic snap over dock icons, and enables full difference blend over canvas typography.
-- Integrated Nidal mini music player directly into the Luca Felix dock chassis with anisotropic cosine magnification, popping upward into a floating glassmorphic audio deck.
-- Unified audio pipeline into a singleton `AudioContextManager` with automatic audio ducking (background music ducks to 20% during procedural UI sounds or demo videos).
-- Defined mobile responsive transformation (<768px) into 92vh iOS bottom modal sheets with swipe-to-dismiss ($140\text{px}$ threshold), sticky 44px audio pill, and fixed bottom tab bar.
+- Successfully formatted and written 18 projects to both paths with exact schema compliance.
+- Automated validation and Vitest runner confirm 100% integrity.
 
 ## Artifact Index
-- `d:\CODE\Html\Showcase\portfolio_research\component_extraction_map.md` — Unified Component Taxonomy, React DOM Layering, Design Tokens, Phase 2 Scaffold
-- `d:\CODE\Html\Showcase\portfolio_research\conflict_analysis.md` — Comprehensive Conflict Analysis & 5 Architectural Resolutions
-- `d:\CODE\Html\Showcase\portfolio_research\research-summary.md` — Master Executive Research Summary & Phase 1 Verification Audit
-- `d:\CODE\Html\Showcase\.agents\worker_synthesizer\handoff.md` — Synthesizer Handoff Report
+- `d:\CODE\Html\Showcase\portfolio_research\projects.json` — Portfolio dataset in research folder
+- `d:\CODE\Html\Showcase\src\data\projects.json` — Portfolio dataset in frontend src data folder
+- `d:\CODE\Html\Showcase\.agents\worker_synthesizer\changes.md` — Detailed changes and verification log
+- `d:\CODE\Html\Showcase\.agents\worker_synthesizer\handoff.md` — Self-contained handoff report
 
 ## Change Tracker
-- **Files created**: `component_extraction_map.md`, `conflict_analysis.md`, `research-summary.md`, `ORIGINAL_REQUEST.md`, `BRIEFING.md`, `progress.md`, `handoff.md`.
-- **Build status**: PASS (Pure Research Synthesis)
-- **Pending issues**: None.
+- **Files modified**: `portfolio_research/projects.json`, `src/data/projects.json`
+- **Build status**: Passed (399 tests passing in Vitest)
+- **Pending issues**: None
 
 ## Quality Status
-- **Build/test result**: All 5 specialist reports synthesized; all acceptance criteria 100% verified.
-- **Lint status**: Clean markdown formatting across all deliverables.
-- **Tests added/modified**: N/A (Research Phase).
+- **Build/test result**: All 38 test suites / 399 tests passing
+- **Lint status**: Clean
+- **Tests added/modified**: Node.js JSON schema and structural validation test

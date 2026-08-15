@@ -1,4 +1,12 @@
-export type CursorVariant = 'default' | 'pointer' | 'text' | 'precision-drag' | 'magnetic-dock' | 'kinetic-hero' | 'disabled';
+export type CursorVariant =
+  | 'default'
+  | 'pointer'
+  | 'text'
+  | 'precision-drag'
+  | 'magnetic-dock'
+  | 'kinetic-hero'
+  | 'magnetic'
+  | 'disabled';
 
 export interface CursorPosition {
   x: number;

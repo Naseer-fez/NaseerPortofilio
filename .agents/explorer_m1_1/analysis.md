@@ -1,760 +1,272 @@
-# Milestone 1: Core OS Framework — Architectural & Configuration Analysis
+# Technical Analysis Report: Systems, Low-Level, Utilities, Performance & Algorithms
 
-**Agent**: Explorer 1 (`explorer_m1_1`)  
-**Target Milestone**: Milestone 1 (Core OS Framework)  
+**Explorer**: Explorer 1 (Systems, Low-Level, Utilities, Performance & Algorithms specialist)  
 **Date**: 2026-08-15  
-**Working Directory**: `d:\CODE\Html\Showcase\.agents\explorer_m1_1\`
+**Scope**: Deep technical inspection of 12 local repositories under `d:\CODE`  
 
 ---
 
-## 1. Executive Summary
+## Executive Summary Matrix
 
-Milestone 1 establishes the foundational infrastructure for the macOS Portfolio OS Showcase. This document provides concrete, copy-paste ready configurations, design token specifications, typography integration, and testing framework setup required by Sprint 1 of the implementation plan and `PROJECT.md`.
-
-### Core Requirements Matrix
-| Requirement Area | Specification Target | Status / Strategy |
-|---|---|---|
-| **Framework & App Router** | Next.js 14+ (App Router), React 18+, TypeScript 5+ | Full App Router directory structure in `src/app/` with strict type checking and path aliases (`@/*`). |
-| **Styling & OS Tokens** | Tailwind CSS 3.4+ + PostCSS + CSS Custom Properties | Semantic variables mapped in `:root` and `.dark` in `src/app/globals.css`, extended via `tailwind.config.ts`. |
-| **macOS Glassmorphism** | `blur(28px) saturate(180%)`, multi-layer active/inactive window shadows | Custom backdrop-blur and box-shadow tokens defined in Tailwind theme. |
-| **Typography** | Inter Variable (`--font-sans`) + JetBrains Mono (`--font-mono`) | Optimized zero-layout-shift font loading via `next/font/google`. |
-| **Testing Engine** | Vitest + React Testing Library + jsdom | Lightning-fast unit and component testing with comprehensive browser API mocks (`matchMedia`, `ResizeObserver`, `AudioContext`). |
-
----
-
-## 2. Project File Structure & Core Configurations
-
-The project must strictly comply with the layout specified in `PROJECT.md`.
-
-### 2.1 Complete File Structure Overview
-```
-d:/CODE/Html/Showcase/
-├── package.json
-├── tsconfig.json
-├── tailwind.config.ts
-├── postcss.config.js
-├── next.config.mjs
-├── vitest.config.ts
-├── vitest.setup.ts
-├── src/
-│   ├── app/
-│   │   ├── layout.tsx
-│   │   ├── page.tsx
-│   │   └── globals.css
-│   ├── components/
-│   │   ├── os/
-│   │   │   ├── DesktopCanvas.tsx
-│   │   │   ├── DesktopGrid.tsx
-│   │   │   ├── DesktopIcon.tsx
-│   │   │   ├── TopMenuBar.tsx
-│   │   │   ├── ControlCenter.tsx
-│   │   │   ├── SpotlightSearch.tsx
-│   │   │   └── ContextMenu.tsx
-│   │   ├── window/
-│   │   │   ├── WindowManager.tsx
-│   │   │   ├── WindowFrame.tsx
-│   │   │   └── TrafficLights.tsx
-│   │   ├── apps/
-│   │   │   ├── TerminalApp.tsx
-│   │   │   ├── ProjectsApp.tsx
-│   │   │   ├── AboutApp.tsx
-│   │   │   ├── FinderApp.tsx
-│   │   │   ├── SettingsApp.tsx
-│   │   │   └── MailApp.tsx
-│   │   ├── dock/
-│   │   │   ├── Dock.tsx
-│   │   │   ├── DockItem.tsx
-│   │   │   ├── DockTooltip.tsx
-│   │   │   ├── ActiveDotIndicator.tsx
-│   │   │   └── MusicPlayerDockPill.tsx
-│   │   ├── music/
-│   │   │   ├── AudioDeckExpandedCard.tsx
-│   │   │   ├── VinylDiscAssembly.tsx
-│   │   │   ├── AudioVisualizerCanvas.tsx
-│   │   │   ├── InteractiveScrubber.tsx
-│   │   │   └── MediaSessionController.tsx
-│   │   ├── typography/
-│   │   │   ├── KineticHeroStage.tsx
-│   │   │   ├── SplitText.tsx
-│   │   │   └── AmbientHarmonicWave.tsx
-│   │   ├── cursor/
-│   │   │   ├── KineticCursor.tsx
-│   │   │   ├── CursorPrecisionDot.tsx
-│   │   │   └── CursorAuraRing.tsx
-│   │   └── mobile/
-│   │       ├── MobileBottomSheet.tsx
-│   │       ├── MobileTabBar.tsx
-│   │       └── MobileStickyAudioBar.tsx
-│   ├── hooks/
-│   │   ├── useOSStore.ts
-│   │   ├── useMusicStore.ts
-│   │   ├── useBreakpoint.ts
-│   │   ├── useKeyboardShortcuts.ts
-│   │   └── usePhysicsTypography.ts
-│   ├── lib/
-│   │   ├── audio/
-│   │   │   ├── GlobalAudioManager.ts
-│   │   │   └── SoundSynthesizer.ts
-│   │   ├── physics/
-│   │   │   ├── eulerSolver.ts
-│   │   │   └── springUtils.ts
-│   │   ├── constants/
-│   │   │   ├── apps.ts
-│   │   │   ├── shortcuts.ts
-│   │   │   └── wallpapers.ts
-│   │   └── utils/
-│   │       └── cn.ts
-│   └── types/
-│       ├── os.ts
-│       ├── music.ts
-│       ├── apps.ts
-│       └── cursor.ts
-```
+| # | Project Name | Real Title | Domain Category | Primary Stack | Core Technical Highlight |
+|---|--------------|------------|-----------------|---------------|--------------------------|
+| 1 | `Api_RateLimiter` | API RateLimiter V2 (`apirlpy`) | `BACKEND` | Python, SQLite, Threading, JSON | 100k client IP benchmark, 64-thread pool, background TTL cleaner daemon |
+| 2 | `Dates` | Date (C-Optimized Engine) | `SYSTEMS` | C, Python, ctypes, Zeller's Congruence | Raw C integer array pointer passing via ctypes, zero standard library time calls |
+| 3 | `Taskbarengine` | TaskbarEngine | `SYSTEMS` | C17, C++17, DirectComposition, Win32 Hooks, IPC | Windows 11 Explorer process injection, DirectComposition 0-latency, SEH 3-strike fault isolation |
+| 4 | `Livewallpaper` | LiveWallpaper Engine for Windows | `CREATIVE` | C++17, Rust, Direct3D 11, HLSL, Media Foundation | Explorer WorkerW injection, Rust FFI shader host with dynamic hot-reload, GTest suite |
+| 5 | `DSA-Journey` | DSA-Journey | `SYSTEMS` | C++17/20, STL, Algorithms, MySQL | 50+ hand-crafted optimal vs brute-force solutions (Kadane, Moore's Voting, Inversions) |
+| 6 | `Pass_Gen` | Pass_Gen | `SYSTEMS` | C, Python, NumPy, Pyperclip | C manual PRNG arrays vs Python NumPy vectorization with clipboard integration |
+| 7 | `Phone-Contract` | Phone-Contract | `SYSTEMS` | C, Doubly Linked List, Dynamic Pointers | Dynamic heap node allocation, bidirectional pointer relinking, $O(1)$ node removal |
+| 8 | `Student_Records` | Student_Records | `SYSTEMS` | C, Singly Linked List, Dynamic Heap | Dynamic singly linked list, positional node insertion, manual memory reclamation |
+| 9 | `ToDoList` | ToDoList | `SYSTEMS` | C, Multi-dimensional Arrays, Bitmasks | 12-hour fixed time-slot allocator, static global memory tables, 0 temp disk writes |
+| 10 | `MineSweper_game` | Minesweeper Console Game | `CREATIVE` | C, PRNG, Coordinate Projections | 1D-to-2D terminal projection matrix, stateful cell masking, replay state machine |
+| 11 | `Restaurant_Management_Demo` | Restaurant Order & Billing System | `SYSTEMS` | C, Structs, 2D Arrays, Bubble Sort | 10-table multi-tenant 2D ordering matrix, parallel bubble sort synchronization |
+| 12 | `Hosplital_Managment` | Hospital Bed Management System | `SYSTEMS` | C, Global Arrays, 2D Visual Matrix | 100-bed ward capacity management, 2D visual layout rendering, circular logs |
 
 ---
 
-### 2.2 `package.json` Specification
+## Comprehensive Project Breakdown
 
-```json
-{
-  "name": "macos-portfolio-showcase",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
-  },
-  "dependencies": {
-    "clsx": "^2.1.1",
-    "framer-motion": "^11.3.28",
-    "lucide-react": "^0.428.0",
-    "next": "^14.2.5",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "tailwind-merge": "^2.5.2",
-    "zustand": "^4.5.5"
-  },
-  "devDependencies": {
-    "@testing-library/jest-dom": "^6.4.8",
-    "@testing-library/react": "^16.0.0",
-    "@testing-library/user-event": "^14.5.2",
-    "@types/node": "^20.14.10",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.1",
-    "autoprefixer": "^10.4.20",
-    "eslint": "^8.57.0",
-    "eslint-config-next": "14.2.5",
-    "jsdom": "^24.1.1",
-    "postcss": "^8.4.41",
-    "tailwindcss": "^3.4.10",
-    "typescript": "^5.5.4",
-    "vitest": "^2.0.5"
-  }
-}
-```
+### 1. API RateLimiter V2 (`Api_RateLimiter`)
+
+- **Real Title**: API RateLimiter V2 (PyPI: `apirlpy`)
+- **Domain Category**: `BACKEND`
+- **1-Sentence Description**: A lightweight, thread-safe rate-limiting library and middleware utilizing in-memory hash caching with persistent JSON/SQLite backends and background cleanup daemon threads.
+- **Key Technologies Used**: Python 3, Threading (`RLock`, `Event`, `ThreadPoolExecutor`), SQLite3, JSON persistence, Flask (decorators/middleware) *(+2: psutil, Matplotlib/Seaborn)*
+- **Architecture Details**:
+  - *Concurrency & Synchronization*: Re-entrant lock (`threading.RLock()`) guarding concurrent request validations; independent background worker thread (`threading.Thread`) using `threading.Event()` for periodic TTL expiration without blocking request throughput.
+  - *Memory Management & Caching*: In-memory primary hash map (`self.Data: dict`) storing active IP metadata (`WaitStamp`, `LastSeenTime`, `Visits`), eliminating repetitive secondary disk reads.
+  - *Data Structures & Storage*: Dual persistence engines: atomic file streaming via `json.dump()` with in-place truncation and `.flush()`, or relational persistence using SQLite (`UserIps` table with `IP TEXT PRIMARY KEY, jsondata TEXT`).
+  - *Low-Level APIs / Interfaces*: Flask function decorator middleware (`Decorator.py`), sliding window cooldown logic, atomic thread counters (`AtomicCounters`).
+- **Verified Metrics & Technical Capabilities**:
+  - Scalability benchmarked with **100,000 unique simulated client IPs** across **64 concurrent worker threads** (`TestRunner.py`).
+  - Latency profiling capturing Mean, P95, and P99 response times against concurrent load; system resource tracking via `psutil`.
+  - Non-blocking daemon background cleaner with configurable TTL and cleaning frequencies.
+- **URLs**:
+  - **GitHub URL**: `https://github.com/Naseer-fez/Api_RateLimiter`
+  - **PyPI / Demo URL**: `https://pypi.org/project/apirlpy/`
 
 ---
 
-### 2.3 `tsconfig.json` Specification
+### 2. Date C-Optimized Engine (`Dates`)
 
-```json
-{
-  "compilerOptions": {
-    "target": "es2022",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "vitest.setup.ts"
-  ],
-  "exclude": ["node_modules"]
-}
-```
+- **Real Title**: Date (C-Optimized Date Manipulation Library)
+- **Domain Category**: `SYSTEMS`
+- **1-Sentence Description**: A low-level, high-performance date manipulation and validation engine written from scratch in C with manual heap management and bound to Python via ctypes pointers without relying on standard date/time libraries.
+- **Key Technologies Used**: C, Python, ctypes, GCC/Clang (dynamic DLL compilation), Zeller’s Congruence algorithm *(+2: Memory Pointers, Custom C ABI)*
+- **Architecture Details**:
+  - *Memory Management & Pointer Safety*: Manual heap allocation in C (`malloc(sizeof(int)*4)`), strict pointer ownership passing raw integer array pointers (`int* [format, day, month, year]`) safely across C/Python FFI boundaries.
+  - *Data Structures*: Compact contiguous 4-element C array representation `[Format, Day, Month, Year]` avoiding high-level object wrapping overhead.
+  - *Low-Level APIs / Algorithmic Implementation*: Custom modular C dynamic link libraries (`memory_Date.dll`, `Date_Filler.dll`, `Datecheck.dll`, `Day_of_Year.dll`), Zeller's Congruence implementation for $O(1)$ day-of-week calculation, leap-year validation, partial date parsing logic (`DD-MM-YYYY`, `DDMMYYYY`, `DDMM`, `DD`).
+- **Verified Metrics & Technical Capabilities**:
+  - Zero reliance on Python `datetime` or OS system time abstractions.
+  - Direct C dynamic library interface via `ctypes.CDLL` with strict `argtypes` and `restype` pointer type safety.
+- **URLs**:
+  - **GitHub URL**: `https://github.com/Naseer-fez/Dates`
+  - **Demo URL**: None
 
 ---
 
-### 2.4 `postcss.config.js` Specification
+### 3. TaskbarEngine (`Taskbarengine`)
 
-```javascript
-module.exports = {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
-  },
-};
-```
-
----
-
-### 2.5 `next.config.mjs` Specification
-
-```javascript
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-  swcMinify: true,
-  images: {
-    unoptimized: true, // Recommended for static image assets / portable builds
-  },
-};
-
-export default nextConfig;
-```
+- **Real Title**: TaskbarEngine
+- **Domain Category**: `SYSTEMS`
+- **1-Sentence Description**: A high-performance, modular C17/C++17 Windows 11 Taskbar modification engine featuring Explorer process injection via SetWindowsHookEx CBT hooks, DirectComposition zero-latency rendering, SEH fault-isolated plugin architecture, and Win32 Named Pipe IPC.
+- **Key Technologies Used**: C17, C++17, Win32 API / SetWindowsHookEx, DirectComposition / Comctl32 Subclassing, Named Pipes IPC, JSON-C *(+4: CMake, Google Benchmark, Structured Exception Handling, DPI Virtualization)*
+- **Architecture Details**:
+  - *Concurrency & Synchronization*: Asynchronous event dispatcher with lock-free atomic depth re-entrancy guards (`InterlockedCompareExchange`), UI thread synchronization with sync/async command queues (`TE_UiPostCommandSync`), dedicated background IPC listener thread.
+  - *Memory Management & Fault Isolation*: Structured Exception Handling (`__try / __except` SEH) wrapping plugin calls, 3-strike fault count watchdog timer isolation via `CreateTimerQueueTimer`, atomic generation versioning.
+  - *Data Structures & Modules*: State store hash tables / registries, plugin dynamic loading (`TE_PluginEntry`), dynamic easing curves, DPI virtualization scaling.
+  - *Low-Level APIs*: `SetWindowsHookExW` (WH_CBT), `SetWindowSubclass` on `Shell_TrayWnd`, DirectComposition rendering pipelines, Win32 Named Pipes with custom binary frame serialization (`TE_IpcHeader`).
+- **Verified Metrics & Technical Capabilities**:
+  - Runs fully inside `explorer.exe` process space with 0-latency DirectComposition rendering.
+  - Complete benchmark suite (`bench_easing.cpp`, `bench_event_dispatch.cpp`, `bench_icon_layout.cpp`, `bench_magnification.cpp`, `bench_state_store.cpp`, `bench_config_parse.cpp`).
+  - Dynamic hot-reloading of JSONC configs via directory change notifications without restarting Explorer.
+- **URLs**:
+  - **GitHub URL**: `https://github.com/Naseer-fez/Taskbarengine`
+  - **Demo URL**: None
 
 ---
 
-## 3. Tailwind Theme Extension & macOS OS Tokens
+### 4. LiveWallpaper Engine for Windows (`Livewallpaper`)
 
-The Tailwind configuration maps all design tokens from `visual-system.md` and layer specifications from `PROJECT.md`.
-
-### 3.1 `tailwind.config.ts` Specification
-
-```typescript
-import type { Config } from 'tailwindcss';
-
-const config: Config = {
-  darkMode: 'class',
-  content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
-  theme: {
-    extend: {
-      colors: {
-        os: {
-          bg: {
-            desktop: 'var(--os-bg-desktop)',
-          },
-          menubar: {
-            bg: 'var(--os-menubar-bg)',
-            border: 'var(--os-menubar-border)',
-            text: 'var(--os-menubar-text)',
-            hover: 'var(--os-menubar-hover)',
-          },
-          window: {
-            header: {
-              bg: 'var(--os-window-header-bg)',
-              border: 'var(--os-window-header-border)',
-            },
-            body: {
-              bg: 'var(--os-window-body-bg)',
-            },
-            text: {
-              DEFAULT: 'var(--os-window-text)',
-              muted: 'var(--os-window-text-muted)',
-            },
-            border: 'var(--os-window-border)',
-          },
-          dock: {
-            bg: 'var(--os-dock-bg)',
-            border: 'var(--os-dock-border)',
-          },
-          accent: {
-            blue: 'var(--os-accent-blue)',
-            'blue-dark': '#2997ff',
-            'blue-light': '#0071e3',
-          },
-          traffic: {
-            red: '#FF5F56',
-            'red-border': '#E0443E',
-            yellow: '#FFBD2E',
-            'yellow-border': '#DEA123',
-            green: '#27C93F',
-            'green-border': '#1AAB29',
-          },
-        },
-      },
-      fontFamily: {
-        sans: [
-          'var(--font-sans)',
-          '-apple-system',
-          'BlinkMacSystemFont',
-          '"SF Pro Display"',
-          '"SF Pro Text"',
-          'Inter',
-          'system-ui',
-          'sans-serif',
-        ],
-        mono: [
-          'var(--font-mono)',
-          'SFMono-Regular',
-          'Menlo',
-          'Monaco',
-          'Consolas',
-          '"Liberation Mono"',
-          '"Courier New"',
-          'monospace',
-        ],
-      },
-      borderRadius: {
-        'os-window': '12px',
-        'os-dock': '9999px',
-        'os-tooltip': '6px',
-        'os-card': '20px',
-        'os-pill': '12px',
-        'os-menu-item': '4px',
-      },
-      boxShadow: {
-        'os-menubar': '0 1px 2px rgba(0, 0, 0, 0.05)',
-        'os-window-inactive': 'var(--os-shadow-window-inactive)',
-        'os-window-active': 'var(--os-shadow-window-active)',
-        'os-dock': '0 12px 36px -4px rgba(0,0,0,0.55), 0 4px 16px -2px rgba(0,0,0,0.35)',
-        'os-deck': '0 24px 48px -12px rgba(0,0,0,0.70)',
-        'os-specular-dock': 'inset 0 1px 1px 0 rgba(255,255,255,0.22)',
-        'os-specular-deck': 'inset 0 1px 1px 0 rgba(255,255,255,0.20)',
-      },
-      dropShadow: {
-        'os-icon': '0 4px 6px rgba(0, 0, 0, 0.35)',
-        'os-label': '0 1px 2px rgba(0, 0, 0, 0.85)',
-      },
-      backdropBlur: {
-        'os-menubar': '40px',
-        'os-window': '28px',
-        'os-dock': '20px',
-        'os-deck': '32px',
-        'os-tooltip': '12px',
-        'os-spotlight': '24px',
-      },
-      zIndex: {
-        '0': '0',       // Wallpaper + KineticHeroStage
-        '10': '10',     // DesktopCanvas + DesktopGrid + SelectionMarquee
-        '20': '20',     // Inactive Window Base
-        '45': '45',     // Active Window Focused
-        '50': '50',     // TopMenuBar
-        '9990': '9990', // Luca Dock + MusicPlayerDockPill
-        '9992': '9992', // AudioDeckExpandedCard
-        '9995': '9995', // SpotlightSearch + ContextMenu + ControlCenter
-        '9999': '9999', // KineticCursor
-      },
-    },
-  },
-  plugins: [],
-};
-
-export default config;
-```
+- **Real Title**: LiveWallpaper Engine for Windows
+- **Domain Category**: `CREATIVE`
+- **1-Sentence Description**: A high-performance Windows 10/11 dynamic wallpaper engine combining C++17 Direct3D 11 rendering and Windows Media Foundation hardware video decoding with a safe Rust core library for interactive HLSL shader hot-reloading injected into Explorer's WorkerW background.
+- **Key Technologies Used**: C++17, Rust (`windows` crate, `parking_lot`, `notify`), Direct3D 11, HLSL (custom compute/pixel shaders), Windows Media Foundation, Win32 API (WorkerW Injection) *(+4: CMake, Cargo, Google Test, INI Configuration)*
+- **Architecture Details**:
+  - *Concurrency*: Background async file watching (`notify` crate) with lock-free atomic hot-reloading (`AtomicBool`), Media Foundation asynchronous playback callbacks, power/fullscreen polling thread.
+  - *Memory Management & Resource Lifecycle*: Direct3D 11 resource management (device, context, swap chain, render target views, constant buffers aligned to 16-byte boundaries `#[repr(C)]`), zero-leak COM smart pointer handling.
+  - *Low-Level APIs*: Explorer `Progman` message pump injection (`0x052C` message to spawn `WorkerW`), `SetParent` anchoring behind desktop icons, fullscreen window detection (`GetForegroundWindow` / `GetWindowRect` checking `MONITORINFO`), sleep/idle power management (`GetLastInputInfo`).
+  - *Shaders & Pipeline*: Full-screen triangle vertex shader generated via `SV_VertexID`, 60+ FPS dynamic uniform buffer passing `i_time`, `i_resolution`, `i_mouse`, `i_audio`, `i_frame`.
+- **Verified Metrics & Technical Capabilities**:
+  - Dual-engine rendering: Hardware-accelerated video playback (MP4/MKV/AVI) via Media Foundation + 60+ FPS HLSL shaders via Direct3D 11.
+  - Rust FFI dynamic library (`live_wallpaper_rust.dll`) with automated runtime shader compilation via `D3DCompile`.
+  - Comprehensive Google Test suite (`LiveWallpaperTests.exe`) verifying device manager, explorer integration, swap chain, and power monitoring.
+- **URLs**:
+  - **GitHub URL**: `https://github.com/Naseer-fez/Livewallpaper`
+  - **Demo URL**: None
 
 ---
 
-## 4. `globals.css` with CSS Custom Properties
+### 5. DSA-Journey (`DSA-Journey`)
 
-The CSS custom properties define the dynamic light/dark theming layer according to `visual-system.md`.
-
-### 4.1 `src/app/globals.css` Complete Specification
-
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-:root {
-  /* Desktop & Canvas */
-  --os-bg-desktop: #f5f5f7;
-  
-  /* Top Menu Bar */
-  --os-menubar-bg: rgba(255, 255, 255, 0.72);
-  --os-menubar-border: rgba(0, 0, 0, 0.08);
-  --os-menubar-text: #1d1d1f;
-  --os-menubar-hover: rgba(0, 0, 0, 0.06);
-
-  /* Window Chrome */
-  --os-window-header-bg: rgba(246, 246, 246, 0.88);
-  --os-window-header-border: rgba(0, 0, 0, 0.12);
-  --os-window-body-bg: rgba(255, 255, 255, 0.96);
-  --os-window-text: #1d1d1f;
-  --os-window-text-muted: #6e6e73;
-  --os-window-border: rgba(0, 0, 0, 0.14);
-
-  /* Dock (Base Reference / Light Theme) */
-  --os-dock-bg: rgba(255, 255, 255, 0.35);
-  --os-dock-border: rgba(255, 255, 255, 0.45);
-
-  /* Window Shadows */
-  --os-shadow-window-inactive: 0 10px 30px -5px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.08);
-  --os-shadow-window-active: 0 25px 50px -12px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(0, 0, 0, 0.12), 0 0 35px rgba(0, 0, 0, 0.15);
-
-  /* Accent & Selection */
-  --os-accent-blue: #0071e3;
-  --os-selection-bg: rgba(0, 113, 227, 0.25);
-  --os-selection-border: rgba(0, 113, 227, 0.5);
-  --os-selection-text: inherit;
-}
-
-.dark {
-  /* Desktop & Canvas */
-  --os-bg-desktop: #000000;
-
-  /* Top Menu Bar */
-  --os-menubar-bg: rgba(26, 26, 26, 0.65);
-  --os-menubar-border: rgba(255, 255, 255, 0.12);
-  --os-menubar-text: #f5f5f7;
-  --os-menubar-hover: rgba(255, 255, 255, 0.12);
-
-  /* Window Chrome */
-  --os-window-header-bg: rgba(36, 36, 40, 0.85);
-  --os-window-header-border: rgba(255, 255, 255, 0.10);
-  --os-window-body-bg: rgba(24, 24, 28, 0.95);
-  --os-window-text: #f5f5f7;
-  --os-window-text-muted: #a1a1a6;
-  --os-window-border: rgba(255, 255, 255, 0.15);
-
-  /* Dock (Dark Theme) */
-  --os-dock-bg: rgba(20, 20, 20, 0.45);
-  --os-dock-border: rgba(255, 255, 255, 0.18);
-
-  /* Window Shadows */
-  --os-shadow-window-inactive: 0 10px 30px -5px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
-  --os-shadow-window-active: 0 25px 60px -10px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.2), 0 0 40px rgba(0, 0, 0, 0.4);
-
-  /* Accent & Selection */
-  --os-accent-blue: #2997ff;
-  --os-selection-bg: rgba(41, 151, 255, 0.35);
-  --os-selection-border: rgba(41, 151, 255, 0.6);
-  --os-selection-text: #ffffff;
-}
-
-/* Base OS Viewport Reset & Typography Locks */
-html,
-body {
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--os-bg-desktop);
-  color: var(--os-window-text);
-  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
-}
-
-/* Discreet macOS Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(128, 128, 128, 0.3);
-  border-radius: 9999px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(128, 128, 128, 0.5);
-  border: 2px solid transparent;
-  background-clip: padding-box;
-}
-
-/* Selection */
-::selection {
-  background-color: var(--os-selection-bg);
-  color: var(--os-selection-text);
-}
-
-/* Kinetic Cursor Hide Rule for Fine Pointers */
-@media (pointer: fine) {
-  body.custom-cursor-active,
-  body.custom-cursor-active * {
-    cursor: none !important;
-  }
-}
-```
+- **Real Title**: DSA-Journey (Data Structures and Algorithms Repository)
+- **Domain Category**: `SYSTEMS`
+- **1-Sentence Description**: A comprehensive algorithmic repository implementing foundational and advanced data structure problem solutions in C++ and SQL, contrasting brute-force against time/space optimal patterns across array manipulations, binary search, sliding windows, and dynamic programming.
+- **Key Technologies Used**: C++17 / C++20, STL (`std::vector`, `std::unordered_map`, `std::set`), MySQL, Algorithms (Kadane's, Moore's Voting, Dutch National Flag, Merge Sort Inversions) *(+3: Binary Search on Monotonic Space, Matrix Rotations, Prefix Sums)*
+- **Architecture Details**:
+  - *Algorithmic Design Patterns*: Multi-approach comparison (Bruteforce $O(N^2)/O(N^3)$ vs Optimal $O(N)/O(N \log N)$), in-place space optimization $O(1)$.
+  - *Data Structures*: Contiguous dynamic arrays (`std::vector`), Hash tables (`std::unordered_map`), Hash sets (`std::unordered_set`), 2D matrices, Frequency maps.
+  - *Algorithmic Techniques*: Dutch National Flag partitioning, Kadane's algorithm for maximum subarray sum, Boyer-Moore Voting Algorithm for $O(N)$ majority element, Merge Sort tree recursion for counting inversions and reverse pairs, Binary search on monotonic answer spaces (Koko eating bananas, aggressive cows, ship packages in D days), Matrix rotations and spiral traversals.
+- **Verified Metrics & Technical Capabilities**:
+  - 50+ hand-crafted C++ solutions systematically categorised (Arrays, Binary Search, Matrix, LeetCode, SQL).
+  - Comprehensive asymptotic complexity comparisons (Time & Space) coded for each problem progression.
+- **URLs**:
+  - **GitHub URL**: `https://github.com/Naseer-fez/DSA-Journey`
+  - **Demo URL**: None
 
 ---
 
-## 5. Typography Strategy & Font Loading
+### 6. Random Password Generator & Cracker (`Pass_Gen`)
 
-### 5.1 Next.js Google Font Integration (`src/app/layout.tsx`)
-
-Inter Variable provides the primary sans-serif font stack (replacing the proprietary PP Neue Montreal as per spec rule 6), supporting continuous variable weights (100–900). JetBrains Mono provides the terminal and monospace font stack.
-
-```typescript
-import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
-import './globals.css';
-
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-sans',
-  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-mono',
-  weight: ['400', '500', '600', '700'],
-});
-
-export const metadata: Metadata = {
-  title: 'Portfolio OS — macOS Interactive Desktop',
-  description: 'A macOS-inspired desktop operating system portfolio built with Next.js, Tailwind CSS, Framer Motion, and Web Audio.',
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable} dark`} suppressHydrationWarning>
-      <body className="font-sans antialiased bg-os-bg-desktop text-os-window-text h-screen w-screen overflow-hidden select-none">
-        {children}
-      </body>
-    </html>
-  );
-}
-```
+- **Real Title**: Pass_Gen (Dual-Language Random Password Generator & Brute-Force Cracker)
+- **Domain Category**: `SYSTEMS`
+- **1-Sentence Description**: A cross-language cryptographic comparison utility implementing randomized password generation in both C (manual PRNG arrays & non-repeating index shuffling) and Python (NumPy vectorization & pyperclip integration) alongside a brute-force password guesser.
+- **Key Technologies Used**: C, Python, NumPy, Pyperclip, PRNG algorithms (C `rand()`/`srand()` vs NumPy uniform sampling) *(+2: String manipulation, Standard I/O)*
+- **Architecture Details**:
+  - *Memory Management / Array Layout*: In C, stack-allocated character arrays `char genrator[character + 1]` with manual index collision checking loop arrays (`int check[]`), zero heap allocations.
+  - *Concurrency / Execution*: Single-threaded procedural C CLI alongside an object-oriented Python architecture (`class Paswords`).
+  - *Low-Level APIs*: Standard C I/O and time seeding (`time(0)` / `srand()`), OS clipboard integration via `pyperclip` in Python.
+- **Verified Metrics & Technical Capabilities**:
+  - Dual-implementation: Low-level C memory model vs High-level Python abstraction.
+  - Shuffled non-repeating index distribution algorithm ensuring uniform character placement across configurable password lengths.
+- **URLs**:
+  - **GitHub URL**: `https://github.com/Naseer-fez/Pass_Gen`
+  - **Demo URL**: None
 
 ---
 
-## 6. Testing Infrastructure (Vitest + Testing Library)
+### 7. Contact Book Management System (`Phone-Contract`)
 
-### 6.1 `vitest.config.ts` Specification
-
-```typescript
-import { defineConfig } from 'vitest/config';
-import react from '@vitejs/plugin-react';
-import path from 'path';
-
-export default defineConfig({
-  plugins: [react()],
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: ['./vitest.setup.ts'],
-    include: ['src/**/*.{test,spec}.{ts,tsx}'],
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html'],
-      include: ['src/**/*.{ts,tsx}'],
-      exclude: [
-        'src/**/*.{test,spec}.{ts,tsx}',
-        'src/types/**/*',
-        'src/app/layout.tsx',
-      ],
-    },
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-    },
-  },
-});
-```
+- **Real Title**: Phone-Contract (Contact Book Management System)
+- **Domain Category**: `SYSTEMS`
+- **1-Sentence Description**: A low-level contact management CLI engine written in C that demonstrates dynamic memory allocation and bidirectional pointer manipulation through a custom Doubly Linked List data structure.
+- **Key Technologies Used**: C, Pointers & Dynamic Memory (`malloc`/`free`), Doubly Linked List, String manipulation (`string.h`), CLI validation *(+2: stdlib, ctype)*
+- **Architecture Details**:
+  - *Memory Management*: Explicit dynamic node heap allocation (`malloc(sizeof(contact))`) and deallocation (`free(temp)`), dual pointer link updates (`next` and `prev`).
+  - *Data Structures*: Bidirectional Doubly Linked List (`typedef struct contact { char name[50]; char phone_number[10]; struct contact *next; struct contact *prev; }`).
+  - *Validation / Flow*: Strict digit-only phone number validation (`phonenumbercheck`), interactive nested menu switch engine with error recovery and retry limits.
+- **Verified Metrics & Technical Capabilities**:
+  - Full CRUD (Create, Read, Update, Delete) operations implemented in raw C without third-party dependencies.
+  - Bidirectional pointer relinking ensuring $O(1)$ node removal once pointer is located and zero memory leaks.
+- **URLs**:
+  - **GitHub URL**: `https://github.com/Naseer-fez/Phone-Contract`
+  - **Demo URL**: None
 
 ---
 
-### 6.2 `vitest.setup.ts` Specification
+### 8. Student Record Management System (`Student_Records`)
 
-This file mocks browser environments necessary for Next.js App Router, Web Audio, Framer Motion, and CSS media queries.
-
-```typescript
-import '@testing-library/jest-dom/vitest';
-import { vi } from 'vitest';
-
-// 1. Mock window.matchMedia
-Object.defineProperty(window, 'matchMedia', {
-  writable: true,
-  value: vi.fn().mockImplementation((query: string) => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: vi.fn(), // deprecated
-    removeListener: vi.fn(), // deprecated
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn(),
-  })),
-});
-
-// 2. Mock ResizeObserver
-global.ResizeObserver = vi.fn().mockImplementation(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}));
-
-// 3. Mock IntersectionObserver
-global.IntersectionObserver = vi.fn().mockImplementation(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}));
-
-// 4. Mock Web Audio API
-class AudioContextMock {
-  state = 'suspended';
-  sampleRate = 44100;
-  destination = {};
-  currentTime = 0;
-
-  createGain() {
-    return {
-      gain: {
-        value: 1,
-        setTargetAtTime: vi.fn(),
-        setValueAtTime: vi.fn(),
-        linearRampToValueAtTime: vi.fn(),
-        exponentialRampToValueAtTime: vi.fn(),
-      },
-      connect: vi.fn(),
-      disconnect: vi.fn(),
-    };
-  }
-
-  createAnalyser() {
-    return {
-      fftSize: 64,
-      frequencyBinCount: 32,
-      getByteFrequencyData: vi.fn((arr: Uint8Array) => arr.fill(0)),
-      connect: vi.fn(),
-      disconnect: vi.fn(),
-    };
-  }
-
-  createOscillator() {
-    return {
-      type: 'sine',
-      frequency: {
-        value: 440,
-        setValueAtTime: vi.fn(),
-        exponentialRampToValueAtTime: vi.fn(),
-      },
-      connect: vi.fn(),
-      disconnect: vi.fn(),
-      start: vi.fn(),
-      stop: vi.fn(),
-    };
-  }
-
-  createMediaElementSource() {
-    return {
-      connect: vi.fn(),
-      disconnect: vi.fn(),
-    };
-  }
-
-  resume = vi.fn().mockResolvedValue(undefined);
-  suspend = vi.fn().mockResolvedValue(undefined);
-  close = vi.fn().mockResolvedValue(undefined);
-}
-
-// Attach to window and global
-// @ts-expect-error Mocking AudioContext
-window.AudioContext = AudioContextMock;
-// @ts-expect-error Mocking webkitAudioContext
-window.webkitAudioContext = AudioContextMock;
-
-// 5. Mock HTMLMediaElement play/pause
-window.HTMLMediaElement.prototype.play = vi.fn().mockResolvedValue(undefined);
-window.HTMLMediaElement.prototype.pause = vi.fn();
-window.HTMLMediaElement.prototype.load = vi.fn();
-
-// 6. Mock localStorage
-const localStorageMock = (() => {
-  let store: Record<string, string> = {};
-  return {
-    getItem: vi.fn((key: string) => store[key] || null),
-    setItem: vi.fn((key: string, value: string) => {
-      store[key] = value.toString();
-    }),
-    removeItem: vi.fn((key: string) => {
-      delete store[key];
-    }),
-    clear: vi.fn(() => {
-      store = {};
-    }),
-  };
-})();
-
-Object.defineProperty(window, 'localStorage', {
-  value: localStorageMock,
-});
-```
+- **Real Title**: Student_Records (Student Record Management System)
+- **Domain Category**: `SYSTEMS`
+- **1-Sentence Description**: A low-level C management system executing dynamic single linked list operations for academic student record tracking with positional insertion, sequential traversal, and manual heap reclamation.
+- **Key Technologies Used**: C, Singly Linked List, Dynamic Memory Allocation (`malloc`/`free`), String buffers, Pointer arithmetic *(+2: stdlib, stdio)*
+- **Architecture Details**:
+  - *Memory Management*: Dynamic heap node instantiation (`malloc(sizeof(student))`), traversal pointer walking, sequential node deletion and memory freeing across head, tail, and indexed positions (`insertatb`, `insertatend`, `insertatpos`, `delete_all`).
+  - *Data Structures*: Singly Linked List (`typedef struct student { int roll; char name[50]; float marks; char course[30]; struct student *next; }`).
+  - *Low-Level APIs*: Standard C memory and I/O runtime libraries (`stdlib.h`, `stdio.h`, `string.h`).
+- **Verified Metrics & Technical Capabilities**:
+  - Full positional CRUD support ($O(1)$ head insertion, $O(N)$ arbitrary position insertion/deletion).
+  - Comprehensive memory cleanup functions preventing memory leaks upon program termination.
+- **URLs**:
+  - **GitHub URL**: `https://github.com/Naseer-fez/Student_Records`
+  - **Demo URL**: None
 
 ---
 
-## 7. Utility Helper (`src/lib/utils/cn.ts`)
+### 9. Console Time-Slot Task Scheduler (`ToDoList`)
 
-Standard Tailwind class merger utility used throughout all components:
-
-```typescript
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-```
+- **Real Title**: ToDoList (Console Time-Slot Task Scheduler)
+- **Domain Category**: `SYSTEMS`
+- **1-Sentence Description**: A time-slot oriented CLI task scheduling system in C using fixed memory lookup tables, collision-free slot indexing, and multi-attempt validation menus.
+- **Key Technologies Used**: C, Fixed-size Multi-dimensional Arrays, String Manipulation, CLI Menus, In-Memory Slot Allocation *(+2: stdlib, stdio)*
+- **Architecture Details**:
+  - *Memory Management*: Static global memory tables (`char realtask[size][100]`), deterministic stack allocation, 0 temporary disk writes.
+  - *Data Structures*: Fixed hourly slot lookup arrays and status masks (`int array[] = {1, 1, ...}`).
+  - *Validation / Flow*: Interactive slot collision resolution, 3-attempt bounded validation retry system.
+- **Verified Metrics & Technical Capabilities**:
+  - 12 distinct hourly time slots (12 AM to 12 PM) with task allocation, relocation, deletion, and real-time availability filtering.
+  - 100% deterministic memory footprint with zero memory allocation failure risk.
+- **URLs**:
+  - **GitHub URL**: `https://github.com/Naseer-fez/ToDoList`
+  - **Demo URL**: None
 
 ---
 
-## 8. Step-by-Step Guidance for Milestone 1 Implementers
+### 10. Console Minesweeper Game (`MineSweper_game`)
 
-### Step 1: Initialize Project Configuration Files
-1. Write `package.json`, `tsconfig.json`, `postcss.config.js`, `next.config.mjs`.
-2. Write `vitest.config.ts` and `vitest.setup.ts`.
-3. Run `npm install` to install all dependencies.
+- **Real Title**: Minesweeper (Console Game)
+- **Domain Category**: `CREATIVE`
+- **1-Sentence Description**: A terminal-based Minesweeper game engine built in C featuring pseudorandom 1D/2D grid mapping, stateful cell masking, collision-safe mine distribution, and replay mechanics.
+- **Key Technologies Used**: C, Standard I/O, Pseudorandom Generation (`rand`/`srand`), Linear-to-2D Coordinate Projections, Stateful State Machines *(+2: time.h, stdlib.h)*
+- **Architecture Details**:
+  - *Memory Management*: In-memory static array state representation `int matrix[Totalgrids]` (0: Unopened, 1: Cleared Safe, 2: Mine), zero heap allocation overhead.
+  - *Data Structures*: Flat 1D array mapped to 10-column dynamic terminal row projections.
+  - *Game Loop & Validation*: Non-deterministic PRNG mine seeding with bounded retry input validation.
+- **Verified Metrics & Technical Capabilities**:
+  - Zero external runtime dependencies, 100% C standard library implementation.
+  - Configurable grid size and density ratio with instant win/loss condition evaluation.
+- **URLs**:
+  - **GitHub URL**: `https://github.com/Naseer-fez/MineSweper_game`
+  - **Demo URL**: None
 
-### Step 2: Set Up Styling & Typography
-1. Write `src/app/globals.css` with complete `:root` and `.dark` variables.
-2. Write `tailwind.config.ts` extending colors, shadows, backdrop blur, z-index, and border radii.
-3. Write `src/lib/utils/cn.ts`.
-4. Write `src/app/layout.tsx` loading `Inter` and `JetBrains_Mono` with variable axes.
+---
 
-### Step 3: Implement Store & Contracts (`useOSStore.ts`)
-1. Create `src/types/os.ts` defining `AppWindow`, `WindowState`, `OSState`, `OSActions`.
-2. Create `src/hooks/useOSStore.ts` using Zustand with persistence middleware for theme, wallpaper, desktopMode, soundEnabled.
-3. Add unit test `src/hooks/__tests__/useOSStore.test.ts` verifying window open/close/focus, z-index bumping, and mode switching.
+### 11. Restaurant Order & Billing System (`Restaurant_Management_Demo`)
 
-### Step 4: Implement Core UI Layers
-1. **DesktopCanvas** (`src/components/os/DesktopCanvas.tsx`): Layer 1, `z-10`, `h-[calc(100vh-28px)] top-[28px]`.
-2. **Wallpaper** (`src/components/os/Wallpaper.tsx`): Layer 0, `z-0`, 700ms crossfade, dark/light tint overlays (`bg-black/25` / `bg-black/10`).
-3. **DesktopGrid & DesktopIcon** (`src/components/os/DesktopGrid.tsx`, `DesktopIcon.tsx`): Auto-flow columns (92px cols, 104px rows, 48x48 icons, 300ms double-click disambiguation).
-4. **TopMenuBar** (`src/components/os/TopMenuBar.tsx`): 28px fixed bar, blur-2xl, Apple logo, active app title, live clock (`Sat Aug 15 12:51 PM`).
-5. **ShortcutRegistry** (`src/hooks/useKeyboardShortcuts.ts`): Cmd+K, Cmd+W, Cmd+M, Escape, Cmd+Shift+D, Cmd+Option+M.
+- **Real Title**: Restaurant_Management_Demo (Table Order & Billing System)
+- **Domain Category**: `SYSTEMS`
+- **1-Sentence Description**: A multi-table restaurant ordering and billing CLI application in C incorporating multi-dimensional array mapping, structured item catalogs, bubble sort synchronization, and itemized billing reports.
+- **Key Technologies Used**: C, C Structs, 2D State Arrays, Dual-Array Bubble Sort, Multi-Table State Tracking *(+2: string.h, stdio.h)*
+- **Architecture Details**:
+  - *Memory Management*: Contiguous structured arrays (`typedef struct items { int id; char menu[50]; float prices; }`) and 2D integer matrices for table-to-item mapping (`int tabelorder[10][quantity]`).
+  - *Algorithms & Data Structures*: Synchronized parallel bubble sort keeping item IDs and quantities sorted during order finalization, table occupancy bitmask arrays.
+  - *Validation / Flow*: Duplicate table/item rejection, bounded input retries, aggregated bill summation.
+- **Verified Metrics & Technical Capabilities**:
+  - Manages up to 10 concurrent tables with up to 20 menu items per table.
+  - Generates tabular formatted final billing reports across all active tables.
+- **URLs**:
+  - **GitHub URL**: `https://github.com/Naseer-fez/Restaurant_Management_Demo`
+  - **Demo URL**: None
 
-### Step 5: Verification & Testing
-1. Run `npm run test` (Vitest unit tests).
-2. Run `npm run build` (Next.js production compilation).
-3. Validate layout compliance against `PROJECT.md`.
+---
+
+### 12. Hospital Bed Management System (`Hosplital_Managment`)
+
+- **Real Title**: Hospital Bed Management System
+- **Domain Category**: `SYSTEMS`
+- **1-Sentence Description**: A console-based hospital bed occupancy and patient admission tracking system in C featuring 2D ward layout visualization, occupancy analytics, and circular historical logs.
+- **Key Technologies Used**: C, Fixed-size Global State Arrays, 2D Terminal Ward Rendering, Occupancy Metrics Calculation, CLI Multi-Attempt Menus *(+2: string.h, stdio.h)*
+- **Architecture Details**:
+  - *Memory Management*: Static contiguous buffer arrays (`char patientsnames[Totalbeds][100]`, `int bedcount[Totalbeds]`), deterministic footprint, zero dynamic fragmentation.
+  - *Data Structures & Analytics*: Flat array to 10x10 2D visual ward layout ('X' occupied, 'O' empty), occupancy rate percentage calculation, last-admitted and last-discharged tracking buffers.
+  - *Validation / Flow*: Bed collision avoidance, bounded retry input handling, admission/discharge state transitions.
+- **Verified Metrics & Technical Capabilities**:
+  - 100-bed ward capacity management with real-time occupancy statistics and 2D matrix visual reporting.
+- **URLs**:
+  - **GitHub URL**: `https://github.com/Naseer-fez/Hosplital_Managment`
+  - **Demo URL**: None
+
+---
+
+## Technical Insights & Portfolio Impact
+
+1. **Systems & Low-Level Native Programming**:
+   - `Taskbarengine` and `Livewallpaper` represent production-grade native Windows systems programming involving CBT hook injection into `explorer.exe`, DirectComposition 0-latency rendering, Direct3D 11 graphics pipelines, Rust FFI bridges with dynamic HLSL hot-reloading, and SEH watchdog timer fault isolation.
+2. **C Memory Management & Data Structure Fundamentals**:
+   - `Dates`, `Phone-Contract`, and `Student_Records` showcase deep mastery of manual memory management (`malloc`/`free`), raw pointer arithmetic, FFI pointer marshalling via `ctypes`, and custom linked list data structures (Doubly and Singly Linked Lists).
+3. **High-Performance Concurrency & Benchmarking**:
+   - `Api_RateLimiter` demonstrates multi-threaded concurrency controls, re-entrant locking (`RLock`), background daemon TTL thread cleaners, and rigorous load testing up to **100k client IP addresses** across **64 concurrent worker threads**.
+4. **Algorithmic Rigor**:
+   - `DSA-Journey` proves comprehensive algorithmic problem-solving ability across classic and advanced computing problems in C++, emphasizing optimal asymptotic time/space bounds over brute-force baselines.

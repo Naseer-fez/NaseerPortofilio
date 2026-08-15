@@ -292,10 +292,10 @@ describe('Adversarial Stress Testing: M1 Core OS UI & Interactions', () => {
   });
 
   // =========================================================================
-  // SUITE 2: DesktopIcon Click Timing & Disambiguation Stress Test
+  // SUITE 2: DesktopIcon Click Timing & Interaction Stress Test
   // =========================================================================
-  describe('2. DesktopIcon 300ms Disambiguation & Interaction Stress Tests', () => {
-    const mockApp = DEFAULT_APPS[0]; // Finder
+  describe('2. DesktopIcon Single-Click Launch & Interaction Stress Tests', () => {
+    const mockApp = DEFAULT_APPS[0]; // Terminal
     let onSelect: ReturnType<typeof vi.fn>;
     let onOpen: ReturnType<typeof vi.fn>;
 
@@ -309,14 +309,15 @@ describe('Adversarial Stress Testing: M1 Core OS UI & Interactions', () => {
       vi.useRealTimers();
     });
 
-    it('100ms interval (<300ms): triggers onSelect on 1st click and onOpen on 2nd click (double click)', () => {
+    it('100ms interval: triggers immediate onSelect and onOpen on each click', () => {
       render(<DesktopIcon app={mockApp} onSelect={onSelect} onOpen={onOpen} />);
       const iconButton = screen.getByTestId(`desktop-icon-${mockApp.id}`);
 
       // Click 1 at t=0ms
       fireEvent.click(iconButton);
       expect(onSelect).toHaveBeenCalledTimes(1);
-      expect(onOpen).toHaveBeenCalledTimes(0);
+      expect(onOpen).toHaveBeenCalledTimes(1);
+      expect(onOpen).toHaveBeenCalledWith(mockApp.id);
 
       // Advance 100ms
       act(() => {
@@ -325,50 +326,52 @@ describe('Adversarial Stress Testing: M1 Core OS UI & Interactions', () => {
 
       // Click 2 at t=100ms
       fireEvent.click(iconButton);
-      expect(onOpen).toHaveBeenCalledTimes(1);
-      expect(onOpen).toHaveBeenCalledWith(mockApp.id);
+      expect(onSelect).toHaveBeenCalledTimes(2);
+      expect(onOpen).toHaveBeenCalledTimes(2);
     });
 
-    it('250ms interval (<300ms): triggers onOpen on 2nd click (double click)', () => {
+    it('250ms interval: triggers onSelect and onOpen on 2nd click', () => {
       render(<DesktopIcon app={mockApp} onSelect={onSelect} onOpen={onOpen} />);
       const iconButton = screen.getByTestId(`desktop-icon-${mockApp.id}`);
 
       fireEvent.click(iconButton);
       expect(onSelect).toHaveBeenCalledTimes(1);
+      expect(onOpen).toHaveBeenCalledTimes(1);
 
       act(() => {
         vi.advanceTimersByTime(250);
       });
 
       fireEvent.click(iconButton);
-      expect(onOpen).toHaveBeenCalledTimes(1);
+      expect(onSelect).toHaveBeenCalledTimes(2);
+      expect(onOpen).toHaveBeenCalledTimes(2);
       expect(onOpen).toHaveBeenCalledWith(mockApp.id);
     });
 
-    it('300ms interval (threshold expired): triggers onSelect on both clicks (no double click)', () => {
+    it('300ms interval: triggers onSelect and onOpen on both clicks', () => {
       render(<DesktopIcon app={mockApp} onSelect={onSelect} onOpen={onOpen} />);
       const iconButton = screen.getByTestId(`desktop-icon-${mockApp.id}`);
 
       fireEvent.click(iconButton);
       expect(onSelect).toHaveBeenCalledTimes(1);
-      expect(onOpen).toHaveBeenCalledTimes(0);
+      expect(onOpen).toHaveBeenCalledTimes(1);
 
-      // Advance exactly 300ms to allow timeout to expire
       act(() => {
         vi.advanceTimersByTime(300);
       });
 
       fireEvent.click(iconButton);
       expect(onSelect).toHaveBeenCalledTimes(2);
-      expect(onOpen).toHaveBeenCalledTimes(0);
+      expect(onOpen).toHaveBeenCalledTimes(2);
     });
 
-    it('400ms interval (>300ms): triggers two independent onSelect calls (no double click)', () => {
+    it('400ms interval: triggers two independent single-click launches', () => {
       render(<DesktopIcon app={mockApp} onSelect={onSelect} onOpen={onOpen} />);
       const iconButton = screen.getByTestId(`desktop-icon-${mockApp.id}`);
 
       fireEvent.click(iconButton);
       expect(onSelect).toHaveBeenCalledTimes(1);
+      expect(onOpen).toHaveBeenCalledTimes(1);
 
       act(() => {
         vi.advanceTimersByTime(400);
@@ -376,59 +379,52 @@ describe('Adversarial Stress Testing: M1 Core OS UI & Interactions', () => {
 
       fireEvent.click(iconButton);
       expect(onSelect).toHaveBeenCalledTimes(2);
-      expect(onOpen).toHaveBeenCalledTimes(0);
+      expect(onOpen).toHaveBeenCalledTimes(2);
     });
 
     it('multi-click hammering sequence: Click(0ms)->Click(100ms)->Click(250ms)->Click(350ms)', () => {
       render(<DesktopIcon app={mockApp} onSelect={onSelect} onOpen={onOpen} />);
       const iconButton = screen.getByTestId(`desktop-icon-${mockApp.id}`);
 
-      // Click 1 (0ms): First click -> Select
+      // Click 1 (0ms)
       fireEvent.click(iconButton);
       expect(onSelect).toHaveBeenCalledTimes(1);
-      expect(onOpen).toHaveBeenCalledTimes(0);
+      expect(onOpen).toHaveBeenCalledTimes(1);
 
-      // Click 2 (100ms): Second click -> Open
+      // Click 2 (100ms)
       act(() => {
         vi.advanceTimersByTime(100);
       });
       fireEvent.click(iconButton);
-      expect(onOpen).toHaveBeenCalledTimes(1);
+      expect(onSelect).toHaveBeenCalledTimes(2);
+      expect(onOpen).toHaveBeenCalledTimes(2);
 
-      // Click 3 (250ms, 150ms after Click 2): Since timer was reset on Open, this is a new First click -> Select
+      // Click 3 (250ms)
       act(() => {
         vi.advanceTimersByTime(150);
       });
       fireEvent.click(iconButton);
-      expect(onSelect).toHaveBeenCalledTimes(2);
-      expect(onOpen).toHaveBeenCalledTimes(1);
+      expect(onSelect).toHaveBeenCalledTimes(3);
+      expect(onOpen).toHaveBeenCalledTimes(3);
 
-      // Click 4 (350ms, 100ms after Click 3): Second click -> Open again
+      // Click 4 (350ms)
       act(() => {
         vi.advanceTimersByTime(100);
       });
       fireEvent.click(iconButton);
-      expect(onOpen).toHaveBeenCalledTimes(2);
+      expect(onSelect).toHaveBeenCalledTimes(4);
+      expect(onOpen).toHaveBeenCalledTimes(4);
     });
 
-    it('cleans up pending 300ms click timer when unmounted without error', () => {
+    it('unmounts cleanly without throwing error', () => {
       const { unmount } = render(<DesktopIcon app={mockApp} onSelect={onSelect} onOpen={onOpen} />);
       const iconButton = screen.getByTestId(`desktop-icon-${mockApp.id}`);
 
       fireEvent.click(iconButton);
       expect(onSelect).toHaveBeenCalledTimes(1);
+      expect(onOpen).toHaveBeenCalledTimes(1);
 
-      // Unmount before 300ms timeout completes
-      act(() => {
-        vi.advanceTimersByTime(150);
-      });
       unmount();
-
-      // Advancing timer after unmount should not cause crash or state updates
-      act(() => {
-        vi.advanceTimersByTime(200);
-      });
-      expect(onOpen).not.toHaveBeenCalled();
     });
 
     it('handles Keyboard activation (Enter / Space keys) and onTouchEnd', () => {

@@ -1,1145 +1,313 @@
-# State & Interaction Specification Analysis — Milestone 1 (Core OS Framework)
+# AI / ML, Data Science, Math Models & Intelligent Automation Technical Analysis
 
+**Investigator**: Explorer 2 (AI/ML & Mathematical Systems Specialist)  
 **Date**: 2026-08-15  
-**Explorer**: Explorer 2 (Milestone 1 — Core OS Framework)  
-**Scope**: `types/os.ts`, `lib/constants/apps.ts`, `hooks/useOSStore.ts`, `hooks/useKeyboardShortcuts.ts`, and `lib/constants/shortcuts.ts`
+**Working Directory**: `d:\CODE\Html\Showcase\.agents\explorer_m1_2`  
+**Parent Orchestrator ID**: `743942f9-04e9-4002-b670-e9e6fae66637`  
 
 ---
 
 ## Executive Summary
 
-This document establishes the concrete, production-ready specifications and complete TypeScript code implementations for the macOS-Style Portfolio OS state architecture and keyboard interaction system.
+A comprehensive, deep inspection of all seven target repositories and submodules across `d:\CODE` was conducted. The inspected projects span the entire AI/ML lifecycle: from foundational first-principles mathematical optimization (closed-form OLS, Coordinate Descent ElasticNet/Lasso, Projected Gradient Descent NNLS) and supervised machine learning pipelines (Random Forest credit scoring, Ridge regularized property price forecasting, heuristic multi-attribute music recommendation) to full-scale autonomous agentic operating systems (Project Jarvis / FRIDAY multi-LLM orchestrator with ChromaDB RAG) and real-time edge speech recognition systems (Whisper local dictation suite with Win32 injection).
 
-The core OS state is driven by a single unified **Zustand store** (`useOSStore`) with selective localStorage persistence, strict TypeScript type definitions, multi-window stacking and focus management with z-index orchestration, macOS window geometry clamping, cascading window positioning, and a cross-platform keyboard shortcut system (`useKeyboardShortcuts`).
-
----
-
-## 1. Complete TypeScript Type Definitions (`types/os.ts`)
-
-The OS system requires exhaustive type definitions governing window state, geometry, desktop modes, themes, context menus, shortcuts, and application metadata.
-
-### Proposed Code for `types/os.ts`:
-
-```typescript
-/**
- * macOS Portfolio OS — Core Type Definitions
- * System Layer: State Architecture & Interface Contracts
- */
-
-export type DesktopMode = 'workspace' | 'ambient' | 'ambient-hero';
-
-export type ThemeMode = 'dark' | 'light' | 'system';
-
-export type AppCategory = 'system' | 'portfolio' | 'utility';
-
-export interface Position {
-  x: number;
-  y: number;
-}
-
-export interface Size {
-  width: number;
-  height: number;
-}
-
-export interface Bounds {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
-
-/**
- * App Window State Representation
- */
-export interface AppWindow {
-  /** Unique window and application identifier (e.g., 'terminal', 'projects') */
-  id: string;
-  /** Display title in window title bar and TopMenuBar when active */
-  title: string;
-  /** Lucide icon identifier string */
-  icon: string;
-  /** Whether the window is currently open (rendered in DOM) */
-  isOpen: boolean;
-  /** Whether the window is minimized to the dock */
-  isMinimized: boolean;
-  /** Whether the window is maximized to full viewport */
-  isMaximized: boolean;
-  /** Whether the window currently has active user focus */
-  isFocused: boolean;
-  /** Z-index layer for stacking order (z-20 to z-49) */
-  zIndex: number;
-  /** Current (x, y) coordinates on DesktopCanvas */
-  position: Position;
-  /** Current (width, height) in pixels */
-  size: Size;
-  /** Enforced minimum size (default: 360x240) */
-  minSize: Size;
-  /** Optional maximum size constraints */
-  maxSize?: Size;
-  /** Stored bounds prior to maximize/minimize for seamless restore */
-  prevBounds?: Bounds;
-  /** Default spawn position */
-  defaultPosition?: Position;
-  /** Default initial spawn size */
-  defaultSize: Size;
-}
-
-/** Backward compatibility alias */
-export type WindowState = AppWindow;
-
-/**
- * Application Registry Metadata
- */
-export interface AppMetadata {
-  id: string;
-  title: string;
-  description?: string;
-  icon: string;
-  category: AppCategory;
-  defaultPosition: Position;
-  defaultSize: Size;
-  minSize?: Size;
-  maxSize?: Size;
-  showInDock?: boolean;
-  showOnDesktop?: boolean;
-  shortcut?: string;
-}
-
-/**
- * Context Menu Data Structures
- */
-export interface ContextMenuItem {
-  id: string;
-  label: string;
-  icon?: string;
-  shortcut?: string;
-  action?: () => void;
-  disabled?: boolean;
-  separator?: boolean;
-  danger?: boolean;
-  children?: ContextMenuItem[];
-}
-
-export interface ContextMenuState {
-  x: number;
-  y: number;
-  items: ContextMenuItem[];
-}
-
-/**
- * Keyboard Shortcut Definition
- */
-export interface ShortcutHandler {
-  id: string;
-  key: string;
-  meta?: boolean;
-  ctrl?: boolean;
-  shift?: boolean;
-  alt?: boolean;
-  description: string;
-  handler: (e: KeyboardEvent) => void;
-  global?: boolean;
-  allowInInput?: boolean;
-}
-
-/**
- * Complete OS Zustand Store State and Action Interface
- */
-export interface OSStoreState {
-  // Window Management
-  windows: Record<string, AppWindow>;
-  activeWindowId: string | null;
-  baseZIndex: number;
-  maxZIndex: number;
-
-  // Desktop Environment
-  desktopMode: DesktopMode;
-  theme: ThemeMode;
-  wallpaperId: string;
-
-  // Audio Configuration
-  soundEnabled: boolean;
-  soundVolume: number;
-
-  // Context Menu & Modals
-  contextMenu: ContextMenuState | null;
-  spotlightOpen: boolean;
-  controlCenterOpen: boolean;
-
-  // Desktop Selection
-  selectedIconIds: string[];
-}
-
-export interface OSStoreActions {
-  // Window Actions
-  openWindow: (id: string, initialConfig?: Partial<AppWindow>) => void;
-  closeWindow: (id: string) => void;
-  minimizeWindow: (id: string) => void;
-  restoreWindow: (id: string) => void;
-  toggleMaximize: (id: string) => void;
-  focusWindow: (id: string) => void;
-  updatePosition: (id: string, position: Position) => void;
-  updateSize: (id: string, size: Size) => void;
-
-  // Desktop Mode Actions
-  setDesktopMode: (mode: DesktopMode) => void;
-  toggleDesktopMode: () => void;
-
-  // Theme & Appearance Actions
-  setTheme: (theme: ThemeMode) => void;
-  toggleTheme: () => void;
-  setWallpaper: (wallpaperId: string) => void;
-
-  // Sound Actions
-  setSoundEnabled: (enabled: boolean) => void;
-  setSoundVolume: (volume: number) => void;
-
-  // Context Menu Actions
-  setContextMenu: (menu: ContextMenuState | null) => void;
-  closeContextMenu: () => void;
-
-  // Modals & Overlays
-  setSpotlightOpen: (open: boolean) => void;
-  toggleSpotlight: () => void;
-  setControlCenterOpen: (open: boolean) => void;
-  toggleControlCenter: () => void;
-
-  // Desktop Icon Selection
-  selectIcon: (id: string, multiSelect?: boolean) => void;
-  setSelectedIcons: (ids: string[]) => void;
-  deselectAllIcons: () => void;
-
-  // App Registry
-  registerApp: (app: AppMetadata) => void;
-}
-
-export type OSStore = OSStoreState & OSStoreActions;
-```
+Every project below contains verified repository locations, Git remote URLs, mathematical formulations, architectural diagrams/flows, technology stacks, and verifiable capabilities.
 
 ---
 
-## 2. Initial Application Registry (`lib/constants/apps.ts`)
+## Project Catalog & Technical Deep Dive
 
-The application registry declares the 6 core macOS-style applications: **Terminal**, **Projects**, **About Me**, **Finder**, **Settings**, and **Mail**.
+### 1. Credit Score Predictor (`Credit_Score_Predictor`)
 
-### Geometry Specifications
-
-| App ID | Title | Icon | Category | Default Size (W×H) | Min Size (W×H) | Default Position (X, Y) |
-|---|---|---|---|---|---|---|
-| `finder` | Finder | Folder | System | 700 × 500 | 420 × 300 | 80, 60 |
-| `terminal` | Terminal | Terminal | System | 640 × 400 | 380 × 240 | 120, 80 |
-| `projects` | Projects | Briefcase | Portfolio | 800 × 550 | 450 × 320 | 160, 70 |
-| `about` | About Me | User | Portfolio | 700 × 500 | 420 × 300 | 200, 100 |
-| `settings` | Settings | Settings | System | 600 × 450 | 400 × 300 | 240, 120 |
-| `mail` | Mail | Mail | Portfolio | 550 × 400 | 380 × 260 | 280, 90 |
-
-### Proposed Code for `lib/constants/apps.ts`:
-
-```typescript
-import { AppMetadata, AppWindow, Position } from '@/types/os';
-
-export const DEFAULT_APPS: AppMetadata[] = [
-  {
-    id: 'finder',
-    title: 'Finder',
-    description: 'System File Browser and Navigation Tree',
-    icon: 'Folder',
-    category: 'system',
-    defaultSize: { width: 700, height: 500 },
-    minSize: { width: 420, height: 300 },
-    defaultPosition: { x: 80, y: 60 },
-    showInDock: true,
-    showOnDesktop: true,
-    shortcut: 'Cmd+1',
-  },
-  {
-    id: 'terminal',
-    title: 'Terminal',
-    description: 'Interactive CLI, Neofetch System Info, Command Interpreter',
-    icon: 'Terminal',
-    category: 'system',
-    defaultSize: { width: 640, height: 400 },
-    minSize: { width: 380, height: 240 },
-    defaultPosition: { x: 120, y: 80 },
-    showInDock: true,
-    showOnDesktop: true,
-    shortcut: 'Cmd+Option+T',
-  },
-  {
-    id: 'projects',
-    title: 'Projects',
-    description: 'Portfolio Showcase Gallery with Category Filtering',
-    icon: 'Briefcase',
-    category: 'portfolio',
-    defaultSize: { width: 800, height: 550 },
-    minSize: { width: 450, height: 320 },
-    defaultPosition: { x: 160, y: 70 },
-    showInDock: true,
-    showOnDesktop: true,
-    shortcut: 'Cmd+2',
-  },
-  {
-    id: 'about',
-    title: 'About Me',
-    description: 'Biography, Career Timeline, Skills Radar, Resume PDF',
-    icon: 'User',
-    category: 'portfolio',
-    defaultSize: { width: 700, height: 500 },
-    minSize: { width: 420, height: 300 },
-    defaultPosition: { x: 200, y: 100 },
-    showInDock: true,
-    showOnDesktop: true,
-    shortcut: 'Cmd+3',
-  },
-  {
-    id: 'settings',
-    title: 'Settings',
-    description: 'OS Customization: Wallpapers, Themes, Audio, Docks',
-    icon: 'Settings',
-    category: 'system',
-    defaultSize: { width: 600, height: 450 },
-    minSize: { width: 400, height: 300 },
-    defaultPosition: { x: 240, y: 120 },
-    showInDock: true,
-    showOnDesktop: true,
-    shortcut: 'Cmd+,',
-  },
-  {
-    id: 'mail',
-    title: 'Mail',
-    description: 'Interactive Contact Form with Validation & Dispatch',
-    icon: 'Mail',
-    category: 'portfolio',
-    defaultSize: { width: 550, height: 400 },
-    minSize: { width: 380, height: 260 },
-    defaultPosition: { x: 280, y: 90 },
-    showInDock: true,
-    showOnDesktop: true,
-    shortcut: 'Cmd+4',
-  },
-];
-
-export const DEFAULT_APPS_MAP: Record<string, AppMetadata> = DEFAULT_APPS.reduce(
-  (acc, app) => {
-    acc[app.id] = app;
-    return acc;
-  },
-  {} as Record<string, AppMetadata>
-);
-
-/**
- * Calculates a cascading spawn position to avoid exact window overlaps
- */
-export function calculateCascadePosition(
-  basePosition: Position,
-  openCount: number,
-  viewportWidth = 1440,
-  viewportHeight = 900,
-  windowWidth = 640,
-  windowHeight = 400
-): Position {
-  const step = 26;
-  const maxOffsetX = Math.max(50, viewportWidth - windowWidth - 100);
-  const maxOffsetY = Math.max(50, viewportHeight - windowHeight - 120);
-
-  const offsetX = (openCount * step) % maxOffsetX;
-  const offsetY = (openCount * step) % maxOffsetY;
-
-  return {
-    x: Math.max(20, Math.min(basePosition.x + offsetX, viewportWidth - windowWidth - 20)),
-    y: Math.max(32, Math.min(basePosition.y + offsetY, viewportHeight - windowHeight - 60)),
-  };
-}
-
-/**
- * Creates an initial AppWindow state from metadata
- */
-export function createInitialWindowState(
-  meta: AppMetadata,
-  zIndex = 20,
-  openCount = 0
-): AppWindow {
-  const defaultPosition = meta.defaultPosition || { x: 100, y: 100 };
-  const position = calculateCascadePosition(
-    defaultPosition,
-    openCount,
-    typeof window !== 'undefined' ? window.innerWidth : 1440,
-    typeof window !== 'undefined' ? window.innerHeight : 900,
-    meta.defaultSize.width,
-    meta.defaultSize.height
-  );
-
-  return {
-    id: meta.id,
-    title: meta.title,
-    icon: meta.icon,
-    isOpen: false,
-    isMinimized: false,
-    isMaximized: false,
-    isFocused: false,
-    zIndex,
-    position,
-    size: { ...meta.defaultSize },
-    minSize: meta.minSize || { width: 360, height: 240 },
-    maxSize: meta.maxSize,
-    defaultPosition: meta.defaultPosition,
-    defaultSize: { ...meta.defaultSize },
-  };
-}
-
-/**
- * Prepopulated initial windows record
- */
-export const INITIAL_WINDOWS: Record<string, AppWindow> = DEFAULT_APPS.reduce(
-  (acc, app, index) => {
-    acc[app.id] = createInitialWindowState(app, 20 + index, 0);
-    return acc;
-  },
-  {} as Record<string, AppWindow>
-);
-```
+- **Title**: Credit Score Predictor & Financial Risk Modeling Pipeline
+- **Domain Category**: AI / ML — Supervised Regression, Synthetic Data Generation & Data Cleaning Pipeline
+- **Local Paths**:
+  - Submodule / Repo: `d:\CODE\GithubCodes\Credit_Score_Predictor`
+  - Workspace Copy: `d:\CODE\AI_ML\Credit_Score_Predictor`
+- **GitHub URL**: `https://github.com/Naseer-fez/Credit_Score_Predictor` (Verified in `.git/modules/Credit_Score_Predictor/config`)
+- **Demo / Run Command**:
+  - `python Credit_Score_Predictor.py` (Full data processing & feature matrix generation)
+  - `python Ml_implementation.py` (Random Forest training & MAE/RMSE evaluation)
+  - `python Graph_Testing.py` (11-graph exploratory data analysis suite)
+- **1-Sentence Description**: An end-to-end financial ML pipeline featuring synthetic noisy data generation, fuzzy-string entity normalization, domain-specific debt-to-income feature engineering, and a tuned Random Forest Regressor predicting FICO-like credit scores.
+- **Key Technologies**:
+  - Visible: `Python`, `scikit-learn (RandomForestRegressor)`, `pandas`, `NumPy`, `RapidFuzz`
+  - Remainder Count: `+3` (`Seaborn/Matplotlib`, `re`, `pickle`)
+- **Architecture & Math Formulation**:
+  - **Synthetic Data Generation (`Data_Generator.py`)**: Synthesizes 3,500 customer records with realistic real-world noise: typographic substitutions (`{'a':'@', 'e':'3', 'i':'1', 'o':'0', 's':'$'}`), random casing, corrupted missing values (`NaN`, `null`, `N/A`), and domain financial penalties (Bankruptcy: -80 pts, Tax Liens: -40 pts, Gaussian noise $\mathcal{N}(0, 30)$).
+  - **Fuzzy Entity Resolution**: Implements `rapidfuzz.process.extractOne` with `fuzz.ratio` thresholding ($\ge 80$) to map corrupted occupation and credit mix text entries to 17 canonical industry classifications.
+  - **Variance-Adjusted Group Imputation**:
+    $$\text{ImputedValue} = |\mu_{\text{group}} - \sigma_{\text{group}}|$$
+    Grouped hierarchically by occupation to impute missing income and payment metrics.
+  - **Domain Feature Engineering**:
+    - Monthly Debt Estimation: $\text{MonthlyDebtPayment} = 0.01 \times \text{TotalLoanAmount} + 0.03 \times \text{TotalCreditBalance}$
+    - Debt-to-Income (DTI) Ratio: $\text{DTI} = \left(\frac{\text{MonthlyDebtPayment}}{\text{MonthlyIncome}}\right) \times 100$
+    - Credit Utilization Ratio (CUR): $\text{CUR} = \left(\frac{\text{TotalCreditBalance}}{\text{TotalCreditLimit}}\right) \times 100$, where $\text{TotalCreditLimit} = (\text{MonthlyIncome} \times 0.04) \times \text{NumCreditAccounts}$
+    - Credit Score Target Function:
+      $$\text{CreditScore} = 0.35 \times \text{PaymentHistoryPct} + 0.30 \times \text{CreditUtilizationRatio} + 0.15 \times \text{CreditHistoryLength\_Months} + 0.10 \times \text{DebtToIncomeRatio}$$
+      clipped strictly to $[0, 1000]$.
+  - **Model Architecture (`Ml_implementation.py`)**:
+    - 19 engineered float features fed to `RandomForestRegressor(n_estimators=400, max_depth=18, min_samples_split=4, min_samples_leaf=2, random_state=42, n_jobs=-1)`.
+    - Evaluated via 80/20 train/test split computing Mean Absolute Error (MAE) and Root Mean Squared Error (RMSE).
+- **Verified Capabilities**:
+  - 19 numerical feature matrix columns
+  - RapidFuzz Levenshtein string matching
+  - Group-by variance statistical imputation
+  - 11-panel automated Seaborn visualization suite
 
 ---
 
-## 3. Zustand OS Store (`hooks/useOSStore.ts`)
-
-### Requirements & Architecture
-1. **Separation of Concerns**: OS store exclusively manages windows, desktop mode, wallpaper, theme, and context menus. Audio streaming/playback is strictly isolated to `useMusicStore`.
-2. **Selective Persistence**:
-   - Persisted to `localStorage`: `theme`, `wallpaperId`, `soundEnabled`, `soundVolume`, `desktopMode`.
-   - Ephemeral (page reload reset): `windows`, `activeWindowId`, `contextMenu`, `spotlightOpen`, `controlCenterOpen`, `selectedIconIds`.
-3. **Z-Index Elevation**:
-   - Base z-index starts at 20.
-   - Focusing or opening a window increments `maxZIndex` and promotes that window above all other Layer 2 windows (up to z-49).
-4. **Window Deactivation & Focus Delegation**:
-   - When active window closes or minimizes, focus delegates automatically to the topmost remaining open, non-minimized window.
-5. **Geometry Clamping**:
-   - `y >= 28` (top menu bar safe clearance).
-   - Horizontal clamping allows partial overhang with at least 100px visible.
-   - Resizing enforces `width >= minSize.width` and `height >= minSize.height`.
-
-### Proposed Code for `hooks/useOSStore.ts`:
-
-```typescript
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import {
-  OSStore,
-  AppWindow,
-  DesktopMode,
-  ThemeMode,
-  Position,
-  Size,
-  ContextMenuState,
-  AppMetadata,
-} from '@/types/os';
-import {
-  DEFAULT_APPS_MAP,
-  INITIAL_WINDOWS,
-  calculateCascadePosition,
-} from '@/lib/constants/apps';
-
-const MENU_BAR_HEIGHT = 28;
-const MIN_OVERHANG_VISIBLE = 100;
-
-export const useOSStore = create<OSStore>()(
-  persist(
-    (set, get) => ({
-      // State Properties
-      windows: INITIAL_WINDOWS,
-      activeWindowId: null,
-      baseZIndex: 20,
-      maxZIndex: 25,
-      desktopMode: 'workspace',
-      theme: 'dark',
-      wallpaperId: 'sonoma-dark',
-      soundEnabled: true,
-      soundVolume: 0.5,
-      contextMenu: null,
-      spotlightOpen: false,
-      controlCenterOpen: false,
-      selectedIconIds: [],
-
-      // Actions
-      openWindow: (id: string, initialConfig?: Partial<AppWindow>) => {
-        const state = get();
-        const existingWindow = state.windows[id];
-        const nextZIndex = Math.max(state.maxZIndex + 1, 21);
-
-        const openCount = Object.values(state.windows).filter((w) => w.isOpen).length;
-
-        // If window already exists in dictionary
-        if (existingWindow) {
-          const updatedWindows = { ...state.windows };
-
-          // Unfocus all other windows
-          Object.keys(updatedWindows).forEach((wId) => {
-            updatedWindows[wId] = {
-              ...updatedWindows[wId],
-              isFocused: wId === id,
-            };
-          });
-
-          // Position if opening from closed state
-          let newPosition = existingWindow.position;
-          if (!existingWindow.isOpen) {
-            newPosition = calculateCascadePosition(
-              existingWindow.defaultPosition || { x: 100, y: 100 },
-              openCount,
-              typeof window !== 'undefined' ? window.innerWidth : 1440,
-              typeof window !== 'undefined' ? window.innerHeight : 900,
-              existingWindow.size.width,
-              existingWindow.size.height
-            );
-          }
-
-          updatedWindows[id] = {
-            ...existingWindow,
-            ...initialConfig,
-            isOpen: true,
-            isMinimized: false,
-            isFocused: true,
-            zIndex: nextZIndex,
-            position: initialConfig?.position || newPosition,
-          };
-
-          set({
-            windows: updatedWindows,
-            activeWindowId: id,
-            maxZIndex: nextZIndex,
-            contextMenu: null,
-          });
-          return;
-        }
-
-        // Window not yet in dictionary: create from metadata
-        const meta = DEFAULT_APPS_MAP[id];
-        const defaultSize = meta?.defaultSize || { width: 640, height: 400 };
-        const minSize = meta?.minSize || { width: 360, height: 240 };
-        const defaultPosition = meta?.defaultPosition || { x: 100, y: 100 };
-
-        const cascadedPosition = calculateCascadePosition(
-          defaultPosition,
-          openCount,
-          typeof window !== 'undefined' ? window.innerWidth : 1440,
-          typeof window !== 'undefined' ? window.innerHeight : 900,
-          defaultSize.width,
-          defaultSize.height
-        );
-
-        const newWindow: AppWindow = {
-          id,
-          title: meta?.title || id.charAt(0).toUpperCase() + id.slice(1),
-          icon: meta?.icon || 'AppWindow',
-          isOpen: true,
-          isMinimized: false,
-          isMaximized: false,
-          isFocused: true,
-          zIndex: nextZIndex,
-          position: cascadedPosition,
-          size: defaultSize,
-          minSize,
-          maxSize: meta?.maxSize,
-          defaultPosition,
-          defaultSize,
-          ...initialConfig,
-        };
-
-        const updatedWindows = { ...state.windows };
-        Object.keys(updatedWindows).forEach((wId) => {
-          updatedWindows[wId] = {
-            ...updatedWindows[wId],
-            isFocused: false,
-          };
-        });
-        updatedWindows[id] = newWindow;
-
-        set({
-          windows: updatedWindows,
-          activeWindowId: id,
-          maxZIndex: nextZIndex,
-          contextMenu: null,
-        });
-      },
-
-      closeWindow: (id: string) => {
-        const state = get();
-        const target = state.windows[id];
-        if (!target || !target.isOpen) return;
-
-        const updatedWindows = {
-          ...state.windows,
-          [id]: {
-            ...target,
-            isOpen: false,
-            isFocused: false,
-            isMaximized: false,
-          },
-        };
-
-        // Determine new active window if closed window was active
-        let nextActiveId = state.activeWindowId;
-        if (state.activeWindowId === id) {
-          const remainingOpen = Object.values(updatedWindows).filter(
-            (w) => w.id !== id && w.isOpen && !w.isMinimized
-          );
-
-          if (remainingOpen.length > 0) {
-            remainingOpen.sort((a, b) => b.zIndex - a.zIndex);
-            nextActiveId = remainingOpen[0].id;
-            updatedWindows[nextActiveId] = {
-              ...updatedWindows[nextActiveId],
-              isFocused: true,
-            };
-          } else {
-            nextActiveId = null;
-          }
-        }
-
-        set({
-          windows: updatedWindows,
-          activeWindowId: nextActiveId,
-        });
-      },
-
-      minimizeWindow: (id: string) => {
-        const state = get();
-        const target = state.windows[id];
-        if (!target || !target.isOpen || target.isMinimized) return;
-
-        const updatedWindows = {
-          ...state.windows,
-          [id]: {
-            ...target,
-            isMinimized: true,
-            isFocused: false,
-          },
-        };
-
-        let nextActiveId = state.activeWindowId;
-        if (state.activeWindowId === id) {
-          const remainingOpen = Object.values(updatedWindows).filter(
-            (w) => w.id !== id && w.isOpen && !w.isMinimized
-          );
-
-          if (remainingOpen.length > 0) {
-            remainingOpen.sort((a, b) => b.zIndex - a.zIndex);
-            nextActiveId = remainingOpen[0].id;
-            updatedWindows[nextActiveId] = {
-              ...updatedWindows[nextActiveId],
-              isFocused: true,
-            };
-          } else {
-            nextActiveId = null;
-          }
-        }
-
-        set({
-          windows: updatedWindows,
-          activeWindowId: nextActiveId,
-        });
-      },
-
-      restoreWindow: (id: string) => {
-        const state = get();
-        const target = state.windows[id];
-        if (!target) return;
-
-        get().openWindow(id);
-      },
-
-      toggleMaximize: (id: string) => {
-        const state = get();
-        const target = state.windows[id];
-        if (!target || !target.isOpen) return;
-
-        const nextZIndex = Math.max(state.maxZIndex + 1, 21);
-        const isCurrentlyMaximized = target.isMaximized;
-
-        const updatedWindows = { ...state.windows };
-
-        // Unfocus other windows
-        Object.keys(updatedWindows).forEach((wId) => {
-          updatedWindows[wId] = {
-            ...updatedWindows[wId],
-            isFocused: wId === id,
-          };
-        });
-
-        if (isCurrentlyMaximized) {
-          // Restore previous bounds
-          const prev = target.prevBounds || {
-            x: target.defaultPosition?.x ?? 100,
-            y: target.defaultPosition?.y ?? 100,
-            width: target.defaultSize.width,
-            height: target.defaultSize.height,
-          };
-
-          updatedWindows[id] = {
-            ...target,
-            isMaximized: false,
-            isFocused: true,
-            zIndex: nextZIndex,
-            position: { x: prev.x, y: prev.y },
-            size: { width: prev.width, height: prev.height },
-            prevBounds: undefined,
-          };
-        } else {
-          // Save current bounds and maximize
-          const vw = typeof window !== 'undefined' ? window.innerWidth : 1440;
-          const vh = typeof window !== 'undefined' ? window.innerHeight : 900;
-
-          updatedWindows[id] = {
-            ...target,
-            isMaximized: true,
-            isFocused: true,
-            zIndex: nextZIndex,
-            prevBounds: {
-              x: target.position.x,
-              y: target.position.y,
-              width: target.size.width,
-              height: target.size.height,
-            },
-            position: { x: 0, y: MENU_BAR_HEIGHT },
-            size: { width: vw, height: vh - MENU_BAR_HEIGHT },
-          };
-        }
-
-        set({
-          windows: updatedWindows,
-          activeWindowId: id,
-          maxZIndex: nextZIndex,
-        });
-      },
-
-      focusWindow: (id: string) => {
-        const state = get();
-        const target = state.windows[id];
-        if (!target || !target.isOpen) return;
-
-        if (state.activeWindowId === id && target.isFocused && !target.isMinimized) {
-          return;
-        }
-
-        const nextZIndex = Math.max(state.maxZIndex + 1, 21);
-        const updatedWindows = { ...state.windows };
-
-        Object.keys(updatedWindows).forEach((wId) => {
-          updatedWindows[wId] = {
-            ...updatedWindows[wId],
-            isFocused: wId === id,
-            isMinimized: wId === id ? false : updatedWindows[wId].isMinimized,
-          };
-        });
-
-        updatedWindows[id] = {
-          ...target,
-          isOpen: true,
-          isMinimized: false,
-          isFocused: true,
-          zIndex: nextZIndex,
-        };
-
-        set({
-          windows: updatedWindows,
-          activeWindowId: id,
-          maxZIndex: nextZIndex,
-        });
-      },
-
-      updatePosition: (id: string, position: Position) => {
-        const state = get();
-        const target = state.windows[id];
-        if (!target) return;
-
-        const vw = typeof window !== 'undefined' ? window.innerWidth : 1440;
-        const vh = typeof window !== 'undefined' ? window.innerHeight : 900;
-
-        // macOS Window drag clamping
-        const clampedX = Math.max(
-          -(target.size.width - MIN_OVERHANG_VISIBLE),
-          Math.min(position.x, vw - MIN_OVERHANG_VISIBLE)
-        );
-        const clampedY = Math.max(
-          MENU_BAR_HEIGHT,
-          Math.min(position.y, vh - 40)
-        );
-
-        set({
-          windows: {
-            ...state.windows,
-            [id]: {
-              ...target,
-              position: { x: clampedX, y: clampedY },
-              isMaximized: false,
-            },
-          },
-        });
-      },
-
-      updateSize: (id: string, size: Size) => {
-        const state = get();
-        const target = state.windows[id];
-        if (!target) return;
-
-        const clampedWidth = Math.max(size.width, target.minSize.width);
-        const clampedHeight = Math.max(size.height, target.minSize.height);
-
-        set({
-          windows: {
-            ...state.windows,
-            [id]: {
-              ...target,
-              size: { width: clampedWidth, height: clampedHeight },
-              isMaximized: false,
-            },
-          },
-        });
-      },
-
-      // Desktop & Mode Actions
-      setDesktopMode: (mode: DesktopMode) => set({ desktopMode: mode }),
-
-      toggleDesktopMode: () => {
-        const current = get().desktopMode;
-        set({ desktopMode: current === 'workspace' ? 'ambient' : 'workspace' });
-      },
-
-      // Theme Actions
-      setTheme: (theme: ThemeMode) => {
-        set({ theme });
-        if (typeof document !== 'undefined') {
-          if (theme === 'dark') {
-            document.documentElement.classList.add('dark');
-          } else if (theme === 'light') {
-            document.documentElement.classList.remove('dark');
-          } else {
-            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            document.documentElement.classList.toggle('dark', systemPrefersDark);
-          }
-        }
-      },
-
-      toggleTheme: () => {
-        const current = get().theme;
-        const nextTheme = current === 'dark' ? 'light' : 'dark';
-        get().setTheme(nextTheme);
-      },
-
-      setWallpaper: (wallpaperId: string) => set({ wallpaperId }),
-
-      // Sound Actions
-      setSoundEnabled: (soundEnabled: boolean) => set({ soundEnabled }),
-      setSoundVolume: (soundVolume: number) =>
-        set({ soundVolume: Math.max(0, Math.min(1, soundVolume)) }),
-
-      // Context Menu Actions
-      setContextMenu: (contextMenu: ContextMenuState | null) => set({ contextMenu }),
-      closeContextMenu: () => set({ contextMenu: null }),
-
-      // Overlays Actions
-      setSpotlightOpen: (spotlightOpen: boolean) =>
-        set({ spotlightOpen, contextMenu: null }),
-      toggleSpotlight: () =>
-        set((state) => ({ spotlightOpen: !state.spotlightOpen, contextMenu: null })),
-
-      setControlCenterOpen: (controlCenterOpen: boolean) =>
-        set({ controlCenterOpen, contextMenu: null }),
-      toggleControlCenter: () =>
-        set((state) => ({ controlCenterOpen: !state.controlCenterOpen, contextMenu: null })),
-
-      // Desktop Icon Selection
-      selectIcon: (id: string, multiSelect = false) => {
-        const { selectedIconIds } = get();
-        if (multiSelect) {
-          const isSelected = selectedIconIds.includes(id);
-          set({
-            selectedIconIds: isSelected
-              ? selectedIconIds.filter((i) => i !== id)
-              : [...selectedIconIds, id],
-          });
-        } else {
-          set({ selectedIconIds: [id] });
-        }
-      },
-
-      setSelectedIcons: (ids: string[]) => set({ selectedIconIds: ids }),
-
-      deselectAllIcons: () => {
-        if (get().selectedIconIds.length > 0) {
-          set({ selectedIconIds: [] });
-        }
-      },
-
-      registerApp: (app: AppMetadata) => {
-        const state = get();
-        if (state.windows[app.id]) return;
-
-        const newWin = createInitialWindowState(app, state.maxZIndex + 1);
-        set({
-          windows: {
-            ...state.windows,
-            [app.id]: newWin,
-          },
-        });
-      },
-    }),
-    {
-      name: 'macos-portfolio-os-state',
-      storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({
-        theme: state.theme,
-        wallpaperId: state.wallpaperId,
-        soundEnabled: state.soundEnabled,
-        soundVolume: state.soundVolume,
-        desktopMode: state.desktopMode,
-      }),
-    }
-  )
-);
-```
+### 2. Real Estate Price Pipeline (`Real-Estate-Pipeline`)
+
+- **Title**: Real-Estate-Pipeline — Mathematical Ridge Regression from First Principles
+- **Domain Category**: AI / ML — Mathematical Modeling, Data Cleaning & Regularized Regression
+- **Local Paths**:
+  - Submodule / Repo: `d:\CODE\GithubCodes\Real-Estate-Pipeline`
+  - Workspace Copy: `d:\CODE\AI_ML\Projects\RealEstateProject`
+- **GitHub URL**: `https://github.com/Naseer-fez/Real-Estate-Pipeline` (Verified in `.git/modules/Real-Estate-Pipeline/config`)
+- **Demo / Run Command**:
+  - `python RealEstateProject/Ridge_Regression.py`
+  - `python RealEstateProject/Data_cleaning.py`
+- **1-Sentence Description**: A first-principles data science and machine learning pipeline that cleans messy multi-variable property records, calculates multi-level statistical feature aggregations, and trains an exact closed-form Ridge Regression model using pure NumPy matrix operations.
+- **Key Technologies**:
+  - Visible: `Python`, `NumPy (Linear Algebra)`, `pandas`, `First-Principles Ridge Math`, `Data Synthesis Engine`
+  - Remainder Count: `+2` (`Regex Normalization`, `CSV Matrix Serialization`)
+- **Architecture & Math Formulation**:
+  - **Data Ingestion & Cleaning (`Data_cleaning.py`)**:
+    - Strips whitespace and normalizes text casing across `City`, `PropertyType`, `Condition`, `Address`.
+    - Converts categorical booleans (`Garage`, `Pool`, `Fireplace`) to float $\{0.0, 1.0\}$ indicator variables based on affirmative sets (`{'YES', 'True', '1', 'Y'}`).
+    - Ordinal Condition mapping: `{'Fair': 4, 'Excellent': 5, 'Good': 3, 'Poor': 2}`.
+  - **Multi-Level Spatial & Segment Imputation**:
+    - Imputes `SquareFeet` using city-level offset: $\mu_{\text{city}}(\text{SqFt}) - \sigma_{\text{city}}(\text{SqFt})$.
+    - Imputes `HOAFees` using rounded property-type means: $\text{round}(\mu_{\text{type}}(\text{HOA}) / 10) \times 10 + 10$.
+    - Imputes neighborhood variables (`SchoolRating`, `CrimeRate`, `WalkScore`, `DistanceToCity`, `PropertyTaxRate`, `NeighborhoodIncome`) using address-level aggregations $(\mu - \sigma)$.
+  - **Closed-Form Ridge Regression Math (`Ridge_Regression.py`)**:
+    - Augments feature matrix with bias intercept: $X_{\text{bias}} = [1_{n \times 1} \mid X] \in \mathbb{R}^{n \times (p+1)}$.
+    - Identity penalty matrix $I \in \mathbb{R}^{(p+1) \times (p+1)}$ with $I_{0,0} = 0$ to leave intercept unpenalized.
+    - Normal Equation Analytical Inversion:
+      $$w = (X_{\text{bias}}^T X_{\text{bias}} + \lambda I)^{-1} X_{\text{bias}}^T y$$
+    - Hyperparameter Optimization: Performs grid search over $\lambda \in \{0, 0.1, 0.001\}$ selecting parameters minimizing Mean Squared Error:
+      $$\text{MSE}(y, \hat{y}) = \frac{1}{n} \sum_{i=1}^n (y_i - \hat{y}_i)^2$$
+- **Verified Capabilities**:
+  - 16 numerical property attributes extracted
+  - Zero external machine learning frameworks (100% pure NumPy implementation)
+  - Analytical matrix inversion with intercept preservation
+  - Multi-tier group-by variance-adjusted imputation
 
 ---
 
-## 4. Keyboard Shortcuts System (`lib/constants/shortcuts.ts` & `hooks/useKeyboardShortcuts.ts`)
+### 3. Music Recommendation System (`music_rec`)
 
-### Shortcut Key Bindings Specification
+- **Title**: Spotify Music Recommendation System & User Profiling Engine
+- **Domain Category**: AI / ML — Content-Based Recommendation, Multi-Dimensional Attribute Matching & Variance Filtering
+- **Local Paths**:
+  - Submodule / Repo: `d:\CODE\GithubCodes\music_rec`
+  - Workspace Copy: `d:\CODE\AI_ML\Projects\Music_rec`
+- **GitHub URL**: `https://github.com/Naseer-fez/music_rec` (Verified in `.git/modules/music_rec/config`)
+- **Demo / Run Command**:
+  - `python Music_rec/Musicrecomendation.py`
+- **1-Sentence Description**: A multi-tiered content-based recommendation engine that extracts audio features from Spotify datasets, synthesizes 50 custom user preference profiles, and executes heuristic bounding and tolerance-relaxation algorithms to match optimal tracks.
+- **Key Technologies**:
+  - Visible: `Python`, `pandas`, `NumPy`, `Kaggle Spotify Dataset`, `Heuristic Filtering Algorithms`
+  - Remainder Count: `+2` (`Temporal Range Querying`, `Multi-Dimensional Variance Math`)
+- **Architecture & Math Formulation**:
+  - **Dataset Ingestion**: Ingests Kaggle high-popularity Spotify dataset (30,000+ tracks) across genres (`pop`, `rock`, `hip-hop`, `latin`, `electronic`, `gaming`), subgenres (`modern`, `throwback`, `sof`, `classic`, `chill`, `global`), and release dates ($2000 \le t \le 2024$).
+  - **User Cohort Synthesis**: Synthesizes 50 multidimensional user profiles with attributes: `[min_popularity, max_popularity, likes_danceable, max_loudness, preferred_genre, preferred_subgenre, release_start, release_end]`.
+  - **Statistical Spread Metric**:
+    $$\text{Variation}(A) = \max(A) - \bar{A} - \sigma_A$$
+    Calculated across popularity, loudness, and danceability for both user cohort and Spotify catalog to establish dynamic matching windows:
+    $$\text{Window}_A = [A_{\text{user}} - \text{Variation}(A), A_{\text{user}} + \text{Variation}(A)]$$
+  - **Hierarchical Fallback Resolution (`Algorithm` class)**:
+    1. *Strict Categorical & Feature Bounding*: Intersects genre, subgenre, and multidimensional feature bounds.
+    2. *Temporal Window Expansion*: Recursively expands release year bounds $\pm \Delta_{\text{years}}$ when candidate set is empty.
+    3. *Tolerance Relaxation Loop*: Incrementally relaxes popularity threshold with step $\Delta = 0.1$ up to $+30$ until candidate count collapses to 1.
+    4. *4-Tier Fallback Scraping Strategy*:
+       - **Tier 1**: Upward popularity relaxation ($\text{pop} \ge \text{target} + \tau$)
+       - **Tier 2**: Downward popularity relaxation ($\text{pop} \le \text{target} - \tau$)
+       - **Tier 3**: Default mode rank retrieval
+       - **Tier 4**: Nearest Euclidean neighbor fallback: $\arg\min_i |\text{track\_popularity}_i - \text{user\_target}|$
+- **Verified Capabilities**:
+  - 50 synthetic user profiles evaluated concurrently
+  - Heuristic bounding algorithms avoiding empty recommendation sets
+  - Multi-tier dynamic tolerance relaxation ($\Delta = 0.1$, $\tau \le 30$)
+  - Dual dataset integration (Kaggle Spotify + Synthetic User Database)
 
-| Key Combination | Scope | Target Action | Allow in Input? | `preventDefault` |
+---
+
+### 4. Project Jarvis & FRIDAY (`Project_Jarvis`)
+
+- **Title**: Project Jarvis & FRIDAY — Autonomous Local AI Assistant & Agentic Operating System
+- **Domain Category**: AI / ML — Autonomous Agents, Multi-LLM Routing, RAG, Voice AI & Desktop Automation
+- **Local Paths**:
+  - Repository: `d:\CODE\GithubCodes\Project_Jarvis`
+  - Monoliths: `d:\CODE\FRIDAY.py` (4,504 lines), `d:\CODE\jarvis_monolith.py` (25,155 lines)
+- **GitHub URL**: `https://github.com/Naseer-fez/Project_Jarvis` (Verified in `.git/modules/Project_Jarvis/config`)
+- **Demo / Run Command**:
+  - `python main.py` (CLI text mode)
+  - `python main.py --voice` (Voice I/O mode)
+  - `python main.py --gui` (Web dashboard at `http://localhost:7070`)
+  - `Start.ps1` (PowerShell unified startup script)
+- **1-Sentence Description**: A privacy-first local autonomous agent framework with dual local-to-cloud LLM fallback cascades, ChromaDB vector RAG, multi-modal voice processing (Whisper STT + Edge-TTS), and full desktop automation capabilities across 10+ third-party services.
+- **Key Technologies**:
+  - Visible: `Python`, `Ollama (Local LLMs)`, `ChromaDB (Vector RAG)`, `OpenAI / Gemini / Groq APIs`, `Whisper STT`
+  - Remainder Count: `+12` (`edge-tts`, `pyttsx3`, `PyAutoGUI`, `OpenCV`, `FastAPI / WebSockets`, `Streamlit`, `Telegram Bot API`, `Spotipy`, `Google APIs (Gmail/Calendar)`, `Notion SDK`, `PyGitHub`, `SQLite3 Pool`)
+- **Architecture & Technical Pipeline**:
+  - **Agentic Control Loop (`JarvisControllerV2`)**: Implements cyclic plan-and-solve execution:
+    $$\text{Plan} \longrightarrow \text{Risk Assessment} \longrightarrow \text{User Confirmation} \longrightarrow \text{Tool Dispatch} \longrightarrow \text{Telemetry/Reflection}$$
+  - **Multi-LLM Routing & Fallback Subsystem (`core/llm/`)**:
+    - `ModelRouter`: Dynamically dispatches tasks based on complexity (Reasoning: `deepseek-r1:8b`, Conversational: `mistral:7b`, Fast Summaries: `llama3.2:1b` / `gemma3:1b`).
+    - Fallback Cascade: Local Ollama $\rightarrow$ Google Gemini $\rightarrow$ Groq $\rightarrow$ OpenAI GPT-4o $\rightarrow$ Anthropic Claude.
+  - **Memory & RAG Subsystem (`core/memory/`)**:
+    - `SemanticMemory`: ChromaDB vector store with sentence-transformers embedding functions for document similarity search.
+    - `SQLitePool`: Transactional relational storage for session states, execution logs, and entity facts.
+    - `ContextCompressor`: Context window optimizer reducing token usage on long conversational threads.
+    - Automated Dropbox watcher: Continuously ingests text files, code, screenshots, and OCR feeds into memory.
+  - **Voice & Desktop Multimodal Pipeline**:
+    - STT: Local OpenAI Whisper with Google Speech fallback.
+    - TTS: Streaming Microsoft `edge-tts` with offline `pyttsx3` fallback.
+    - Desktop: OpenCV screenshot capture, PyTesseract OCR indexing, PyAutoGUI mouse/keyboard control.
+  - **Consolidated Monolithic Architecture (`FRIDAY.py`, `jarvis_monolith.py`)**:
+    - Monolithic compilation merging 58+ individual subsystems with topologically sorted dependencies, `sys.modules` runtime mocks, and zero cross-file import bottlenecks.
+- **Verified Capabilities**:
+  - 10+ Production Tool Integrations (Telegram, Spotify, Gmail, Calendar, Notion, GitHub, System Shell, Weather, Python REPL)
+  - 100% offline air-gapped capability (Ollama + Whisper + Pyttsx3 + SQLite)
+  - 25,000+ line consolidated monolithic architecture with real-time WebSocket dashboard
+
+---
+
+### 5. Simple ChatBot (`Simple_ChatBot`)
+
+- **Title**: Simple ChatBot — Rule-Based Conversational Agent & Intent Classifier
+- **Domain Category**: AI / ML — Natural Language Processing, Rule-Based Intent Recognition & Lexical Substring Search
+- **Local Paths**:
+  - Submodule / Repo: `d:\CODE\GithubCodes\Simple_ChatBot`
+- **GitHub URL**: `https://github.com/Naseer-fez/Simple_ChatBot` (Verified in `.git/modules/Simple_ChatBot/config`)
+- **Demo / Run Command**:
+  - `python Chatbot/Chatbot.py`
+- **1-Sentence Description**: A lightweight, deterministic conversational agent utilizing combinatorial substring search, regex text sanitization, and stochastic response sampling across 400+ domain-mapped conversational intents.
+- **Key Technologies**:
+  - Visible: `Python`, `Regular Expressions (re)`, `NumPy (Randomized Dispatch)`, `Lexical Substring Search`, `Predefined Intent Knowledge Base`
+  - Remainder Count: `+1` (`String Normalization Pipeline`)
+- **Architecture & Intent Recognition**:
+  - **Lexical Sanitization**: Strips non-alphabetic characters using regex `re.sub(r'[^a-zA-Z]', '', text)` and standardizes casing.
+  - **Combinatorial Substring Search (`keywordsending`)**:
+    - Evaluates all contiguous candidate substrings $S[i:j]$ for $0 \le i < j \le |S|$.
+    - Evaluates against target intent keywords with minimum length constraints ($|S| \ge 3$) to eliminate false-positive substring matches.
+  - **Structured Intent Knowledge Base (`Responses_data.py`)**:
+    - 425+ lines mapping compound keyword tuples to response candidate arrays.
+    - Categorized domains: Greetings, Farewells, Emotional States (Happy, Sad, Depressed, Tired, Bored, Stressed), Entertainment (Jokes, Riddles, Fun Facts, Quizzes), Utility Queries (Time, Date, Weather), and Gratitude.
+  - **Stochastic Response Dispatching**:
+    - Dispatches replies via `np.random.randint(0, len(responses))` to simulate natural conversational variation.
+- **Verified Capabilities**:
+  - 400+ lines of intent response mappings
+  - Combinatorial sliding substring intent classification
+  - Zero third-party NLP framework footprint (pure Python standard library + NumPy)
+
+---
+
+### 6. Ordinary Least Squares & Linear Models from Scratch (`Ordinary-Least-Squares-`)
+
+- **Title**: Ordinary Least Squares & Statistical Regularization Models from First Principles
+- **Domain Category**: AI / ML — Mathematical Foundations, Statistical Learning Theory & Optimization Algorithms
+- **Local Paths**:
+  - Core Implementation: `d:\CODE\AI_ML\Code\Skitlearn\LinearModel`
+  - Workspace Projects: `d:\CODE\AI_ML\Projects`
+- **GitHub URL**: `https://github.com/Naseer-fez/Ordinary-Least-Squares-` (Verified)
+- **Demo / Run Command**:
+  - `python d:\CODE\AI_ML\Code\Skitlearn\LinearModel\OLS\OLS(M1).py` (Univariate OLS)
+  - `python d:\CODE\AI_ML\Code\Skitlearn\LinearModel\OLS\OLS(M2).py` (Multivariate Normal Equation OLS)
+  - `python d:\CODE\AI_ML\Code\Skitlearn\LinearModel\OLS\NNLS.py` (Non-Negative Least Squares)
+  - `python d:\CODE\AI_ML\Code\Skitlearn\LinearModel\ElasticNet.py` (Coordinate Descent ElasticNet)
+  - `python d:\CODE\AI_ML\Code\Skitlearn\LinearModel\Lasco_AIC.py` (Lasso with AIC selection)
+  - `python d:\CODE\AI_ML\Code\Skitlearn\LinearModel\Lasco_Bic.py` (Lasso with BIC selection)
+- **1-Sentence Description**: A comprehensive library of linear regression and regularization algorithms implemented from scratch in pure NumPy, including analytical OLS, normal equations, Non-Negative Least Squares, and Coordinate Descent ElasticNet/Lasso with AIC/BIC model selection.
+- **Key Technologies**:
+  - Visible: `Python`, `NumPy (Matrix Linear Algebra)`, `First-Principles Optimization Algorithms`, `Matplotlib`, `Information-Theoretic Model Selection (AIC/BIC)`
+  - Remainder Count: `+2` (`Coordinate Descent Solvers`, `Projected Gradient Solvers`)
+- **Mathematical Formulations & Algorithmic Implementations**:
+  - **1. Ordinary Least Squares (OLS)**:
+    - *Method 1 (Analytical Univariate)*:
+      $$w = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sum (x_i - \bar{x})^2}, \quad b = \bar{y} - w\bar{x}$$
+    - *Method 2 (Multivariate Normal Equations)*:
+      $$w = (X_{\text{bias}}^T X_{\text{bias}})^{-1} X_{\text{bias}}^T y$$
+      with bias augmentation $X_{\text{bias}} = [1_{n \times 1} \mid X]$, intercept $b = w_0$, and weights $w = w_{1:}$.
+  - **2. Non-Negative Least Squares (NNLS)**:
+    - Solves $\min_w \|Xw - y\|_2^2$ subject to $w \ge 0$.
+    - Implemented via Projected Gradient Descent:
+      $$\nabla L = -2 X_{\text{bias}}^T (y - X_{\text{bias}} w), \quad w^{(t+1)} = \max\left(0, w^{(t)} - \eta \nabla L\right)$$
+  - **3. Lasso Regression (L1) with Coordinate Descent & Soft-Thresholding**:
+    - Residual update: $r_j = y - X w + w_j X_j$, with scalar projection $\rho_j = X_j^T r_j$.
+    - Soft-thresholding operator:
+      $$S(\rho, \lambda) = \begin{cases} \rho + \lambda & \text{if } \rho < -\lambda \\ \rho - \lambda & \text{if } \rho > \lambda \\ 0 & \text{if } |\rho| \le \lambda \end{cases}$$
+    - Coordinate update: $w_j = \frac{S(\rho_j, \lambda)}{\sum X_{ij}^2}$.
+  - **4. ElasticNet Regression (L1 + L2)**:
+    - Combines L1 penalty $\lambda \alpha$ and L2 penalty $\lambda (1 - \alpha)$:
+      $$w_j = \frac{S(\rho_j, \lambda \alpha)}{\sum X_{ij}^2 + \lambda (1 - \alpha)}$$
+    - Iterates across features until weight vector displacement satisfies $\|w^{(t+1)} - w^{(t)}\|_1 \le \text{tol} = 10^{-6}$.
+  - **5. Information-Theoretic Hyperparameter Selection**:
+    - **Akaike Information Criterion (AIC)**:
+      $$\text{AIC} = n \ln\left(\frac{\text{RSS} + 10^{-8}}{n}\right) + 2 k$$
+      where degrees of freedom $k = \sum_{j=1}^p \mathbb{I}(w_j \neq 0)$.
+    - **Bayesian Information Criterion (BIC)**:
+      $$\text{BIC} = n \ln\left(\frac{\text{RSS} + 10^{-8}}{n}\right) + k \ln(n)$$
+- **Verified Capabilities**:
+  - Exact closed-form matrix inversion (`np.linalg.inv`)
+  - Iterative Coordinate Descent optimization converging at $\text{tol} = 10^{-6}$
+  - Projected gradient descent for constrained non-negative optimization
+  - Analytical AIC / BIC model selection algorithms
+
+---
+
+### 7. Local Whisper Dictation Suite (`Whisper`)
+
+- **Title**: Whisper Dictation Suite — Edge Speech-to-Text & Real-Time Dictation System
+- **Domain Category**: AI / ML — Automatic Speech Recognition (ASR), Multilingual Transformer Modeling & System Audio Engineering
+- **Local Path**: `d:\CODE\Utlities\Whisper`
+- **GitHub URL**: `https://github.com/openai/whisper` (Local custom dictation application built on Whisper engine)
+- **Demo / Run Command**:
+  - `python main.py`
+  - `run_dictation.bat`
+- **1-Sentence Description**: A production-grade, local speech-to-text dictation application powered by OpenAI Whisper Transformer models, featuring energy-based voice activity detection, background queue processing, and low-level Win32 clipboard injection.
+- **Key Technologies**:
+  - Visible: `Python`, `PyTorch / OpenAI Whisper`, `PyAudio (16kHz Audio Streams)`, `Windows Win32 API (ctypes/user32)`, `Tkinter (Non-Activating UI)`
+  - Remainder Count: `+4` (`pystray`, `threading/Queue`, `Wave Audio Serialization`, `JSON Settings Manager`)
+- **Architecture & System Pipeline**:
+  - **Whisper Transformer ASR Architecture**:
+    - Multitask Encoder-Decoder Transformer trained on 680,000 hours of speech data.
+    - 80-channel log-magnitude Mel spectrogram audio feature extraction over 25ms windows with 10ms shift.
+    - Model family support: `tiny` (39M), `base` (74M), `small` (244M), `medium` (769M), `large` (1550M), `turbo` (809M).
+    - CUDA GPU inference with automatic half-precision (`fp16=True`) fallback to CPU float32.
+  - **Audio Capture & VAD Subsystem (`Recorder`, `EnergyVAD`)**:
+    - Captures 16,000 Hz 16-bit mono PCM streams via PyAudio.
+    - Real-time RMS (Root Mean Square) volume computation feeding live pulsing UI waveform animations.
+    - Energy-based Voice Activity Detection with silence thresholding (`energy_threshold=300`).
+  - **Concurrency & EventBus Pipeline**:
+    - Decoupled event-driven architecture (`EventBus`) with multi-threaded execution:
+      - **Thread 1 (Main)**: Tkinter event loop rendering the non-activating HUD overlay.
+      - **Thread 2 (Tray)**: Pystray system tray listener and menu dispatcher.
+      - **Thread 3 (Audio)**: Real-time PyAudio recording buffer thread.
+      - **Thread 4 (Transcription Queue)**: Asynchronous background worker processing Whisper inference.
+  - **Win32 System Integration & Non-Activating HUD**:
+    - Floating UI overlay uses `WS_EX_NOACTIVATE` via `ctypes.windll.user32.SetWindowLongW` to prevent stealing window focus from the user's active application.
+    - Text Injector: Injects transcribed text into the Windows clipboard via Win32 API, followed by simulated virtual `Ctrl+V` keystrokes with physical modifier key release buffering.
+- **Verified Capabilities**:
+  - 16kHz audio capture with RMS waveform tracking
+  - Multi-tier model sizes from 39M parameters (`tiny`) to 1.55B parameters (`large-v3`) / 809M (`turbo`)
+  - Sub-second transcription queue processing with CUDA FP16 acceleration
+  - Zero-focus-stealing Windows HUD overlay
+
+---
+
+## Summary Matrix
+
+| Project | Domain / Type | Core Algorithm / Math | Key Stack | Verified GitHub / Target |
 |---|---|---|---|---|
-| `Cmd/Ctrl + K` | Global | Toggle Spotlight Search | YES | YES |
-| `Cmd/Ctrl + W` | Focused Window | Close current active window | NO | YES |
-| `Cmd/Ctrl + M` | Focused Window | Minimize current active window | NO | YES |
-| `Cmd/Ctrl + Shift + D` | Global | Toggle Dark/Light Theme | NO | YES |
-| `Cmd/Ctrl + Option + M` | Global | Toggle Ambient/Workspace mode | NO | YES |
-| `Cmd/Ctrl + Option + T` | Global | Launch / Focus Terminal | NO | YES |
-| `Escape` | Global | Dismiss ContextMenu, Spotlight, ControlCenter | YES | YES |
-
-### Proposed Code for `lib/constants/shortcuts.ts`:
-
-```typescript
-export interface OSShortcutDefinition {
-  id: string;
-  keyLabel: string;
-  description: string;
-  category: 'system' | 'window' | 'navigation';
-}
-
-export const OS_SHORTCUTS: OSShortcutDefinition[] = [
-  {
-    id: 'spotlight',
-    keyLabel: '⌘K / Ctrl+K',
-    description: 'Toggle Spotlight Search command palette',
-    category: 'navigation',
-  },
-  {
-    id: 'close_window',
-    keyLabel: '⌘W / Ctrl+W',
-    description: 'Close active window',
-    category: 'window',
-  },
-  {
-    id: 'minimize_window',
-    keyLabel: '⌘M / Ctrl+M',
-    description: 'Minimize active window',
-    category: 'window',
-  },
-  {
-    id: 'toggle_theme',
-    keyLabel: '⌘⇧D / Ctrl+Shift+D',
-    description: 'Toggle Dark and Light theme',
-    category: 'system',
-  },
-  {
-    id: 'toggle_ambient',
-    keyLabel: '⌘⌥M / Ctrl+Alt+M',
-    description: 'Toggle Workspace and Ambient Hero mode',
-    category: 'system',
-  },
-  {
-    id: 'open_terminal',
-    keyLabel: '⌘⌥T / Ctrl+Alt+T',
-    description: 'Open or focus Terminal CLI',
-    category: 'navigation',
-  },
-  {
-    id: 'dismiss',
-    keyLabel: 'Esc',
-    description: 'Dismiss popups, context menus, and spotlight',
-    category: 'system',
-  },
-];
-```
-
-### Proposed Code for `hooks/useKeyboardShortcuts.ts`:
-
-```typescript
-'use client';
-
-import { useEffect } from 'react';
-import { useOSStore } from './useOSStore';
-
-function isInputElement(element: EventTarget | null): boolean {
-  if (!element || !(element instanceof HTMLElement)) return false;
-  const tagName = element.tagName.toLowerCase();
-  return (
-    tagName === 'input' ||
-    tagName === 'textarea' ||
-    tagName === 'select' ||
-    element.isContentEditable
-  );
-}
-
-export function useKeyboardShortcuts() {
-  const {
-    activeWindowId,
-    spotlightOpen,
-    contextMenu,
-    controlCenterOpen,
-    closeWindow,
-    minimizeWindow,
-    toggleSpotlight,
-    setSpotlightOpen,
-    closeContextMenu,
-    setControlCenterOpen,
-    toggleTheme,
-    toggleDesktopMode,
-    openWindow,
-  } = useOSStore();
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const isMac = typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform);
-      const isCmdOrCtrl = isMac ? e.metaKey : e.ctrlKey;
-      const isAltOrOption = e.altKey;
-      const isShift = e.shiftKey;
-      const key = e.key.toLowerCase();
-      const inInput = isInputElement(e.target);
-
-      // 1. Escape: Dismiss overlay modals & menus (Always active, even in inputs)
-      if (e.key === 'Escape') {
-        if (contextMenu) {
-          e.preventDefault();
-          closeContextMenu();
-          return;
-        }
-        if (spotlightOpen) {
-          e.preventDefault();
-          setSpotlightOpen(false);
-          return;
-        }
-        if (controlCenterOpen) {
-          e.preventDefault();
-          setControlCenterOpen(false);
-          return;
-        }
-      }
-
-      // 2. Cmd/Ctrl + K: Spotlight Search toggle (Allowed inside inputs)
-      if (isCmdOrCtrl && !isAltOrOption && !isShift && key === 'k') {
-        e.preventDefault();
-        toggleSpotlight();
-        return;
-      }
-
-      // Remaining shortcuts are suppressed while actively typing in input fields
-      if (inInput) return;
-
-      // 3. Cmd/Ctrl + W: Close current active window
-      if (isCmdOrCtrl && !isAltOrOption && !isShift && key === 'w') {
-        if (activeWindowId) {
-          e.preventDefault();
-          closeWindow(activeWindowId);
-        }
-        return;
-      }
-
-      // 4. Cmd/Ctrl + M: Minimize current active window
-      if (isCmdOrCtrl && !isAltOrOption && !isShift && key === 'm') {
-        if (activeWindowId) {
-          e.preventDefault();
-          minimizeWindow(activeWindowId);
-        }
-        return;
-      }
-
-      // 5. Cmd/Ctrl + Shift + D: Toggle Dark/Light Theme
-      if (isCmdOrCtrl && isShift && !isAltOrOption && key === 'd') {
-        e.preventDefault();
-        toggleTheme();
-        return;
-      }
-
-      // 6. Cmd/Ctrl + Option + M: Toggle Ambient/Workspace Mode
-      if (isCmdOrCtrl && isAltOrOption && !isShift && key === 'm') {
-        e.preventDefault();
-        toggleDesktopMode();
-        return;
-      }
-
-      // 7. Cmd/Ctrl + Option + T: Open/Focus Terminal
-      if (isCmdOrCtrl && isAltOrOption && !isShift && key === 't') {
-        e.preventDefault();
-        openWindow('terminal');
-        return;
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [
-    activeWindowId,
-    spotlightOpen,
-    contextMenu,
-    controlCenterOpen,
-    closeWindow,
-    minimizeWindow,
-    toggleSpotlight,
-    setSpotlightOpen,
-    closeContextMenu,
-    setControlCenterOpen,
-    toggleTheme,
-    toggleDesktopMode,
-    openWindow,
-  ]);
-}
-```
+| **Credit Score Predictor** | AI/ML Supervised Regression | Random Forest, RapidFuzz string distance, DTI/CUR feature math, Variance Imputation | scikit-learn, RapidFuzz, pandas, NumPy (+3) | `https://github.com/Naseer-fez/Credit_Score_Predictor` |
+| **Real Estate Pipeline** | AI/ML Mathematical Modeling | Closed-form Ridge Regression $(X^T X + \lambda I)^{-1} X^T y$, Multi-level $(\mu - \sigma)$ imputation | NumPy, pandas, First-Principles Linear Algebra (+2) | `https://github.com/Naseer-fez/Real-Estate-Pipeline` |
+| **Music Recommendation** | AI/ML Content Recommendation | Multi-attribute variance spread $(\max - \mu - \sigma)$, Dynamic tolerance relaxation $(\Delta = 0.1)$ | pandas, NumPy, Kaggle Spotify Dataset (+2) | `https://github.com/Naseer-fez/music_rec` |
+| **Project Jarvis & FRIDAY** | AI/ML Autonomous Agents & RAG | Plan-Confirm-Execute loop, Multi-LLM routing, Vector RAG (ChromaDB + SQLite), Monolith architecture | Ollama, ChromaDB, OpenAI/Gemini/Groq APIs, Whisper (+12) | `https://github.com/Naseer-fez/Project_Jarvis` |
+| **Simple ChatBot** | AI/ML NLP & Intent Recognition | Combinatorial sliding substring search, Regex sanitization, Stochastic sampling | Python `re`, NumPy, Predefined Intent Database (+1) | `https://github.com/Naseer-fez/Simple_ChatBot` |
+| **Ordinary Least Squares** | AI/ML Mathematical Foundations | Analytical OLS, Normal Equations, Projected Gradient NNLS, Coordinate Descent ElasticNet/Lasso, AIC/BIC | NumPy, Matplotlib, First-Principles Optimization (+2) | `https://github.com/Naseer-fez/Ordinary-Least-Squares-` |
+| **Whisper Dictation Suite** | AI/ML Speech Recognition (ASR) | Encoder-Decoder Transformer, 80-channel Mel filterbank, PyAudio 16kHz VAD, Win32 HUD injection | PyTorch, OpenAI Whisper, PyAudio, Win32 API (+4) | `https://github.com/openai/whisper` (Local Dictation App) |
 
 ---
-
-## 5. Hydration & SSR Safety
-
-When Next.js App Router renders on the server and mounts on the client with Zustand localStorage persistence:
-- Initial SSR renders default theme/wallpaper.
-- On mount, localStorage hydrates.
-- To prevent hydration mismatch warnings when applying theme classes or wallpaper styling, we recommend a client-only mounting guard hook `useHydrated()` or initial theme applicator script in `src/app/layout.tsx`.
-
-### Recommended Hook: `hooks/useHydrated.ts`
-```typescript
-'use client';
-
-import { useState, useEffect } from 'react';
-
-export function useHydrated(): boolean {
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
-  return hydrated;
-}
-```
-
----
-
-## 6. Implementation Action Plan for Implementer (Worker 2)
-
-1. Create `src/types/os.ts` with all complete interfaces.
-2. Create `src/lib/constants/apps.ts` with the 6 app definitions, geometry calculations, and initial state factories.
-3. Create `src/lib/constants/shortcuts.ts` with shortcut metadata.
-4. Create `src/hooks/useOSStore.ts` with complete Zustand store, actions, and persistence.
-5. Create `src/hooks/useKeyboardShortcuts.ts` with keyboard event listener and input safeguards.
-6. Create `src/hooks/useHydrated.ts` for SSR hydration safety.
-7. Write unit tests for store actions: open, close, minimize, toggleMaximize, focus, cascade positioning, z-index elevation, and keyboard shortcut event handlers.

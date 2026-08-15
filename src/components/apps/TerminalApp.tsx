@@ -27,9 +27,9 @@ const COMMANDS = [
 ];
 
 const VIRTUAL_FILES: Record<string, string> = {
-  'resume.txt': `${PROFILE_DATA.name} — ${PROFILE_DATA.title}\nLocation: ${PROFILE_DATA.location}\nEmail: ${PROFILE_DATA.email}\nGitHub: ${PROFILE_DATA.github}\n\nExperience: 8+ Years in Distributed Systems, Web Audio & High-Performance UI.`,
+  'resume.txt': `${PROFILE_DATA.name} — ${PROFILE_DATA.title}\nLocation: ${PROFILE_DATA.location}\nEmail: ${PROFILE_DATA.email}\nGitHub: ${PROFILE_DATA.github}\n\nEducation: B.Tech in CSBS @ VBIT Hyderabad\nCore Skills: Python, C/C++, SQL, Flask, Docker, Cloudflare Tunnel, Concurrency`,
   'bio.md': PROFILE_DATA.bio.join('\n\n'),
-  'secret.txt': '🎉 Easter Egg Found! "Design is not just what it looks like and feels like. Design is how it works." — Steve Jobs',
+  'secret.txt': '🎉 Easter Egg Found! "First, solve the problem. Then, write the code." — John Johnson',
 };
 
 export function TerminalApp() {
@@ -138,7 +138,7 @@ export function TerminalApp() {
    > ^ <   Sonoma v2.4`}
           </div>
           <div className="sm:col-span-8 space-y-0.5 text-white/90">
-            <div><span className="text-blue-400 font-semibold">dev@macbook-pro</span></div>
+            <div><span className="text-blue-400 font-semibold">naseer@portfolio-os</span></div>
             <div className="text-white/30">-----------------------</div>
             <div><span className="text-purple-400 font-medium">OS:</span> macOS Sonoma (Web Edition)</div>
             <div><span className="text-purple-400 font-medium">Host:</span> MacBook Pro M3 Max 64GB</div>

@@ -113,7 +113,9 @@ const config: Config = {
         '9990': '9990', // Layer 4: Luca Dock + MusicPlayerDockPill
         '9992': '9992', // Layer 5: AudioDeckExpandedCard
         '9995': '9995', // Layer 6: SpotlightSearch + ContextMenu + ControlCenter
-        '9999': '9999', // Layer 7: KineticCursor
+        '9999': '9999',
+        '10000': '10000', // Layer 7: Lock Screen
+        '10001': '10001', // Layer 8: Kinetic Cursor
       },
     },
   },

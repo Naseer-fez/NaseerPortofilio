@@ -21,7 +21,7 @@ export function CursorAuraRing({ x, y, variant, radius }: CursorAuraRingProps) {
   return (
     <div
       data-testid="cursor-aura-ring"
-      className="fixed pointer-events-none z-[9999] border-2 border-white/60 will-change-transform transition-[border-radius,transform] duration-100 ease-out"
+      className="fixed pointer-events-none z-[10001] border-2 border-white/60 will-change-transform transition-[border-radius,transform] duration-100 ease-out"
       style={{
         width: `${diameter}px`,
         height: `${diameter}px`,

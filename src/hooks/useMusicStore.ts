@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { MusicState, Track, RepeatMode } from '@/types/music';
-import { mockPlaylist } from '../../tests/fixtures/playlist.fixture';
+import { MUSIC_PLAYLIST } from '@/config/music';
 import { GlobalAudioManager } from '@/lib/audio/GlobalAudioManager';
 
 function getStoredVolume(): number {
@@ -26,12 +26,12 @@ function getStoredCurrentTime(): number {
 }
 
 export const useMusicStore = create<MusicState>((set, get) => ({
-  playlist: [...mockPlaylist],
+  playlist: [...MUSIC_PLAYLIST],
   currentIndex: 0,
   status: 'idle',
-  currentTime: getStoredCurrentTime(),
-  duration: mockPlaylist[0]?.duration || 180,
-  volume: getStoredVolume(),
+  currentTime: 0,
+  duration: MUSIC_PLAYLIST[0]?.duration || 184,
+  volume: 0.8,
   isMuted: false,
   isShuffled: false,
   repeatMode: 'off',

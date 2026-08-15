@@ -1,8 +1,7 @@
 import React from 'react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, fireEvent, act } from '@testing-library/react';
-import { MusicPlayerDockPill } from '@/components/dock/MusicPlayerDockPill';
-import { AudioDeckExpandedCard } from '@/components/music/AudioDeckExpandedCard';
+import { RetroCassettePlayer } from '@/components/music/RetroCassettePlayer';
 import { useMusicStore } from '@/hooks/useMusicStore';
 import { GlobalAudioManager } from '@/lib/audio/GlobalAudioManager';
 import { getActiveAudioElements } from '../mocks/audio/HTMLAudioElementMock';
@@ -22,44 +21,44 @@ describe('Tier 1: Music Playback & Audio Deck', () => {
   });
 
   it('initializes in IDLE state with audio paused and no autoplay (#37)', () => {
-    const { getByTestId } = render(<MusicPlayerDockPill magnifiedWidth={44} />);
+    const { getByTestId } = render(<RetroCassettePlayer />);
 
     expect(useMusicStore.getState().status).toBe('idle');
-    expect(getByTestId('music-play-pause-btn')).toHaveAttribute('aria-label', 'Play');
+    expect(getByTestId('music-play-btn')).toHaveAttribute('aria-label', 'Play');
   });
 
   it('resumes AudioContext and starts playback on play click (#38, #35, #37)', async () => {
-    const { getByTestId } = render(<MusicPlayerDockPill magnifiedWidth={44} />);
+    const { getByTestId } = render(<RetroCassettePlayer />);
 
     await act(async () => {
-      fireEvent.click(getByTestId('music-play-pause-btn'));
+      fireEvent.click(getByTestId('music-play-btn'));
     });
 
     expect(useMusicStore.getState().status).toBe('playing');
     expect(GlobalAudioManager.getInstance().context?.state).toBe('running');
-    expect(getByTestId('eq-bar-1')).toHaveClass('animate-pulse');
+    expect(getByTestId('cassette-led')).toHaveClass('animate-pulse');
   });
 
   it('pauses audio and resumes from current position without resetting (#39, #40)', async () => {
     useMusicStore.setState({ status: 'playing', currentTime: 45 });
-    const { getByTestId } = render(<MusicPlayerDockPill magnifiedWidth={44} />);
+    const { getByTestId } = render(<RetroCassettePlayer />);
 
     // Pause
-    fireEvent.click(getByTestId('music-play-pause-btn'));
+    fireEvent.click(getByTestId('music-play-btn'));
     expect(useMusicStore.getState().status).toBe('paused');
     expect(useMusicStore.getState().currentTime).toBe(45);
 
     // Resume
     await act(async () => {
-      fireEvent.click(getByTestId('music-play-pause-btn'));
+      fireEvent.click(getByTestId('music-play-btn'));
     });
     expect(useMusicStore.getState().status).toBe('playing');
     expect(useMusicStore.getState().currentTime).toBe(45);
   });
 
   it('advances to next track in playlist and updates metadata (#41)', () => {
-    useMusicStore.setState({ isDeckExpanded: true, currentIndex: 0 });
-    const { getByTestId } = render(<AudioDeckExpandedCard />);
+    useMusicStore.setState({ currentIndex: 0 });
+    const { getByTestId } = render(<RetroCassettePlayer />);
 
     fireEvent.click(getByTestId('music-next-btn'));
 
@@ -68,8 +67,8 @@ describe('Tier 1: Music Playback & Audio Deck', () => {
   });
 
   it('restarts track if currentTime >= 3s, loads previous track if < 3s (#42, #43)', () => {
-    useMusicStore.setState({ isDeckExpanded: true, currentIndex: 1, currentTime: 15 });
-    const { getByTestId } = render(<AudioDeckExpandedCard />);
+    useMusicStore.setState({ currentIndex: 1, currentTime: 15 });
+    const { getByTestId } = render(<RetroCassettePlayer />);
 
     // >= 3s: restarts track 1
     fireEvent.click(getByTestId('music-prev-btn'));
@@ -82,44 +81,21 @@ describe('Tier 1: Music Playback & Audio Deck', () => {
     expect(useMusicStore.getState().currentIndex).toBe(0);
   });
 
-  it('expands and collapses full glassmorphic audio deck (#44, #45, #38, #45)', () => {
-    const { getByTestId, queryByTestId, rerender } = render(
-      <>
-        <MusicPlayerDockPill magnifiedWidth={44} />
-        <AudioDeckExpandedCard />
-      </>
-    );
+  it('renders retro SONY cassette player with full structure (#44, #45, #38, #45)', () => {
+    const { getByTestId, getByText } = render(<RetroCassettePlayer />);
 
-    expect(queryByTestId('audio-deck-expanded')).not.toBeInTheDocument();
-
-    // Click pill to expand
-    fireEvent.click(getByTestId('music-player-pill'));
-    rerender(
-      <>
-        <MusicPlayerDockPill magnifiedWidth={44} />
-        <AudioDeckExpandedCard />
-      </>
-    );
-
-    const deck = getByTestId('audio-deck-expanded');
-    expect(deck).toBeInTheDocument();
-    expect(deck).toHaveStyle({ width: '340px', borderRadius: '20px' });
-    expect(deck).toMatchGlassmorphism({ blur: '32px', saturate: '200%' });
-
-    // Click collapse button
-    fireEvent.click(getByTestId('audio-deck-collapse-btn'));
-    rerender(
-      <>
-        <MusicPlayerDockPill magnifiedWidth={44} />
-        <AudioDeckExpandedCard />
-      </>
-    );
-    expect(queryByTestId('audio-deck-expanded')).not.toBeInTheDocument();
+    const player = getByTestId('retro-cassette-player');
+    expect(player).toBeInTheDocument();
+    expect(getByTestId('cassette-body')).toBeInTheDocument();
+    expect(getByTestId('cassette-label')).toBeInTheDocument();
+    expect(getByTestId('cassette-window')).toBeInTheDocument();
+    expect(getByText('SONY')).toBeInTheDocument();
+    expect(getByText('SIDE A')).toBeInTheDocument();
   });
 
   it('seeks audio position on progress bar click (#46, #42)', () => {
-    useMusicStore.setState({ isDeckExpanded: true, duration: 200, currentTime: 0 });
-    const { getByTestId } = render(<AudioDeckExpandedCard />);
+    useMusicStore.setState({ duration: 200, currentTime: 0 });
+    const { getByTestId } = render(<RetroCassettePlayer />);
 
     const track = getByTestId('interactive-scrubber-track');
     vi.spyOn(track, 'getBoundingClientRect').mockReturnValue({
@@ -140,8 +116,7 @@ describe('Tier 1: Music Playback & Audio Deck', () => {
   });
 
   it('updates volume state and mutes/unmutes audio (#47, #48, #43)', () => {
-    useMusicStore.setState({ isDeckExpanded: true });
-    const { getByTestId } = render(<AudioDeckExpandedCard />);
+    const { getByTestId } = render(<RetroCassettePlayer />);
 
     const slider = getByTestId('music-volume-slider');
     fireEvent.change(slider, { target: { value: '0.45' } });
@@ -157,8 +132,7 @@ describe('Tier 1: Music Playback & Audio Deck', () => {
   });
 
   it('toggles shuffle and cycles repeat mode (#49, #50)', () => {
-    useMusicStore.setState({ isDeckExpanded: true });
-    const { getByTestId } = render(<AudioDeckExpandedCard />);
+    const { getByTestId } = render(<RetroCassettePlayer />);
 
     // Shuffle
     fireEvent.click(getByTestId('music-shuffle-btn'));
@@ -174,21 +148,18 @@ describe('Tier 1: Music Playback & Audio Deck', () => {
     expect(useMusicStore.getState().repeatMode).toBe('off');
   });
 
-  it('applies continuous 3s rotation on vinyl when playing and pauses on pause (#51, #39, #40)', () => {
-    useMusicStore.setState({ isDeckExpanded: true, status: 'playing' });
-    const { getByTestId, rerender } = render(<AudioDeckExpandedCard />);
+  it('animates spinning tape reels when playing and pauses on pause (#51, #39, #40)', () => {
+    useMusicStore.setState({ status: 'playing' });
+    const { getByTestId, rerender } = render(<RetroCassettePlayer />);
 
-    const vinyl = getByTestId('vinyl-disc');
-    expect(vinyl).toHaveStyle({
-      width: '200px',
-      height: '200px',
-      animationDuration: '3s',
+    const leftSpool = getByTestId('cassette-spool-left');
+    expect(leftSpool).toHaveStyle({
       animationPlayState: 'running',
     });
 
     useMusicStore.setState({ status: 'paused' });
-    rerender(<AudioDeckExpandedCard />);
-    expect(vinyl).toHaveStyle({ animationPlayState: 'paused' });
+    rerender(<RetroCassettePlayer />);
+    expect(leftSpool).toHaveStyle({ animationPlayState: 'paused' });
   });
 
   it('handles track end auto-advance (#52, #53)', () => {

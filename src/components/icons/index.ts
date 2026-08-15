@@ -1,0 +1,10 @@
+export { TerminalIcon } from './TerminalIcon';
+export { ProjectsIcon } from './ProjectsIcon';
+export { AboutIcon } from './AboutIcon';
+export { FinderIcon } from './FinderIcon';
+export { SettingsIcon } from './SettingsIcon';
+export { MailIcon } from './MailIcon';
+export { AppleLogo } from './AppleLogo';
+export { AppIcon, APP_ICONS } from './AppIcon';
+export type { AppIconProps } from './AppIcon';
+export type { AppleLogoProps } from './AppleLogo';

@@ -1,13 +1,36 @@
 import React, { useState, useMemo } from 'react';
 import { PROJECTS, ProjectItem } from '@/data/projects';
 import { GlobalAudioManager } from '@/lib/audio/GlobalAudioManager';
-import { Search, ExternalLink, Github, X, Sparkles, Layers, Cpu, Server, BarChart2, Activity, Layout, Zap } from 'lucide-react';
+import {
+  Search,
+  ExternalLink,
+  Github,
+  X,
+  Sparkles,
+  Layers,
+  Cpu,
+  Server,
+  BarChart2,
+  Activity,
+  Layout,
+  Zap,
+  Database,
+  Terminal,
+  Shield,
+  FolderGit2,
+  Music,
+  Home,
+  Sliders,
+} from 'lucide-react';
 
 const CATEGORIES = [
   { id: 'all', label: 'All', filterKey: 'All' },
-  { id: 'full-stack', label: 'Full Stack', filterKey: 'Full Stack' },
-  { id: 'ai-ml', label: 'AI / ML', filterKey: 'AI / ML' },
   { id: 'systems', label: 'Systems', filterKey: 'Systems' },
+  { id: 'ai-ml', label: 'AI / ML', filterKey: 'AI / ML' },
+  { id: 'full-stack', label: 'Full Stack', filterKey: 'Full Stack' },
+  { id: 'cloud', label: 'Cloud', filterKey: 'Cloud' },
+  { id: 'database', label: 'Database', filterKey: 'Database' },
+  { id: 'devops', label: 'DevOps', filterKey: 'DevOps' },
   { id: 'creative', label: 'Creative', filterKey: 'Creative' },
 ];
 
@@ -61,6 +84,20 @@ export function ProjectsApp() {
         return <BarChart2 className="w-5 h-5" />;
       case 'Zap':
         return <Zap className="w-5 h-5" />;
+      case 'Database':
+        return <Database className="w-5 h-5" />;
+      case 'Terminal':
+        return <Terminal className="w-5 h-5" />;
+      case 'Shield':
+        return <Shield className="w-5 h-5" />;
+      case 'FolderGit2':
+        return <FolderGit2 className="w-5 h-5" />;
+      case 'Music':
+        return <Music className="w-5 h-5" />;
+      case 'Home':
+        return <Home className="w-5 h-5" />;
+      case 'Sliders':
+        return <Sliders className="w-5 h-5" />;
       default:
         return <Layers className="w-5 h-5" />;
     }
@@ -94,7 +131,11 @@ export function ProjectsApp() {
                 }`}
               >
                 <span>{cat.label}</span>
-                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isActive ? 'bg-blue-700 text-white' : 'bg-white/10 text-white/60'}`}>
+                <span
+                  className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                    isActive ? 'bg-blue-700 text-white' : 'bg-white/10 text-white/60'
+                  }`}
+                >
                   {count}
                 </span>
               </button>

@@ -157,8 +157,13 @@ export interface OSStoreState {
   spotlightOpen: boolean;
   controlCenterOpen: boolean;
 
-  // Desktop Selection
+  // Lock Screen State
+  isLocked: boolean;
+
+  // Desktop Selection & Movable Elements
   selectedIconIds: string[];
+  desktopIconPositions: Record<string, Position>;
+  cassettePosition: Position;
 }
 
 export interface OSStoreActions {
@@ -196,11 +201,21 @@ export interface OSStoreActions {
   setControlCenterOpen: (open: boolean) => void;
   toggleControlCenter: () => void;
 
-  // Desktop Icon Selection
+  // Desktop Icon Selection & Movement
   selectIcon: (id: string, multiSelect?: boolean) => void;
   setSelectedIcons: (ids: string[]) => void;
   deselectAllIcons: () => void;
   clearSelectedIcons: () => void;
+  updateIconPosition: (id: string, position: Position) => void;
+  resetIconPositions: () => void;
+
+  // Widget Position Actions
+  updateCassettePosition: (position: Position) => void;
+  resetCassettePosition: () => void;
+
+  // Lock Screen Actions
+  unlock: () => void;
+  lock: () => void;
 
   // App Registry
   registerApp: (app: AppMetadata) => void;

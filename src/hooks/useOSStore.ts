@@ -44,7 +44,10 @@ export const useOSStore = create<OSStore>()(
       contextMenu: null,
       spotlightOpen: false,
       controlCenterOpen: false,
+      isLocked: true,
       selectedIconIds: [],
+      desktopIconPositions: {},
+      cassettePosition: { x: 0, y: 0 },
 
       // Actions
       openWindow: (id: string, initialConfig?: Partial<AppWindow>) => {
@@ -95,6 +98,7 @@ export const useOSStore = create<OSStore>()(
             activeWindowId: id,
             maxZIndex: Math.min(nextZIndex, 49),
             contextMenu: null,
+            desktopMode: 'workspace',
           });
           return;
         }
@@ -145,6 +149,7 @@ export const useOSStore = create<OSStore>()(
           activeWindowId: id,
           maxZIndex: Math.min(nextZIndex, 49),
           contextMenu: null,
+          desktopMode: 'workspace',
         });
       },
 
@@ -328,6 +333,7 @@ export const useOSStore = create<OSStore>()(
           windows,
           activeWindowId: id,
           maxZIndex: Math.min(nextZIndex, 49),
+          desktopMode: 'workspace',
         });
       },
 
@@ -475,6 +481,38 @@ export const useOSStore = create<OSStore>()(
         }
       },
 
+      updateIconPosition: (id: string, position: Position) => {
+        const current = get().desktopIconPositions || {};
+        set({
+          desktopIconPositions: {
+            ...current,
+            [id]: position,
+          },
+        });
+      },
+
+      resetIconPositions: () => {
+        set({ desktopIconPositions: {} });
+      },
+
+      updateCassettePosition: (position: Position) => {
+        const maxX = typeof window !== 'undefined' ? Math.max(300, window.innerWidth - 380) : 1000;
+        const maxY = typeof window !== 'undefined' ? Math.max(300, window.innerHeight - 340) : 800;
+        const clamped = {
+          x: Math.max(-maxX, Math.min(100, position.x || 0)),
+          y: Math.max(-maxY, Math.min(100, position.y || 0)),
+        };
+        set({ cassettePosition: clamped });
+      },
+
+      resetCassettePosition: () => {
+        set({ cassettePosition: { x: 0, y: 0 } });
+      },
+
+      // Lock Screen Actions
+      unlock: () => set({ isLocked: false }),
+      lock: () => set({ isLocked: true }),
+
       registerApp: (app: AppMetadata) => {
         const state = get();
         const windows = state.windows || INITIAL_WINDOWS;
@@ -490,7 +528,7 @@ export const useOSStore = create<OSStore>()(
       },
     }),
     {
-      name: 'macos-portfolio-os-state',
+      name: 'macos-portfolio-os-state-v4',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         theme: state.theme,
@@ -498,6 +536,8 @@ export const useOSStore = create<OSStore>()(
         soundEnabled: state.soundEnabled,
         soundVolume: state.soundVolume,
         desktopMode: state.desktopMode,
+        desktopIconPositions: state.desktopIconPositions,
+        cassettePosition: state.cassettePosition,
       }),
     }
   )

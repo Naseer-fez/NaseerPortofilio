@@ -11,55 +11,43 @@ import {
   SlidersHorizontal,
 } from 'lucide-react';
 
+function formatMenuBarTime(now: Date = new Date()): string {
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+  const day = days[now.getDay()];
+  const month = months[now.getMonth()];
+  const date = now.getDate();
+  let hours = now.getHours();
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12 || 12;
+  return `${day} ${month} ${date} ${hours}:${minutes} ${ampm}`;
+}
+
 // LiveClock Subcomponent with SSR Hydration Safety
 export const LiveClock: React.FC = () => {
-  const [timeString, setTimeString] = useState<string>('Sat Aug 15 12:51 PM');
-  const [mounted, setMounted] = useState(false);
+  const [timeString, setTimeString] = useState<string>(() => formatMenuBarTime());
 
   useEffect(() => {
-    setMounted(true);
-    const updateTime = () => {
-      const now = new Date();
-      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-      const months = [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
-      ];
-      const day = days[now.getDay()];
-      const month = months[now.getMonth()];
-      const date = now.getDate();
-      let hours = now.getHours();
-      const minutes = now.getMinutes().toString().padStart(2, '0');
-      const ampm = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12 || 12;
-      setTimeString(`${day} ${month} ${date} ${hours}:${minutes} ${ampm}`);
-    };
-
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
+    setTimeString(formatMenuBarTime());
+    const interval = setInterval(() => {
+      setTimeString(formatMenuBarTime());
+    }, 1000);
     return () => clearInterval(interval);
   }, []);
-
-  if (!mounted) {
-    return (
-      <span
-        data-testid="menu-bar-clock"
-        className="text-[12px] font-medium tracking-tight px-1.5"
-      >
-        Sat Aug 15 12:51 PM
-      </span>
-    );
-  }
 
   return (
     <button
@@ -68,24 +56,15 @@ export const LiveClock: React.FC = () => {
       className="text-[12px] font-medium tracking-tight px-1.5 py-0.5 rounded hover:bg-black/10 dark:hover:bg-white/15 transition-colors cursor-default"
       aria-label="Current date and time"
     >
-      <span data-testid="menu-bar-clock">{timeString}</span>
+      <span data-testid="menu-bar-clock" suppressHydrationWarning>
+        {timeString}
+      </span>
     </button>
   );
 };
 
-// Apple Logo SVG (14x14)
-export const AppleLogo: React.FC<{ className?: string }> = ({
-  className = 'w-3.5 h-3.5',
-}) => (
-  <svg
-    viewBox="0 0 170 170"
-    className={className}
-    fill="currentColor"
-    aria-hidden="true"
-  >
-    <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.7-3.04-7.69-7.83-11.97-14.34-6.42-9.78-11.45-20.87-15.08-33.28-3.63-12.4-5.45-23.9-5.45-34.52 0-14.34 3.59-26.3 10.77-35.88 7.18-9.58 16.2-14.48 27.06-14.7 4.79 0 10.33 1.3 16.63 3.9 6.3 2.61 10.38 3.96 12.24 4.05 1.52-.1 5.82-1.5 12.89-4.22 7.07-2.72 12.8-3.86 17.18-3.41 12.61 1.09 22.45 6.08 29.53 14.99-11.09 6.74-16.52 16.09-16.31 28.04.22 9.57 3.92 17.5 11.09 23.8 7.18 6.3 15.76 9.89 25.76 10.76-2.17 6.74-4.89 13.59-8.15 20.54zM119.22 31.02c0-7.18 2.61-13.91 7.83-20.21 5.22-6.3 11.85-10.22 19.9-11.74.22 1.3.33 2.5.33 3.59 0 7.17-2.72 14.02-8.16 20.54-5.43 6.52-12.17 10.43-20.21 11.74-.22-1.09-.33-2.4-.33-3.92z" />
-  </svg>
-);
+import { AppleLogo } from '@/components/icons/AppleLogo';
+export { AppleLogo };
 
 export const TopMenuBar: React.FC = () => {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
@@ -133,17 +112,21 @@ export const TopMenuBar: React.FC = () => {
     >
       {/* Left Menu Section */}
       <div className="flex items-center gap-1">
-        {/* Apple Logo Menu */}
+        {/* Custom Logo System Menu */}
         <div className="relative">
           <button
             type="button"
             data-testid="apple-menu-button"
             onClick={() => toggleMenuDropdown('apple')}
-            className="p-1 rounded hover:bg-black/10 dark:hover:bg-white/15 transition-colors"
-            aria-label="Apple Menu"
+            className="px-1.5 py-0.5 rounded hover:bg-black/10 dark:hover:bg-white/15 transition-colors flex items-center justify-center"
+            aria-label="System Menu"
           >
-            <span data-testid="menu-bar-apple-logo">
-              <AppleLogo />
+            <span data-testid="menu-bar-apple-logo" className="flex items-center">
+              <img
+                src="/name.png"
+                alt="Naseer"
+                className="h-[18px] w-auto max-h-[18px] object-contain select-none transition-transform hover:scale-105"
+              />
             </span>
           </button>
 
@@ -267,21 +250,35 @@ export const TopMenuBar: React.FC = () => {
                     </button>
                   )}
                   {item === 'View' && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setOpenMenu(null);
-                        if (setDesktopMode) {
-                          setDesktopMode(
-                            desktopMode === 'workspace' ? 'ambient-hero' : 'workspace'
-                          );
-                        }
-                      }}
-                      className="w-full text-left px-3 py-1 hover:bg-blue-600 hover:text-white flex items-center justify-between"
-                    >
-                      <span>Toggle Ambient Mode</span>
-                      <span className="text-xs opacity-60">⌘⌥M</span>
-                    </button>
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setOpenMenu(null);
+                          if (setDesktopMode) {
+                            setDesktopMode(
+                              desktopMode === 'workspace' ? 'ambient-hero' : 'workspace'
+                            );
+                          }
+                        }}
+                        className="w-full text-left px-3 py-1 hover:bg-blue-600 hover:text-white flex items-center justify-between"
+                      >
+                        <span>Toggle Ambient Mode</span>
+                        <span className="text-xs opacity-60">⌘⌥M</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setOpenMenu(null);
+                          useOSStore.getState().resetIconPositions();
+                          useOSStore.getState().resetCassettePosition();
+                        }}
+                        className="w-full text-left px-3 py-1 hover:bg-blue-600 hover:text-white flex items-center justify-between"
+                      >
+                        <span>Reset Layout</span>
+                        <span className="text-xs opacity-60">⌘R</span>
+                      </button>
+                    </>
                   )}
                   {item === 'Window' && (
                     <button

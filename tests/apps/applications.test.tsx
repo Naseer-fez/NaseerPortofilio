@@ -8,6 +8,8 @@ import { FinderApp } from '@/components/apps/FinderApp';
 import { SettingsApp } from '@/components/apps/SettingsApp';
 import { MailApp } from '@/components/apps/MailApp';
 import { useOSStore } from '@/hooks/useOSStore';
+import { PROFILE_DATA } from '@/data/profile';
+import { PROJECTS } from '@/data/projects';
 
 describe('Applications Suite: 6 macOS Interactive Applications', () => {
   beforeEach(() => {
@@ -29,7 +31,7 @@ describe('Applications Suite: 6 macOS Interactive Applications', () => {
       expect(screen.getByTestId('terminal-prompt')).toBeInTheDocument();
       expect(screen.getByTestId('terminal-input')).toBeInTheDocument();
       expect(screen.getByTestId('neofetch-banner')).toBeInTheDocument();
-      expect(screen.getByText(/dev@macbook-pro/i)).toBeInTheDocument();
+      expect(screen.getByText(/portfolio-os/i)).toBeInTheDocument();
     });
 
     it('executes "help" command and renders available commands list', () => {
@@ -50,7 +52,7 @@ describe('Applications Suite: 6 macOS Interactive Applications', () => {
       // about
       fireEvent.change(input, { target: { value: 'about' } });
       fireEvent.keyDown(input, { key: 'Enter' });
-      expect(screen.getByText(/Alex Rivera/i)).toBeInTheDocument();
+      expect(screen.getByText(new RegExp(PROFILE_DATA.name, 'i'))).toBeInTheDocument();
 
       // projects
       fireEvent.change(input, { target: { value: 'projects' } });
@@ -60,7 +62,7 @@ describe('Applications Suite: 6 macOS Interactive Applications', () => {
       // skills
       fireEvent.change(input, { target: { value: 'skills' } });
       fireEvent.keyDown(input, { key: 'Enter' });
-      expect(screen.getByText(/Languages:/i)).toBeInTheDocument();
+      expect(screen.getByText(new RegExp(PROFILE_DATA.skillCategories[0].name, 'i'))).toBeInTheDocument();
     });
 
     it('executes "theme dark" and "theme light" commands', () => {
@@ -92,7 +94,7 @@ describe('Applications Suite: 6 macOS Interactive Applications', () => {
       // cat
       fireEvent.change(input, { target: { value: 'cat resume.txt' } });
       fireEvent.keyDown(input, { key: 'Enter' });
-      expect(screen.getByText(/Alex Rivera — Principal Software Engineer/i)).toBeInTheDocument();
+      expect(screen.getByText(new RegExp(PROFILE_DATA.name, 'i'))).toBeInTheDocument();
 
       // sudo
       fireEvent.change(input, { target: { value: 'sudo rm -rf /' } });
@@ -166,22 +168,18 @@ describe('Applications Suite: 6 macOS Interactive Applications', () => {
   /* 2. ProjectsApp Tests                                                       */
   /* -------------------------------------------------------------------------- */
   describe('ProjectsApp', () => {
-    it('renders project gallery with 6 project cards and filter pills', () => {
+    it('renders project gallery with project cards and filter pills', () => {
       render(<ProjectsApp />);
 
       expect(screen.getByTestId('projects-app')).toBeInTheDocument();
       expect(screen.getByTestId('project-filter-all')).toBeInTheDocument();
       expect(screen.getByTestId('project-filter-full-stack')).toBeInTheDocument();
-      expect(screen.getByTestId('project-filter-ai-ml')).toBeInTheDocument();
       expect(screen.getByTestId('project-filter-systems')).toBeInTheDocument();
       expect(screen.getByTestId('project-filter-creative')).toBeInTheDocument();
 
-      expect(screen.getByTestId('project-card-portfolio-os')).toBeInTheDocument();
-      expect(screen.getByTestId('project-card-neural-synth')).toBeInTheDocument();
-      expect(screen.getByTestId('project-card-hyperscale-kv')).toBeInTheDocument();
-      expect(screen.getByTestId('project-card-agent-mesh')).toBeInTheDocument();
-      expect(screen.getByTestId('project-card-cloud-telemetry')).toBeInTheDocument();
-      expect(screen.getByTestId('project-card-shader-visualizer')).toBeInTheDocument();
+      PROJECTS.forEach(project => {
+        expect(screen.getByTestId(`project-card-${project.id}`)).toBeInTheDocument();
+      });
     });
 
     it('filters projects by category pill selection', () => {
@@ -189,25 +187,32 @@ describe('Applications Suite: 6 macOS Interactive Applications', () => {
 
       fireEvent.click(screen.getByTestId('project-filter-systems'));
 
-      expect(screen.getByTestId('project-card-hyperscale-kv')).toBeInTheDocument();
-      expect(screen.queryByTestId('project-card-neural-synth')).not.toBeInTheDocument();
-      expect(screen.queryByTestId('project-card-portfolio-os')).not.toBeInTheDocument();
+      const systemsProjects = PROJECTS.filter(p => p.category === 'Systems');
+      const otherProjects = PROJECTS.filter(p => p.category !== 'Systems');
+
+      systemsProjects.forEach(p => {
+        expect(screen.getByTestId(`project-card-${p.id}`)).toBeInTheDocument();
+      });
+
+      otherProjects.forEach(p => {
+        expect(screen.queryByTestId(`project-card-${p.id}`)).not.toBeInTheDocument();
+      });
     });
 
     it('filters projects by real-time search query', () => {
       render(<ProjectsApp />);
       const searchInput = screen.getByTestId('project-search-input');
 
-      fireEvent.change(searchInput, { target: { value: 'Rust' } });
+      fireEvent.change(searchInput, { target: { value: 'NasCloud' } });
 
-      expect(screen.getByTestId('project-card-hyperscale-kv')).toBeInTheDocument();
+      expect(screen.getByTestId('project-card-nascloud')).toBeInTheDocument();
       expect(screen.queryByTestId('project-card-portfolio-os')).not.toBeInTheDocument();
     });
 
     it('opens project detail modal when card is clicked and closes on dismiss button', () => {
       render(<ProjectsApp />);
 
-      fireEvent.click(screen.getByTestId('project-card-portfolio-os'));
+      fireEvent.click(screen.getByTestId('project-card-nascloud'));
 
       const modal = screen.getByTestId('project-modal');
       expect(modal).toBeInTheDocument();
@@ -232,8 +237,7 @@ describe('Applications Suite: 6 macOS Interactive Applications', () => {
       expect(screen.getByTestId('about-tab-skills')).toBeInTheDocument();
       expect(screen.getByTestId('about-tab-resume')).toBeInTheDocument();
 
-      expect(screen.getByText(/Alex Rivera/i)).toBeInTheDocument();
-      expect(screen.getByText(/Years Experience/i)).toBeInTheDocument();
+      expect(screen.getByText(new RegExp(PROFILE_DATA.name, 'i'))).toBeInTheDocument();
       expect(screen.getByText(/Biography & Philosophy/i)).toBeInTheDocument();
     });
 
@@ -242,9 +246,8 @@ describe('Applications Suite: 6 macOS Interactive Applications', () => {
 
       fireEvent.click(screen.getByTestId('about-tab-timeline'));
 
-      expect(screen.getByText(/Lead Systems & AI Engineer/i)).toBeInTheDocument();
-      expect(screen.getByText(/Senior Full-Stack & UI Architect/i)).toBeInTheDocument();
-      expect(screen.getByText(/Autonomous Labs/i)).toBeInTheDocument();
+      expect(screen.getByText(new RegExp(PROFILE_DATA.timeline[0].role, 'i'))).toBeInTheDocument();
+      expect(screen.getByText(/Departmental Coding Club/i)).toBeInTheDocument();
     });
 
     it('switches to skills matrix tab and renders animated progress bars', () => {
@@ -252,10 +255,10 @@ describe('Applications Suite: 6 macOS Interactive Applications', () => {
 
       fireEvent.click(screen.getByTestId('about-tab-skills'));
 
-      expect(screen.getByText(/Languages/i)).toBeInTheDocument();
-      expect(screen.getByText(/Frontend & Creative Tech/i)).toBeInTheDocument();
-      expect(screen.getByTestId('skills-progress-bar-typescript---javascript')).toBeInTheDocument();
-      expect(screen.getByTestId('skills-progress-bar-rust')).toBeInTheDocument();
+      expect(screen.getByText(new RegExp(PROFILE_DATA.skillCategories[0].name, 'i'))).toBeInTheDocument();
+      const firstSkill = PROFILE_DATA.skillCategories[0].skills[0];
+      const testId = `skills-progress-bar-${firstSkill.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
+      expect(screen.getByTestId(testId)).toBeInTheDocument();
     });
 
     it('switches to resume document tab', () => {

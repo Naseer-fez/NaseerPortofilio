@@ -4,16 +4,13 @@ import { useOSStore } from '@/hooks/useOSStore';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
 
 export function MobileTabBar() {
-  const { isMobile } = useBreakpoint();
   const openWindow = useOSStore(state => state.openWindow);
   const activeWindowId = useOSStore(state => state.activeWindowId);
-
-  if (!isMobile) return null;
 
   return (
     <nav
       data-testid="mobile-tab-bar"
-      className="fixed bottom-0 inset-x-0 z-50 h-[52px] bg-stone-950/90 backdrop-blur-xl border-t border-white/10 flex items-center justify-around px-2"
+      className="md:hidden fixed bottom-0 inset-x-0 z-50 h-[52px] bg-stone-950/90 backdrop-blur-xl border-t border-white/10 flex items-center justify-around px-2"
       style={{
         height: 'calc(52px + env(safe-area-inset-bottom, 0px))',
         paddingBottom: 'env(safe-area-inset-bottom, 0px)',

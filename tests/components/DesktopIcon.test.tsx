@@ -1,23 +1,18 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 import { DesktopIcon } from '@/components/os/DesktopIcon';
 import { DEFAULT_APPS } from '@/lib/constants/apps';
 import { useOSStore } from '@/hooks/useOSStore';
 
 describe('DesktopIcon Component', () => {
-  const mockApp = DEFAULT_APPS[0]; // Finder
+  const mockApp = DEFAULT_APPS[0]; // Terminal
   const onSelect = vi.fn();
   const onOpen = vi.fn();
 
   beforeEach(() => {
-    vi.useFakeTimers();
     onSelect.mockClear();
     onOpen.mockClear();
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
   });
 
   it('should render icon frame, title, and label properly', () => {
@@ -59,7 +54,7 @@ describe('DesktopIcon Component', () => {
     expect(iconButton).toHaveClass('bg-white/15');
   });
 
-  it('should call onSelect on first click and onOpen on second click within 300ms', () => {
+  it('should call onSelect and onOpen immediately on single click', () => {
     render(
       <DesktopIcon
         app={mockApp}
@@ -71,16 +66,9 @@ describe('DesktopIcon Component', () => {
 
     const iconButton = screen.getByTestId(`desktop-icon-${mockApp.id}`);
 
-    // First click
+    // Single click launches app immediately
     fireEvent.click(iconButton);
     expect(onSelect).toHaveBeenCalledWith(mockApp.id);
-    expect(onOpen).not.toHaveBeenCalled();
-
-    // Second click within 200ms
-    act(() => {
-      vi.advanceTimersByTime(150);
-    });
-    fireEvent.click(iconButton);
     expect(onOpen).toHaveBeenCalledWith(mockApp.id);
   });
 

@@ -10,13 +10,13 @@ interface KineticHeroStageProps {
 
 export function KineticHeroStage({
   heading = 'CREATIVE DEVELOPER',
-  subheading = 'DESIGN ENGINEER & SYSTEMS ARCHITECT',
+  subheading = 'BACKEND & SYSTEMS ARCHITECT',
 }: KineticHeroStageProps) {
   const desktopMode = useOSStore(state => state.desktopMode);
   const windows = useOSStore(state => state.windows);
   const stageRef = useRef<HTMLDivElement>(null);
 
-  const charStatesRef = useRef<Map<HTMLElement, { xState: SpringState; yState: SpringState; origin: { x: number; y: number } }>>(new Map());
+  const charStatesRef = useRef<Map<HTMLElement, { xState: SpringState; yState: SpringState; scaleState: SpringState; origin: { x: number; y: number } }>>(new Map());
   const mousePosRef = useRef<{ x: number; y: number; active: boolean }>({ x: -1000, y: -1000, active: false });
 
   // Has any open window
@@ -34,6 +34,7 @@ export function KineticHeroStage({
       charStatesRef.current.set(span, {
         xState: { x: 0, v: 0 },
         yState: { x: 0, v: 0 },
+        scaleState: { x: 1.0, v: 0 },
         origin: { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 },
       });
     });
@@ -61,6 +62,7 @@ export function KineticHeroStage({
       charStatesRef.current.forEach((state, span) => {
         let targetDx = 0;
         let targetDy = 0;
+        let targetScale = 1.0;
 
         if (active) {
           const dist = Math.hypot(mouseX - state.origin.x, mouseY - state.origin.y);
@@ -70,6 +72,7 @@ export function KineticHeroStage({
             const angle = Math.atan2(state.origin.y - mouseY, state.origin.x - mouseX);
             targetDx = Math.cos(angle) * force * maxDisplacement;
             targetDy = Math.sin(angle) * force * maxDisplacement;
+            targetScale = 1.0 + force * 0.35;
 
             // Variable font weight modulation
             const weight = Math.round(400 + force * 500);
@@ -86,10 +89,16 @@ export function KineticHeroStage({
         }
 
         // Solve Euler physics step
-        state.xState = solveEulerStep(state.xState, targetDx, { k: 280, c: 24, m: 1.0 });
-        state.yState = solveEulerStep(state.yState, targetDy, { k: 280, c: 24, m: 1.0 });
+        const curX = state.xState || { x: 0, v: 0 };
+        const curY = state.yState || { x: 0, v: 0 };
+        const curScale = state.scaleState || { x: 1.0, v: 0 };
 
-        span.style.transform = `translate3d(${state.xState.x.toFixed(2)}px, ${state.yState.x.toFixed(2)}px, 0)`;
+        state.xState = solveEulerStep(curX, targetDx, { k: 280, c: 24, m: 1.0 });
+        state.yState = solveEulerStep(curY, targetDy, { k: 280, c: 24, m: 1.0 });
+        state.scaleState = solveEulerStep(curScale, targetScale, { k: 300, c: 24, m: 1.0 });
+
+        const scaleVal = typeof state.scaleState?.x === 'number' ? state.scaleState.x : 1.0;
+        span.style.transform = `translate3d(${state.xState.x.toFixed(2)}px, ${state.yState.x.toFixed(2)}px, 0) scale(${scaleVal.toFixed(3)})`;
       });
     };
 
@@ -115,10 +124,10 @@ export function KineticHeroStage({
         opacity: stageOpacity,
       }}
     >
-      <div className="text-center px-4 max-w-7xl">
+      <div className="text-center px-4 max-w-7xl pointer-events-none">
         <h1
           data-testid="hero-heading"
-          className="font-black tracking-tighter uppercase leading-[0.88] text-white/90"
+          className="font-black tracking-tighter uppercase leading-[0.88] text-white/90 pointer-events-none"
           style={{
             fontSize: 'clamp(4.5rem, 14vw + 1rem, 18.5rem)',
             textTransform: 'uppercase',
@@ -129,7 +138,7 @@ export function KineticHeroStage({
 
         <p
           data-testid="hero-subheading"
-          className="mt-6 text-sm sm:text-base font-semibold tracking-widest uppercase text-white/60 font-mono"
+          className="mt-6 text-sm sm:text-base font-semibold tracking-widest uppercase text-white/60 font-mono pointer-events-none"
         >
           {subheading}
         </p>

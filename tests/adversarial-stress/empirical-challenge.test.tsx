@@ -719,7 +719,6 @@ describe('CHALLENGER-1: Rapid Concurrency & Physics Stress Tests', () => {
   beforeEach(() => {
     useOSStore.setState({
       activeWindowId: null,
-      focusedWindowId: null,
       theme: 'dark',
     });
   });

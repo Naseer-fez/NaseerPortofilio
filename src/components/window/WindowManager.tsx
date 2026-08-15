@@ -23,16 +23,13 @@ export const APP_REGISTRY: Record<string, React.ComponentType<any>> = {
 export function WindowManager() {
   const windows = useOSStore(state => state.windows);
   const desktopMode = useOSStore(state => state.desktopMode);
-  const { isMobile } = useBreakpoint();
-
-  if (isMobile) return null;
 
   const windowList = Object.values(windows || {});
 
   return (
     <div
       data-testid="window-manager"
-      className={`fixed inset-0 pointer-events-none z-20 transition-opacity duration-300 ${
+      className={`hidden md:block fixed inset-0 pointer-events-none z-20 transition-opacity duration-300 ${
         desktopMode === 'ambient-hero' ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
     >

@@ -19,12 +19,17 @@ export const metadata: Metadata = {
   title: 'Portfolio OS — macOS Interactive Desktop',
   description:
     'A macOS-inspired desktop operating system portfolio showcase built with Next.js, Tailwind CSS, Framer Motion, and Web Audio.',
+  icons: {
+    icon: '/favicon.png',
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
+  },
 };
 
 const themeScript = `
 (function() {
   try {
-    var stored = localStorage.getItem('macos-portfolio-os-state');
+    var stored = localStorage.getItem('macos-portfolio-os-state-v4') || localStorage.getItem('macos-portfolio-os-state');
     var isDark = true;
     if (stored) {
       var parsed = JSON.parse(stored);
@@ -55,6 +60,9 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <link rel="icon" href="/favicon.png" type="image/png" />
+        <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className="font-sans antialiased bg-os-bg-desktop text-os-window-text h-screen w-screen overflow-hidden select-none">

@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, fireEvent, act } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import { DesktopCanvas } from '@/components/os/DesktopCanvas';
 import { useOSStore } from '@/hooks/useOSStore';
 
@@ -84,30 +84,24 @@ describe('Tier 1: Desktop Surface & Icon Grid', () => {
     expect(terminalIcon).toHaveAttribute('aria-selected', 'true');
   });
 
-  it('launches app window and sets focus on double click (#5)', () => {
+  it('launches app window and sets focus on single click (#5)', () => {
     const { getByTestId } = render(<DesktopCanvas />);
     const icon = getByTestId('desktop-icon-terminal');
 
-    fireEvent.doubleClick(icon);
+    fireEvent.click(icon);
 
     expect(useOSStore.getState().windows['terminal'].isOpen).toBe(true);
     expect(useOSStore.getState().activeWindowId).toBe('terminal');
   });
 
-  it('selects icon on single click without launching window (#6)', async () => {
-    vi.useFakeTimers();
+  it('selects icon and launches window immediately on single click (#6)', () => {
     const { getByTestId } = render(<DesktopCanvas />);
     const icon = getByTestId('desktop-icon-projects');
 
     fireEvent.click(icon);
 
-    act(() => {
-      vi.advanceTimersByTime(350);
-    });
-
     expect(useOSStore.getState().selectedIconIds).toContain('projects');
-    expect(useOSStore.getState().windows['projects'].isOpen).toBe(false);
-    vi.useRealTimers();
+    expect(useOSStore.getState().windows['projects'].isOpen).toBe(true);
   });
 
   it('verifies desktop background and icon grid visual conformance (#6, #7, #8, #9)', () => {

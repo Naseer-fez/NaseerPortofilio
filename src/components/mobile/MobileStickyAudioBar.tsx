@@ -4,14 +4,11 @@ import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { Play, Pause } from 'lucide-react';
 
 export function MobileStickyAudioBar() {
-  const { isMobile } = useBreakpoint();
   const playlist = useMusicStore(state => state.playlist);
   const currentIndex = useMusicStore(state => state.currentIndex);
   const status = useMusicStore(state => state.status);
   const togglePlay = useMusicStore(state => state.togglePlay);
   const toggleDeckExpanded = useMusicStore(state => state.toggleDeckExpanded);
-
-  if (!isMobile) return null;
 
   const track = playlist[currentIndex] || { title: '', artist: '' };
   const isPlaying = status === 'playing';
@@ -20,7 +17,7 @@ export function MobileStickyAudioBar() {
     <div
       data-testid="mobile-sticky-audio-bar"
       onClick={toggleDeckExpanded}
-      className="fixed inset-x-2 z-40 h-11 bg-stone-900/90 backdrop-blur-xl border border-white/10 rounded-xl px-3 flex items-center justify-between shadow-lg"
+      className="md:hidden fixed inset-x-2 z-40 h-11 bg-stone-900/90 backdrop-blur-xl border border-white/10 rounded-xl px-3 flex items-center justify-between shadow-lg"
       style={{
         bottom: 'calc(52px + env(safe-area-inset-bottom, 0px) + 8px)',
         height: '44px',

@@ -7,7 +7,7 @@ import { GlobalAudioManager } from '@/lib/audio/GlobalAudioManager';
 import { DesktopCanvas } from '@/components/os/DesktopCanvas';
 import { WindowManager } from '@/components/window/WindowManager';
 import { Dock } from '@/components/dock/Dock';
-import { AudioDeckExpandedCard } from '@/components/music/AudioDeckExpandedCard';
+import { RetroCassettePlayer } from '@/components/music/RetroCassettePlayer';
 import { TopMenuBar } from '@/components/os/TopMenuBar';
 import { MobileBottomSheet } from '@/components/mobile/MobileBottomSheet';
 import { MobileTabBar } from '@/components/mobile/MobileTabBar';
@@ -21,7 +21,7 @@ function FullDesktopApp() {
       <DesktopCanvas />
       <WindowManager />
       <Dock />
-      <AudioDeckExpandedCard />
+      <RetroCassettePlayer />
     </div>
   );
 }
@@ -64,7 +64,7 @@ describe('Tier 4: End-to-End Real-World Application Workflows', () => {
 
     // 1. User clicks Desktop Icon to launch Terminal
     const termIcon = getByTestId('desktop-icon-terminal');
-    fireEvent.doubleClick(termIcon);
+    fireEvent.click(termIcon);
 
     expect(useOSStore.getState().windows['terminal'].isOpen).toBe(true);
     expect(useOSStore.getState().activeWindowId).toBe('terminal');
@@ -82,29 +82,26 @@ describe('Tier 4: End-to-End Real-World Application Workflows', () => {
     expect(useOSStore.getState().theme).toBe('light');
   });
 
-  it('Workflow 2: Music Discovery & Vinyl Deck Interaction Journey', async () => {
-    const { getByTestId, rerender } = render(<FullDesktopApp />);
+  it('Workflow 2: Music Discovery & Retro Cassette Interaction Journey', async () => {
+    const { getByTestId } = render(<FullDesktopApp />);
 
-    // 1. Expand Audio Deck from dock pill
-    fireEvent.click(getByTestId('music-player-pill'));
-    expect(useMusicStore.getState().isDeckExpanded).toBe(true);
-    rerender(<FullDesktopApp />);
+    expect(getByTestId('retro-cassette-player')).toBeInTheDocument();
 
-    // 2. Start playback
+    // 1. Start playback
     await act(async () => {
       fireEvent.click(getByTestId('music-play-btn'));
     });
     expect(useMusicStore.getState().status).toBe('playing');
-    expect(getByTestId('vinyl-disc')).toHaveStyle({ animationPlayState: 'running' });
+    expect(getByTestId('cassette-spool-left')).toHaveStyle({ animationPlayState: 'running' });
 
-    // 3. Next track and seek
+    // 2. Next track and seek
     fireEvent.click(getByTestId('music-next-btn'));
     expect(useMusicStore.getState().currentIndex).toBe(1);
 
     useMusicStore.getState().seekTo(80);
     expect(useMusicStore.getState().currentTime).toBe(80);
 
-    // 4. Adjust volume
+    // 3. Adjust volume
     fireEvent.change(getByTestId('music-volume-slider'), { target: { value: '0.6' } });
     expect(useMusicStore.getState().volume).toBe(0.6);
   });

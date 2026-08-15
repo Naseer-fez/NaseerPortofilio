@@ -1,32 +1,61 @@
 # Original User Request
 
-## Initial Request — 2026-08-15T11:32:19Z
+## 2026-08-15T16:22:02Z
 
-<USER_REQUEST>
-Implement a comprehensive UX and visual refactor of an existing Next.js macOS-style portfolio OS showcase, including a new lock screen experience, a retro cassette music player widget, and an overhaul of the dock and desktop icons.
+Analyze all publicly accessible GitHub repositories belonging to `https://github.com/Naseer-fez` and produce a portfolio dataset of the best 15–20 real projects formatted as structured JSON cards based on verified repository evidence.
 
 Working directory: d:\CODE\Html\Showcase
-Integrity mode: development
+Integrity mode: demo
 
 ## Requirements
 
-### R1. Lock Screen (NEW Component)
-Create a fullscreen lock screen layer (`z-[10000]`) that appears on initial load. It must display the live time (HH:MM), date ("Weekday, Month DD"), "Welcome to" text, and the brand "Irfan.dev" in a script font. The lock screen background must be driven by a new modular wallpaper config. The lock screen must include a magnetic cursor and kinetic typography applied to the "Irfan.dev" text. Clicking anywhere should trigger a smooth, slide-up dismiss transition to reveal the desktop.
+### R1. Comprehensive Repository Enumeration & Deep Inspection
+Enumerate every public repository under GitHub account `https://github.com/Naseer-fez`. Deeply inspect all repository assets—including READMEs, codebases, dependency configurations (`package.json`, `requirements.txt`, `pyproject.toml`, `go.mod`, `Cargo.toml`, `CMakeLists.txt`, etc.), Docker/CI/CD configs, schema definitions, and commit histories. Identify actual functionality, architecture, and technology stacks without fabricating unsupported features or metrics.
 
-### R2. Retro Cassette Music Player Widget
-Replace the existing `AudioDeckExpandedCard` and `MusicPlayerDockPill` with a freely draggable retro SONY-style cassette tape widget. It must feature transport controls wired to the existing `GlobalAudioManager`, spinning tape reels that animate only during active playback, and a color scheme that dynamically extracts and matches the desktop wallpaper's dominant colors. Playback tracks must be defined via a config file with placeholder MP3 paths.
+### R2. Portfolio Selection & Technical Diversity
+Rank and select the top 15–20 projects (or fewer if fewer than 15 genuinely qualified public repositories exist). Ensure high domain diversity across categories (`SYSTEMS`, `AI / ML`, `FULL STACK`, `BACKEND`, `DEVOPS`, `CREATIVE`, `DATABASE`, `CLOUD`). Eliminate redundant/similar projects in favor of technical breadth. Flag the top 3–5 flagship projects with `featured: true`.
 
-### R3. Dock & Desktop Icon Overhaul
-Replace existing basic letter icons with macOS-style squircle icons containing SVG graphics with gradients and depth for Terminal, Projects, About, Finder, Settings, and Mail. Change interactions from double-click to single-click to open apps. Implement a fisheye magnification hover effect for the dock (hovered icon scales 1.8-2.2x, immediate neighbors scale 0.7x, next neighbors 0.85x) and an idle breathing animation for all dock icons when not hovered.
-
-### R4. Core System Updates
-- Replace the top menu bar Apple logo with a proper, swappable SVG.
-- Ensure the magnetic cursor and kinetic typography systems are portable utilities capable of being used on both the lock screen and desktop.
-- Create a central configuration system for wallpapers, music tracks, and icons, removing hardcoded values.
+### R3. Evidence-Based Structured Dataset Generation
+Generate the final project portfolio dataset matching the required JSON schema:
+```json
+{
+  "projects": [
+    {
+      "title": "Project name",
+      "category": "SYSTEMS",
+      "featured": true,
+      "description": "Concise one-sentence description of what the project actually does.",
+      "technologies": [
+        "Rust",
+        "Tokio",
+        "gRPC",
+        "Raft",
+        "+2"
+      ],
+      "architecture": "Concise description of the important architecture and engineering design.",
+      "metrics": [
+        "Relevant verified metric",
+        "Relevant verified metric"
+      ],
+      "githubUrl": "https://github.com/Naseer-fez/repository",
+      "demoUrl": "https://actual-demo-url-if-found"
+    }
+  ]
+}
+```
+Save the results to `portfolio_research/projects.json` and `src/data/projects.json`.
 
 ## Acceptance Criteria
 
-### Verification
-- [ ] Automated tests (Vitest/RTL): Ensure the existing 281 tests pass. Write new tests for the lock screen render/dismiss, cassette player playback state, and config loading.
-- [ ] Manual visual verification: The fisheye dock effect operates smoothly without layout thrashing; the cassette color dynamically matches the wallpaper; the lock screen slide-up transition is performant.
-</USER_REQUEST>
+### Data & Schema Integrity
+- [ ] Output JSON in `portfolio_research/projects.json` and `src/data/projects.json` is syntactically valid and strictly conforms to the schema with 15–20 projects (ranked from strongest to weakest).
+- [ ] Exactly 3–5 projects are flagged with `featured: true`.
+- [ ] Visible `technologies` list contains 4–5 key technologies, with any remaining technologies represented as `+N`.
+
+### Factuality & Link Verification
+- [ ] 100% of listed `githubUrl` links correspond to real, public repositories under `https://github.com/Naseer-fez` and return HTTP status 200.
+- [ ] Any populated `demoUrl` points to a verified live demo or package registry (e.g., PyPI, live web deployment) that returns HTTP status 200.
+- [ ] Every item in `metrics` represents a verified technical feature/capability (e.g., `JWT authentication`, `Dockerized`, `WebSocket`, `Zero-Config`) or repository-proven metric, with zero fabricated traffic/user/latency statistics.
+
+### Domain Diversity
+- [ ] The final selection includes representations across multiple distinct technical domains without over-indexing on repetitive CRUD applications.

@@ -10,9 +10,14 @@ import { DEFAULT_APPS } from '@/lib/constants/apps';
 interface DesktopCanvasProps {
   children?: React.ReactNode;
   className?: string;
+  withWallpaper?: boolean;
 }
 
-export const DesktopCanvas: React.FC<DesktopCanvasProps> = ({ children, className }) => {
+export const DesktopCanvas: React.FC<DesktopCanvasProps> = ({
+  children,
+  className,
+  withWallpaper = true,
+}) => {
   const desktopMode = useOSStore((state) => state.desktopMode);
   const setDesktopMode = useOSStore((state) => state.setDesktopMode);
   const setContextMenu = useOSStore((state) => state.setContextMenu);
@@ -123,6 +128,11 @@ export const DesktopCanvas: React.FC<DesktopCanvasProps> = ({ children, classNam
               label: 'New Folder',
               disabled: true,
             },
+            {
+              id: 'clean-up-icons',
+              label: 'Clean Up / Align to Grid',
+              action: () => useOSStore.getState().resetIconPositions(),
+            },
             { id: 'sep-1', label: '', separator: true },
             {
               id: 'change-wallpaper',
@@ -210,11 +220,11 @@ export const DesktopCanvas: React.FC<DesktopCanvasProps> = ({ children, classNam
         className || ''
       }`}
     >
-      {/* Background wallpaper layer */}
-      <Wallpaper />
+      {/* Background wallpaper layer (optional) */}
+      {withWallpaper && <Wallpaper />}
 
       {/* Grid layer */}
-      <DesktopGrid />
+      {children || <DesktopGrid />}
 
       {/* Selection Marquee rectangle */}
       {marquee && (
@@ -227,8 +237,6 @@ export const DesktopCanvas: React.FC<DesktopCanvasProps> = ({ children, classNam
 
       {/* Context menu */}
       <ContextMenu />
-
-      {children}
     </div>
   );
 };

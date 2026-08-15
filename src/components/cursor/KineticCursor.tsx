@@ -73,13 +73,12 @@ export function KineticCursor() {
     };
   }, [isMobile]);
 
-  // If mobile or coarse pointer, do not render cursor
   if (isMobile) return null;
 
   return (
-    <>
+    <div className="hidden md:block pointer-events-none">
       <CursorPrecisionDot x={pos.x} y={pos.y} />
       <CursorAuraRing x={auraPos.x} y={auraPos.y} variant={variant} radius={auraRadius} />
-    </>
+    </div>
   );
 }
