@@ -10,7 +10,7 @@ interface CursorAuraRingProps {
   radius: number;
 }
 
-export function CursorAuraRing({ x, y, variant, radius }: CursorAuraRingProps) {
+export const CursorAuraRing = React.memo(function CursorAuraRing({ x, y, variant, radius }: CursorAuraRingProps) {
   if (variant === 'disabled') return null;
 
   const isPrecisionDrag = variant === 'precision-drag';
@@ -34,4 +34,4 @@ export function CursorAuraRing({ x, y, variant, radius }: CursorAuraRingProps) {
       }}
     />
   );
-}
+});

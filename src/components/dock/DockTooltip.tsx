@@ -6,7 +6,7 @@ interface DockTooltipProps {
   title: string;
 }
 
-export function DockTooltip({ title }: DockTooltipProps) {
+export const DockTooltip = React.memo(function DockTooltip({ title }: DockTooltipProps) {
   return (
     <div
       role="tooltip"
@@ -22,4 +22,4 @@ export function DockTooltip({ title }: DockTooltipProps) {
       {title}
     </div>
   );
-}
+});

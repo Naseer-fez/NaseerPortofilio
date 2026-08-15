@@ -43,8 +43,10 @@ export const LiveClock: React.FC = () => {
 
   useEffect(() => {
     setTimeString(formatMenuBarTime());
+    // Check every second but only trigger re-render when minute changes
     const interval = setInterval(() => {
-      setTimeString(formatMenuBarTime());
+      const next = formatMenuBarTime();
+      setTimeString(prev => prev === next ? prev : next);
     }, 1000);
     return () => clearInterval(interval);
   }, []);

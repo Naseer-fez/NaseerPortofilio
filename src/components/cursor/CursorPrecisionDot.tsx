@@ -7,7 +7,7 @@ interface CursorPrecisionDotProps {
   y: number;
 }
 
-export function CursorPrecisionDot({ x, y }: CursorPrecisionDotProps) {
+export const CursorPrecisionDot = React.memo(function CursorPrecisionDot({ x, y }: CursorPrecisionDotProps) {
   return (
     <div
       data-testid="cursor-precision-dot"
@@ -22,4 +22,4 @@ export function CursorPrecisionDot({ x, y }: CursorPrecisionDotProps) {
       }}
     />
   );
-}
+});

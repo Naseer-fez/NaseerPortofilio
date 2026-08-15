@@ -7,7 +7,7 @@ import { AboutIcon } from './AboutIcon';
 import { FinderIcon } from './FinderIcon';
 import { SettingsIcon } from './SettingsIcon';
 import { MailIcon } from './MailIcon';
-import * as LucideIcons from 'lucide-react';
+import { AppWindow } from 'lucide-react';
 
 export const APP_ICONS: Record<string, React.FC<{ className?: string; size?: number }>> = {
   terminal: TerminalIcon,
@@ -36,10 +36,5 @@ export const AppIcon: React.FC<AppIconProps> = ({
     return <IconComponent className={className} size={size} />;
   }
 
-  const LucideMap = LucideIcons as unknown as Record<
-    string,
-    React.ComponentType<{ className?: string }>
-  >;
-  const FallbackLucide = (iconName && LucideMap[iconName]) || LucideIcons.AppWindow;
-  return <FallbackLucide className={className} />;
+  return <AppWindow className={className} />;
 };

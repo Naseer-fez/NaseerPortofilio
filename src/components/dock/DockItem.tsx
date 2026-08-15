@@ -15,7 +15,7 @@ interface DockItemProps {
   index?: number;
 }
 
-export function DockItem({
+export const DockItem = React.memo(function DockItem({
   app,
   magnifiedWidth,
   isDockHovered = false,
@@ -85,4 +85,4 @@ export function DockItem({
       />
     </div>
   );
-}
+});

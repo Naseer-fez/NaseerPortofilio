@@ -147,3 +147,24 @@ body {
   }
 }
 
+/* GPU Compositor Hints for frequently animated/composited layers */
+[data-testid="desktop-dock"] {
+  will-change: transform;
+  contain: layout style;
+}
+
+[data-testid="top-menu-bar"] {
+  contain: layout style;
+}
+
+[data-testid="cursor-precision-dot"],
+[data-testid="cursor-aura-ring"] {
+  will-change: transform;
+  contain: layout style paint;
+}
+
+[data-testid="kinetic-hero-stage"] [data-char] {
+  will-change: transform;
+  contain: layout style;
+}
+

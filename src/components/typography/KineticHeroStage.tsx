@@ -18,7 +18,7 @@ export function KineticHeroStage({
   const windows = useOSStore(state => state.windows);
   const stageRef = useRef<HTMLDivElement>(null);
 
-  const charStatesRef = useRef<Map<HTMLElement, { xState: SpringState; yState: SpringState; scaleState: SpringState; origin: { x: number; y: number } }>>(new Map());
+  const charStatesRef = useRef<Map<HTMLElement, { xState: SpringState; yState: SpringState; scaleState: SpringState; origin: { x: number; y: number }; charIndex: number }>>(new Map());
   const mousePosRef = useRef<{ x: number; y: number; active: boolean }>({ x: -1000, y: -1000, active: false });
 
   // Has any open window
@@ -31,13 +31,14 @@ export function KineticHeroStage({
     const charSpans = Array.from(stage.querySelectorAll<HTMLElement>('[data-char]'));
     charStatesRef.current.clear();
 
-    charSpans.forEach(span => {
+    charSpans.forEach((span, idx) => {
       const rect = span.getBoundingClientRect();
       charStatesRef.current.set(span, {
         xState: { x: 0, v: 0 },
         yState: { x: 0, v: 0 },
         scaleState: { x: 1.0, v: 0 },
         origin: { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 },
+        charIndex: idx,
       });
     });
 
@@ -85,7 +86,7 @@ export function KineticHeroStage({
           }
         } else {
           // Ambient harmonic wave idle oscillation
-          const charIndex = Array.from(charStatesRef.current.keys()).indexOf(span);
+          const charIndex = state.charIndex;
           targetDy = Math.sin(time * 2 + charIndex * 0.2) * 4;
           span.style.fontVariationSettings = "'wght' 400";
         }

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useOSStore } from '@/hooks/useOSStore';
 import { DEFAULT_APPS } from '@/lib/constants/apps';
 import { DesktopIcon } from './DesktopIcon';
@@ -35,6 +35,30 @@ export const DesktopGrid: React.FC = () => {
     };
   };
 
+  const handlePositionChange = useCallback(
+    (appId: string, pos: Position) => {
+      if (updateIconPosition) updateIconPosition(appId, pos);
+    },
+    [updateIconPosition]
+  );
+
+  const handleSelect = useCallback(
+    (id: string) => {
+      setSelectedIconId(id);
+      if (selectIcon) selectIcon(id);
+    },
+    [selectIcon]
+  );
+
+  const handleOpen = useCallback(
+    (id: string) => {
+      setSelectedIconId(id);
+      if (selectIcon) selectIcon(id);
+      if (openWindow) openWindow(id);
+    },
+    [selectIcon, openWindow]
+  );
+
   return (
     <div
       data-testid="desktop-grid"
@@ -53,24 +77,15 @@ export const DesktopGrid: React.FC = () => {
             app={app}
             index={index}
             position={currentPos}
-            onPositionChange={(pos) => {
-              if (updateIconPosition) updateIconPosition(app.id, pos);
-            }}
+            onPositionChange={(pos) => handlePositionChange(app.id, pos)}
             isHovered={isThisHovered}
             isOtherHovered={isAnotherHovered}
             onHoverChange={(hovered) => setHoveredAppId(hovered ? app.id : null)}
             isSelected={
               selectedIconIds?.includes(app.id) || selectedIconId === app.id
             }
-            onSelect={(id) => {
-              setSelectedIconId(id);
-              if (selectIcon) selectIcon(id);
-            }}
-            onOpen={(id) => {
-              setSelectedIconId(id);
-              if (selectIcon) selectIcon(id);
-              if (openWindow) openWindow(id);
-            }}
+            onSelect={handleSelect}
+            onOpen={handleOpen}
           />
         );
       })}

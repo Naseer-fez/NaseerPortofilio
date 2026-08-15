@@ -9,7 +9,7 @@ interface ActiveDotIndicatorProps {
   isMinimized: boolean;
 }
 
-export function ActiveDotIndicator({ windowId, isOpen, isMinimized }: ActiveDotIndicatorProps) {
+export const ActiveDotIndicator = React.memo(function ActiveDotIndicator({ windowId, isOpen, isMinimized }: ActiveDotIndicatorProps) {
   if (!isOpen) return null;
 
   return (
@@ -26,4 +26,4 @@ export function ActiveDotIndicator({ windowId, isOpen, isMinimized }: ActiveDotI
       }}
     />
   );
-}
+});

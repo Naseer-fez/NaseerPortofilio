@@ -9,7 +9,7 @@ interface TrafficLightsProps {
   isFocused: boolean;
 }
 
-export function TrafficLights({ windowId, isFocused }: TrafficLightsProps) {
+export const TrafficLights = React.memo(function TrafficLights({ windowId, isFocused }: TrafficLightsProps) {
   const closeWindow = useOSStore(state => state.closeWindow);
   const minimizeWindow = useOSStore(state => state.minimizeWindow);
   const toggleMaximize = useOSStore(state => state.toggleMaximize);
@@ -79,4 +79,4 @@ export function TrafficLights({ windowId, isFocused }: TrafficLightsProps) {
       </button>
     </div>
   );
-}
+});

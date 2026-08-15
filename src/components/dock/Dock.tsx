@@ -8,13 +8,23 @@ import { useBreakpoint } from '@/hooks/useBreakpoint';
 
 export function Dock() {
   const [mouseX, setMouseX] = useState<number | null>(null);
+  const rafRef = useRef<number | null>(null);
   const dockRef = useRef<HTMLDivElement>(null);
 
   const handlePointerMove = (e: React.PointerEvent) => {
-    setMouseX(e.clientX);
+    const x = e.clientX;
+    if (rafRef.current !== null) return;
+    rafRef.current = requestAnimationFrame(() => {
+      setMouseX(x);
+      rafRef.current = null;
+    });
   };
 
   const handlePointerLeave = () => {
+    if (rafRef.current !== null) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
     setMouseX(null);
   };
 
