@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: #0066cc;
+    --color-primary-focus: #0071e3;
+    --color-primary-dark: #2997ff;
+    --color-canvas: #ffffff;
+    --color-parchment: #f5f5f7;
+    --color-surface-tile1: #272729;
+    --color-surface-black: #000000;
+    --color-ink: #1d1d1f;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif;
+    background-color: #0a0a0c;
+    color: #ffffff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Custom audio range slider styling */
+  input[type="range"].audio-scrubber {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  input[type="range"].audio-scrubber:focus {
+    outline: none;
+  }
+
+  input[type="range"].audio-scrubber::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    transition: transform 0.12s ease;
+  }
+
+  input[type="range"].audio-scrubber:hover::-webkit-slider-thumb {
+    transform: scale(1.25);
+  }
+
+  input[type="range"].audio-scrubber::-moz-range-thumb {
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    transition: transform 0.12s ease;
+  }
+
+  /* Custom scrollbar for windows and terminal */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.32);
+  }
+}
+
+@layer utilities {
+  .glassmorphic-capsule {
+    background: rgba(30, 30, 35, 0.75);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .glassmorphic-modal {
+    background: rgba(20, 20, 24, 0.88);
+    backdrop-filter: blur(32px) saturate(190%);
+    -webkit-backdrop-filter: blur(32px) saturate(190%);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .glassmorphic-dock {
+    background: rgba(23, 23, 27, 0.65);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+  }
+
+  .glassmorphic-menubar {
+    background: rgba(26, 26, 26, 0.75);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+  }
+
+  .btn-apple-active {
+    transition: transform 0.1s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease;
+  }
+
+  .btn-apple-active:active {
+    transform: scale(0.95);
+  }
+}
