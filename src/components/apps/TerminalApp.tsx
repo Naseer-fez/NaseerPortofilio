@@ -34,6 +34,67 @@ const VIRTUAL_FILES: Record<string, string> = {
   'secret.txt': '🎉 Easter Egg Found! "First, solve the problem. Then, write the code." — John Johnson',
 };
 
+function NeofetchOutput() {
+  const [uptimeStr, setUptimeStr] = useState('0 days, 0 hours, 0 mins');
+
+  useEffect(() => {
+    // Launch date: August 16, 2026, at 12:00 PM
+    const startDate = new Date('2026-08-16T12:00:00');
+    
+    const calculateUptime = () => {
+      const now = new Date();
+      const diffMs = Math.max(0, now.getTime() - startDate.getTime());
+      
+      const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+      
+      setUptimeStr(`${days} days, ${hours} hours, ${mins} mins`);
+    };
+
+    calculateUptime();
+    const interval = setInterval(calculateUptime, 60000); // Update every minute
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div data-testid="neofetch-banner" className="my-2 select-text font-mono text-xs leading-relaxed">
+      <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-start">
+        <div className="sm:col-span-4 text-emerald-400 font-bold whitespace-pre">
+{`   /\\_/\\
+  ( o.o )  Portfolio OS
+   > ^ <   Sonoma v2.4`}
+        </div>
+        <div className="sm:col-span-8 space-y-0.5 text-white/90">
+          <div><span className="text-blue-400 font-semibold">naseer@portfolio-os</span></div>
+          <div className="text-white/30">-----------------------</div>
+          <div><span className="text-purple-400 font-medium">OS:</span> macOS Sonoma (Web Edition)</div>
+          <div><span className="text-purple-400 font-medium">Host:</span> MacBook Pro M3 Max 64GB</div>
+          <div><span className="text-purple-400 font-medium">Kernel:</span> 24.2.0 Darwin x86_64</div>
+          <div><span className="text-purple-400 font-medium">Uptime:</span> {uptimeStr}</div>
+          <div><span className="text-purple-400 font-medium">Shell:</span> zsh 5.9 (x86_64-apple-darwin24.0)</div>
+          <div><span className="text-purple-400 font-medium">Resolution:</span> 3840x2160 @ 120Hz Retina</div>
+          <div><span className="text-purple-400 font-medium">Theme:</span> Sonoma Dark (Glassmorphic)</div>
+          <div><span className="text-purple-400 font-medium">CPU:</span> Apple M3 Max (16 cores @ 4.05GHz)</div>
+          <div><span className="text-purple-400 font-medium">Memory:</span> 32.4 GiB / 64.0 GiB (50%)</div>
+        </div>
+      </div>
+
+      {/* ANSI Color palette swatches */}
+      <div className="flex space-x-1.5 mt-3 pt-2 border-t border-white/10">
+        <div className="w-4 h-3 rounded-xs bg-stone-900" />
+        <div className="w-4 h-3 rounded-xs bg-red-500" />
+        <div className="w-4 h-3 rounded-xs bg-emerald-500" />
+        <div className="w-4 h-3 rounded-xs bg-yellow-400" />
+        <div className="w-4 h-3 rounded-xs bg-blue-500" />
+        <div className="w-4 h-3 rounded-xs bg-purple-500" />
+        <div className="w-4 h-3 rounded-xs bg-cyan-400" />
+        <div className="w-4 h-3 rounded-xs bg-white" />
+      </div>
+    </div>
+  );
+}
+
 export function TerminalApp() {
   const [history, setHistory] = useState<TerminalEntry[]>([]);
   const [input, setInput] = useState('');
@@ -131,42 +192,7 @@ export function TerminalApp() {
   }, [isMatrix]);
 
   function renderNeofetch() {
-    return (
-      <div data-testid="neofetch-banner" className="my-2 select-text font-mono text-xs leading-relaxed">
-        <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-start">
-          <div className="sm:col-span-4 text-emerald-400 font-bold whitespace-pre">
-{`   /\\_/\\
-  ( o.o )  Portfolio OS
-   > ^ <   Sonoma v2.4`}
-          </div>
-          <div className="sm:col-span-8 space-y-0.5 text-white/90">
-            <div><span className="text-blue-400 font-semibold">naseer@portfolio-os</span></div>
-            <div className="text-white/30">-----------------------</div>
-            <div><span className="text-purple-400 font-medium">OS:</span> macOS Sonoma (Web Edition)</div>
-            <div><span className="text-purple-400 font-medium">Host:</span> MacBook Pro M3 Max 64GB</div>
-            <div><span className="text-purple-400 font-medium">Kernel:</span> 24.2.0 Darwin x86_64</div>
-            <div><span className="text-purple-400 font-medium">Uptime:</span> 42 days, 13 hours, 37 mins</div>
-            <div><span className="text-purple-400 font-medium">Shell:</span> zsh 5.9 (x86_64-apple-darwin24.0)</div>
-            <div><span className="text-purple-400 font-medium">Resolution:</span> 3840x2160 @ 120Hz Retina</div>
-            <div><span className="text-purple-400 font-medium">Theme:</span> Sonoma Dark (Glassmorphic)</div>
-            <div><span className="text-purple-400 font-medium">CPU:</span> Apple M3 Max (16 cores @ 4.05GHz)</div>
-            <div><span className="text-purple-400 font-medium">Memory:</span> 32.4 GiB / 64.0 GiB (50%)</div>
-          </div>
-        </div>
-
-        {/* ANSI Color palette swatches */}
-        <div className="flex space-x-1.5 mt-3 pt-2 border-t border-white/10">
-          <div className="w-4 h-3 rounded-xs bg-stone-900" />
-          <div className="w-4 h-3 rounded-xs bg-red-500" />
-          <div className="w-4 h-3 rounded-xs bg-emerald-500" />
-          <div className="w-4 h-3 rounded-xs bg-yellow-400" />
-          <div className="w-4 h-3 rounded-xs bg-blue-500" />
-          <div className="w-4 h-3 rounded-xs bg-purple-500" />
-          <div className="w-4 h-3 rounded-xs bg-cyan-400" />
-          <div className="w-4 h-3 rounded-xs bg-white" />
-        </div>
-      </div>
-    );
+    return <NeofetchOutput />;
   }
 
   const executeCommand = (cmdStr: string) => {

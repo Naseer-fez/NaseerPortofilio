@@ -1,0 +1,38 @@
+[
+  {
+    "name": "1_single_worker_throughput_latency.svg",
+    "type": "file",
+    "path": "/finder-data/apirlpy/benchmarks/1_single_worker_throughput_latency.svg",
+    "icon": "file"
+  },
+  {
+    "name": "2_latency_percentiles_distribution.svg",
+    "type": "file",
+    "path": "/finder-data/apirlpy/benchmarks/2_latency_percentiles_distribution.svg",
+    "icon": "file"
+  },
+  {
+    "name": "3_memory_footprint_scaling.svg",
+    "type": "file",
+    "path": "/finder-data/apirlpy/benchmarks/3_memory_footprint_scaling.svg",
+    "icon": "file"
+  },
+  {
+    "name": "4_multi_worker_contention_performance.svg",
+    "type": "file",
+    "path": "/finder-data/apirlpy/benchmarks/4_multi_worker_contention_performance.svg",
+    "icon": "file"
+  },
+  {
+    "name": "5_rate_limit_security_integrity.svg",
+    "type": "file",
+    "path": "/finder-data/apirlpy/benchmarks/5_rate_limit_security_integrity.svg",
+    "icon": "file"
+  },
+  {
+    "name": "6_performance_gap_summary_radar.svg",
+    "type": "file",
+    "path": "/finder-data/apirlpy/benchmarks/6_performance_gap_summary_radar.svg",
+    "icon": "file"
+  }
+]

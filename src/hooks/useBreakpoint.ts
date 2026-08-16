@@ -5,7 +5,12 @@ const MOBILE_QUERY = '(max-width: 767px)';
 export function useBreakpoint() {
   const [isMobile, setIsMobile] = useState<boolean>(() => {
     if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
-      return Boolean(window.matchMedia(MOBILE_QUERY).matches);
+      try {
+        const mql = window.matchMedia(MOBILE_QUERY);
+        return Boolean(mql?.matches);
+      } catch {
+        return false;
+      }
     }
     return false;
   });

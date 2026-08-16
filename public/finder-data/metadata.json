@@ -1,5 +1,11 @@
 [
   {
+    "name": "apirlpy",
+    "type": "folder",
+    "path": "/finder-data/apirlpy",
+    "icon": "folder"
+  },
+  {
     "name": "Applications",
     "type": "folder",
     "path": "/finder-data/Applications",

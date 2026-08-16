@@ -2,11 +2,13 @@
 
 import React, { useEffect, useState, useCallback } from 'react';
 import { useOSStore } from '@/hooks/useOSStore';
+import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { DEFAULT_APPS } from '@/lib/constants/apps';
 import { DesktopIcon } from './DesktopIcon';
 import { Position } from '@/types/os';
 
 export const DesktopGrid: React.FC = () => {
+  const { isMobile } = useBreakpoint();
   const [selectedIconId, setSelectedIconId] = useState<string | null>(null);
   const [hoveredAppId, setHoveredAppId] = useState<string | null>(null);
   const selectedIconIds = useOSStore((state) => state.selectedIconIds);
@@ -64,7 +66,9 @@ export const DesktopGrid: React.FC = () => {
       data-testid="desktop-grid"
       style={{ gridAutoFlow: 'column' }}
       onPointerLeave={() => setHoveredAppId(null)}
-      className="absolute inset-0 h-full w-full pointer-events-none overflow-hidden flex flex-wrap content-start gap-3 p-4 pt-12 md:block md:p-0"
+      className={`absolute inset-0 h-full w-full pointer-events-none overflow-hidden flex flex-wrap content-start gap-3 p-4 pt-12 md:block md:p-0 ${
+        isMobile ? 'hidden' : ''
+      }`}
     >
       {DEFAULT_APPS.map((app, index) => {
         const isThisHovered = hoveredAppId === app.id;

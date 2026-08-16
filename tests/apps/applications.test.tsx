@@ -323,7 +323,7 @@ describe('Applications Suite: 6 macOS Interactive Applications', () => {
       fireEvent.click(terminalItem);
 
       expect(screen.getByTestId('finder-preview-pane')).toBeInTheDocument();
-      expect(screen.getByText(/Executable application bundle for Portfolio OS Terminal/i)).toBeInTheDocument();
+      expect(screen.getAllByText(/Executable application bundle for Portfolio OS Terminal/i).length).toBeGreaterThan(0);
 
       fireEvent.doubleClick(terminalItem);
       expect(useOSStore.getState().windows['terminal'].isOpen).toBe(true);

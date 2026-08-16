@@ -9,6 +9,10 @@ export interface VFSItem {
   iconName: string;
   description?: string;
   contentPreview?: string;
+  realFilePath?: string;
+  rating?: number;
+  reviews?: string;
+  developer?: string;
 }
 
 export interface VFSFolder {
@@ -38,6 +42,9 @@ export const VFS_ITEMS: VFSItem[] = [
     iconName: 'Terminal',
     description: 'Interactive Unix Shell CLI with Neofetch & Matrix mode',
     contentPreview: 'Executable application bundle for Portfolio OS Terminal.',
+    rating: 4.9,
+    reviews: '1,204',
+    developer: 'Naseer John Ahmed',
   },
   {
     id: 'app-projects',
@@ -161,6 +168,72 @@ export const VFS_ITEMS: VFSItem[] = [
     iconName: 'Image',
     description: 'Shaik Naseer John Ahmed — Profile Portrait',
     contentPreview: 'Developer avatar portrait in high definition.',
+  },
+  {
+    id: 'pic-bench-1',
+    name: '1_single_worker_throughput_latency.svg',
+    parentId: 'pics',
+    type: 'picture',
+    size: '64 KB',
+    modified: '2026-08-16',
+    iconName: 'Image',
+    description: 'apirlpy Single Worker Throughput Latency',
+    realFilePath: '/finder-data/apirlpy/benchmarks/1_single_worker_throughput_latency.svg',
+  },
+  {
+    id: 'pic-bench-2',
+    name: '2_latency_percentiles_distribution.svg',
+    parentId: 'pics',
+    type: 'picture',
+    size: '45 KB',
+    modified: '2026-08-16',
+    iconName: 'Image',
+    description: 'apirlpy Latency Percentiles Distribution',
+    realFilePath: '/finder-data/apirlpy/benchmarks/2_latency_percentiles_distribution.svg',
+  },
+  {
+    id: 'pic-bench-3',
+    name: '3_memory_footprint_scaling.svg',
+    parentId: 'pics',
+    type: 'picture',
+    size: '58 KB',
+    modified: '2026-08-16',
+    iconName: 'Image',
+    description: 'apirlpy Memory Footprint Scaling',
+    realFilePath: '/finder-data/apirlpy/benchmarks/3_memory_footprint_scaling.svg',
+  },
+  {
+    id: 'pic-bench-4',
+    name: '4_multi_worker_contention_performance.svg',
+    parentId: 'pics',
+    type: 'picture',
+    size: '63 KB',
+    modified: '2026-08-16',
+    iconName: 'Image',
+    description: 'apirlpy Multi-Worker Contention Performance',
+    realFilePath: '/finder-data/apirlpy/benchmarks/4_multi_worker_contention_performance.svg',
+  },
+  {
+    id: 'pic-bench-5',
+    name: '5_rate_limit_security_integrity.svg',
+    parentId: 'pics',
+    type: 'picture',
+    size: '56 KB',
+    modified: '2026-08-16',
+    iconName: 'Image',
+    description: 'apirlpy Rate Limit Security Integrity',
+    realFilePath: '/finder-data/apirlpy/benchmarks/5_rate_limit_security_integrity.svg',
+  },
+  {
+    id: 'pic-bench-6',
+    name: '6_performance_gap_summary_radar.svg',
+    parentId: 'pics',
+    type: 'picture',
+    size: '61 KB',
+    modified: '2026-08-16',
+    iconName: 'Image',
+    description: 'apirlpy Performance Gap Summary Radar',
+    realFilePath: '/finder-data/apirlpy/benchmarks/6_performance_gap_summary_radar.svg',
   },
   {
     id: 'pic-sonoma',

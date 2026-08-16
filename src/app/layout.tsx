@@ -1,7 +1,8 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { GlobalKeyboardListener } from '@/components/os/GlobalKeyboardListener';
+import { ServiceWorkerRegister } from '@/components/pwa/ServiceWorkerRegister';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -15,10 +16,19 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 });
 
+export const viewport: Viewport = {
+  themeColor: '#0c0a09',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 export const metadata: Metadata = {
-  title: 'Portfolio OS — macOS Interactive Desktop',
+  title: 'Naseer Portfolio',
   description:
     'A macOS-inspired desktop operating system portfolio showcase built with Next.js, Tailwind CSS, Framer Motion, and Web Audio.',
+  manifest: '/manifest.json',
   icons: {
     icon: '/favicon.png',
     shortcut: '/favicon.png',
@@ -64,6 +74,7 @@ export default function RootLayout({
     >
       <head>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/favicon.png" type="image/png" />
         <link rel="shortcut icon" href="/favicon.png" type="image/png" />
         <link rel="apple-touch-icon" href="/favicon.png" />
@@ -71,6 +82,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased bg-os-bg-desktop text-os-window-text h-screen w-screen overflow-hidden select-none">
         <GlobalKeyboardListener />
+        <ServiceWorkerRegister />
         {children}
       </body>
     </html>
