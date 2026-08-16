@@ -372,7 +372,7 @@ export function RetroCassettePlayer() {
 
             {/* Bottom Right: IRFAN.DEV / Portfolio Branding */}
             <div className="font-mono font-bold text-xs tracking-wider text-white/90 drop-shadow-[0_1px_3px_rgba(0,0,0,0.8)]">
-              IRFAN.DEV
+              NASEER.DEV
             </div>
           </div>
         </div>

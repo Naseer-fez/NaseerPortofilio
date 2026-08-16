@@ -22,6 +22,7 @@ export interface MusicState {
   isShuffled: boolean;
   repeatMode: RepeatMode;
   isDeckExpanded: boolean;
+  isMobileAudioBarVisible: boolean;
 
   // Actions
   play: () => Promise<void>;
@@ -36,6 +37,7 @@ export interface MusicState {
   cycleRepeat: () => void;
   toggleDeckExpanded: () => void;
   setDeckExpanded: (expanded: boolean) => void;
+  setMobileAudioBarVisible: (visible: boolean) => void;
   setPlaylist: (tracks: Track[]) => void;
   setCurrentIndex: (index: number) => void;
 }

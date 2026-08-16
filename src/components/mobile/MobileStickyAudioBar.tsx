@@ -4,6 +4,7 @@ import React from 'react';
 import { useMusicStore } from '@/hooks/useMusicStore';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { Play, Pause } from 'lucide-react';
+import { motion, PanInfo } from 'framer-motion';
 
 export function MobileStickyAudioBar() {
   const playlist = useMusicStore(state => state.playlist);
@@ -11,12 +12,30 @@ export function MobileStickyAudioBar() {
   const status = useMusicStore(state => state.status);
   const togglePlay = useMusicStore(state => state.togglePlay);
   const toggleDeckExpanded = useMusicStore(state => state.toggleDeckExpanded);
+  const isMobileAudioBarVisible = useMusicStore(state => state.isMobileAudioBarVisible);
+  const setMobileAudioBarVisible = useMusicStore(state => state.setMobileAudioBarVisible);
 
   const track = playlist[currentIndex] || { title: '', artist: '' };
   const isPlaying = status === 'playing';
 
+  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    if (Math.abs(info.offset.x) > 100) {
+      setMobileAudioBarVisible(false);
+    }
+  };
+
+  if (!isMobileAudioBarVisible) return null;
+
   return (
-    <div
+    <motion.div
+      drag="x"
+      dragConstraints={{ left: 0, right: 0 }}
+      dragElastic={0.2}
+      onDragEnd={handleDragEnd}
+      whileDrag={{ scale: 0.95, opacity: 0.8 }}
+      initial={{ y: 50, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
       data-testid="mobile-sticky-audio-bar"
       onClick={toggleDeckExpanded}
       className="md:hidden fixed inset-x-2 z-40 h-11 bg-stone-900/90 backdrop-blur-xl border border-white/10 rounded-xl px-3 flex items-center justify-between shadow-lg"
@@ -45,6 +64,6 @@ export function MobileStickyAudioBar() {
       >
         {isPlaying ? <Pause size={14} /> : <Play size={14} className="ml-0.5" />}
       </button>
-    </div>
+    </motion.div>
   );
 }

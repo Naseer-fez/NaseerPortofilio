@@ -93,13 +93,17 @@ export const TopMenuBar: React.FC = () => {
   };
 
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setOpenMenu(null);
       }
     };
     window.addEventListener('mousedown', handleClickOutside);
-    return () => window.removeEventListener('mousedown', handleClickOutside);
+    window.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      window.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('touchstart', handleClickOutside);
+    };
   }, []);
 
   return (
@@ -337,11 +341,11 @@ export const TopMenuBar: React.FC = () => {
           style={{ gap: '10px' }}
           className="flex items-center space-x-[10px]"
         >
-          {/* WiFi Indicator */}
+          {/* WiFi Indicator (Hidden on mobile) */}
           <button
             type="button"
             data-testid="wifi-indicator"
-            className="p-1 rounded hover:bg-black/10 dark:hover:bg-white/15 transition-colors cursor-default flex items-center justify-center"
+            className="hidden sm:flex p-1 rounded hover:bg-black/10 dark:hover:bg-white/15 transition-colors cursor-default items-center justify-center"
             title="Wi-Fi: Connected to Gigabit Fiber"
             aria-label="Wi-Fi Status"
           >
@@ -352,11 +356,11 @@ export const TopMenuBar: React.FC = () => {
             />
           </button>
 
-          {/* Volume Indicator */}
+          {/* Volume Indicator (Hidden on mobile) */}
           <div
             data-testid="tray-icon-volume"
             style={{ width: '16px', height: '16px' }}
-            className="flex items-center justify-center cursor-default opacity-90"
+            className="hidden sm:flex items-center justify-center cursor-default opacity-90"
             title="Volume: 100%"
           >
             <Volume2 className="w-4 h-4" />
@@ -377,14 +381,14 @@ export const TopMenuBar: React.FC = () => {
           </div>
         </div>
 
-        {/* Spotlight Trigger */}
+        {/* Spotlight Trigger (Hidden on mobile) */}
         <button
           type="button"
           data-testid="spotlight-button"
           onClick={() => {
             if (setSpotlightOpen) setSpotlightOpen(true);
           }}
-          className="p-1 rounded hover:bg-black/10 dark:hover:bg-white/15 transition-colors"
+          className="hidden sm:block p-1 rounded hover:bg-black/10 dark:hover:bg-white/15 transition-colors"
           title="Spotlight Search (⌘K)"
           aria-label="Open Spotlight Search"
         >

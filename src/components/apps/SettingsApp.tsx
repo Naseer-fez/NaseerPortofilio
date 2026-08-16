@@ -54,90 +54,96 @@ export function SettingsApp() {
   return (
     <div
       data-testid="settings-app"
-      className="flex-1 w-full h-full bg-stone-950/90 text-white flex overflow-hidden select-none"
+      className="flex-1 w-full h-full bg-stone-950/90 text-white flex flex-col sm:flex-row overflow-hidden select-none"
     >
       {/* Left Sidebar Navigation */}
-      <div className="w-48 sm:w-52 border-r border-white/10 bg-white/[0.02] p-3 flex flex-col space-y-1">
-        <div className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white/40 mb-1">
+      <div className="w-full sm:w-52 border-b sm:border-b-0 sm:border-r border-white/10 bg-white/[0.02] p-2 sm:p-3 flex sm:flex-col overflow-x-auto space-x-2 sm:space-x-0 sm:space-y-1 no-scrollbar shrink-0">
+        <div className="hidden sm:block px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white/40 mb-1">
           Settings
         </div>
 
         <button
           data-testid="settings-nav-wallpaper"
           onClick={() => handleSectionChange('wallpaper')}
-          className={`w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+          className={`flex-shrink-0 w-auto sm:w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
             activeSection === 'wallpaper'
               ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
               : 'text-white/70 hover:bg-white/5 hover:text-white'
           }`}
         >
           <Image size={15} />
-          <span>Wallpaper</span>
+          <span className="hidden sm:inline">Wallpaper</span>
+          <span className="sm:hidden">Wallpaper</span>
         </button>
 
         <button
           data-testid="settings-nav-appearance"
           onClick={() => handleSectionChange('appearance')}
-          className={`w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+          className={`flex-shrink-0 w-auto sm:w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
             activeSection === 'appearance'
               ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
               : 'text-white/70 hover:bg-white/5 hover:text-white'
           }`}
         >
           <SunMoon size={15} />
-          <span>Appearance</span>
+          <span className="hidden sm:inline">Appearance</span>
+          <span className="sm:hidden">Appearance</span>
         </button>
 
         <button
           data-testid="settings-nav-dock"
           onClick={() => handleSectionChange('dock')}
-          className={`w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+          className={`flex-shrink-0 w-auto sm:w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
             activeSection === 'dock'
               ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
               : 'text-white/70 hover:bg-white/5 hover:text-white'
           }`}
         >
           <Sliders size={15} />
-          <span>Dock & Taskbar</span>
+          <span className="hidden sm:inline">Dock & Taskbar</span>
+          <span className="sm:hidden">Dock</span>
         </button>
 
         <button
           data-testid="settings-nav-sound"
           onClick={() => handleSectionChange('sound')}
-          className={`w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+          className={`flex-shrink-0 w-auto sm:w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
             activeSection === 'sound'
               ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
               : 'text-white/70 hover:bg-white/5 hover:text-white'
           }`}
         >
           <Volume2 size={15} />
-          <span>Sound & Audio</span>
+          <span className="hidden sm:inline">Sound & Audio</span>
+          <span className="sm:hidden">Sound</span>
         </button>
 
         <button
           data-testid="settings-nav-displays"
           onClick={() => handleSectionChange('displays')}
-          className={`w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+          className={`flex-shrink-0 w-auto sm:w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
             activeSection === 'displays'
               ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
               : 'text-white/70 hover:bg-white/5 hover:text-white'
           }`}
         >
           <Monitor size={15} />
-          <span>Displays & Ambient</span>
+          <span className="hidden sm:inline">Displays & Ambient</span>
+          <span className="sm:hidden">Displays</span>
         </button>
 
         <button
           data-testid="settings-nav-about"
           onClick={() => handleSectionChange('about')}
-          className={`w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
+          className={`flex-shrink-0 w-auto sm:w-full flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
             activeSection === 'about'
               ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
               : 'text-white/70 hover:bg-white/5 hover:text-white'
           }`}
         >
           <Info size={15} />
-          <span>About System</span>
+          <span className="hidden sm:inline">About System</span>
+          <span className="sm:hidden">About</span>
         </button>
       </div>
 

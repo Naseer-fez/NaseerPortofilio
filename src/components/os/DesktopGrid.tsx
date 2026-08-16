@@ -64,7 +64,7 @@ export const DesktopGrid: React.FC = () => {
       data-testid="desktop-grid"
       style={{ gridAutoFlow: 'column' }}
       onPointerLeave={() => setHoveredAppId(null)}
-      className="hidden md:block absolute inset-0 h-full w-full pointer-events-none overflow-hidden"
+      className="absolute inset-0 h-full w-full pointer-events-none overflow-hidden flex flex-wrap content-start gap-3 p-4 pt-12 md:block md:p-0"
     >
       {DEFAULT_APPS.map((app, index) => {
         const isThisHovered = hoveredAppId === app.id;

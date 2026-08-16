@@ -5,6 +5,7 @@ import { useOSStore } from '@/hooks/useOSStore';
 import { AppMetadata, Position } from '@/types/os';
 import { AppIcon } from '@/components/icons/AppIcon';
 import { GlobalAudioManager } from '@/lib/audio/GlobalAudioManager';
+import { useBreakpoint } from '@/hooks/useBreakpoint';
 
 export interface DesktopIconProps {
   app: AppMetadata;
@@ -41,6 +42,7 @@ export const DesktopIcon: React.FC<DesktopIconProps> = ({
   const [isPressed, setIsPressed] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const { isMobile } = useBreakpoint();
 
   const startPointerRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const isDragActiveRef = useRef(false);
@@ -214,7 +216,7 @@ export const DesktopIcon: React.FC<DesktopIconProps> = ({
       onKeyDown={handleKeyDown}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`group absolute flex flex-col items-center justify-start w-[94px] h-[108px] p-2 rounded-2xl transition-transform duration-150 hover:scale-105 transition-all duration-200 ease-out outline-none select-none pointer-events-auto cursor-pointer ${
+      className={`group flex flex-col items-center justify-start w-[94px] h-[108px] p-2 rounded-2xl transition-transform duration-150 hover:scale-105 transition-all duration-200 ease-out outline-none select-none pointer-events-auto cursor-pointer ${isMobile ? 'relative' : 'absolute'} ${
         isIdle ? 'animate-dock-breathe' : ''
       } ${
         isDragging
@@ -230,8 +232,8 @@ export const DesktopIcon: React.FC<DesktopIconProps> = ({
           : 'scale-100 hover:bg-white/15 border-transparent opacity-100 z-10'
       } border`}
       style={{
-        left: position ? `${currentX}px` : undefined,
-        top: position ? `${currentY}px` : undefined,
+        left: position && !isMobile ? `${currentX}px` : undefined,
+        top: position && !isMobile ? `${currentY}px` : undefined,
         animationDelay: isIdle ? `${index * 0.15}s` : undefined,
         transformOrigin: 'center center',
       }}

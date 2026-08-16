@@ -36,6 +36,7 @@ export const useMusicStore = create<MusicState>((set, get) => ({
   isShuffled: false,
   repeatMode: 'off',
   isDeckExpanded: false,
+  isMobileAudioBarVisible: true,
 
   play: async () => {
     const state = get();
@@ -210,6 +211,10 @@ export const useMusicStore = create<MusicState>((set, get) => ({
 
   setDeckExpanded: (expanded: boolean) => {
     set({ isDeckExpanded: expanded });
+  },
+
+  setMobileAudioBarVisible: (visible: boolean) => {
+    set({ isMobileAudioBarVisible: visible });
   },
 
   setPlaylist: (tracks: Track[]) => {

@@ -3,7 +3,12 @@ import { useState, useEffect } from 'react';
 const MOBILE_QUERY = '(max-width: 767px)';
 
 export function useBreakpoint() {
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(() => {
+    if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
+      return Boolean(window.matchMedia(MOBILE_QUERY).matches);
+    }
+    return false;
+  });
 
   useEffect(() => {
     if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;

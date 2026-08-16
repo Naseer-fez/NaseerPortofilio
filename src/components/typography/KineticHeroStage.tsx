@@ -28,7 +28,7 @@ export function KineticHeroStage({
 
   useEffect(() => {
     const stage = stageRef.current;
-    if (!stage || isMobile) return;
+    if (!stage) return;
 
     const charSpans = Array.from(stage.querySelectorAll<HTMLElement>('[data-char]'));
     charStatesRef.current.clear();
@@ -53,7 +53,11 @@ export function KineticHeroStage({
     };
 
     window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('touchmove', (e: TouchEvent) => {
+      mousePosRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY, active: true };
+    });
     document.addEventListener('pointerleave', handlePointerLeave);
+    document.addEventListener('touchend', handlePointerLeave);
 
     let animId: number;
     let time = 0;
@@ -112,7 +116,9 @@ export function KineticHeroStage({
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('touchmove', handlePointerMove as any);
       document.removeEventListener('pointerleave', handlePointerLeave);
+      document.removeEventListener('touchend', handlePointerLeave);
     };
   }, []);
 
