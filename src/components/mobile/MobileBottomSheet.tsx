@@ -54,10 +54,11 @@ export function MobileBottomSheet({ windowState, children }: MobileBottomSheetPr
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      className="fixed inset-x-0 bottom-0 z-40 bg-stone-900 text-white rounded-t-2xl shadow-2xl flex flex-col overflow-hidden transition-transform duration-200"
+      className="fixed inset-x-0 bottom-0 z-40 bg-stone-900 text-white rounded-t-2xl shadow-2xl flex flex-col overflow-hidden transition-transform duration-200 max-w-full"
       style={{
         height: '92vh',
         width: '100vw',
+        maxWidth: '100vw',
         borderTopLeftRadius: '16px',
         borderTopRightRadius: '16px',
         transform: `translateY(${translateY}px)`,
@@ -67,15 +68,16 @@ export function MobileBottomSheet({ windowState, children }: MobileBottomSheetPr
       {/* Handle Bar */}
       <div
         data-testid={`sheet-drag-handle-${windowState.id}`}
-        className="w-full py-3 flex flex-col items-center justify-center cursor-grab"
+        className="w-full py-3 flex flex-col items-center justify-center cursor-grab shrink-0 bg-stone-900 select-none touch-none"
       >
         <div className="w-10 h-1 bg-white/30 rounded-full mb-2" />
         <div className="w-full px-4 flex items-center justify-between">
-          <span className="text-sm font-semibold">{windowState.title}</span>
+          <span className="text-sm font-semibold truncate pr-2">{windowState.title}</span>
           <button
             data-testid={`sheet-close-btn-${windowState.id}`}
             onClick={() => closeWindow(windowState.id)}
-            className="p-1 rounded-full bg-white/10"
+            className="p-1.5 rounded-full bg-white/10 hover:bg-white/20 active:bg-white/30 text-white/80 transition-colors shrink-0"
+            aria-label={`Close ${windowState.title}`}
           >
             <X size={16} />
           </button>
@@ -86,10 +88,10 @@ export function MobileBottomSheet({ windowState, children }: MobileBottomSheetPr
       <div
         ref={contentRef}
         data-testid={`sheet-content-${windowState.id}`}
-        className="flex-1 overflow-y-auto p-4"
+        className="flex-1 overflow-y-auto min-h-0 w-full flex flex-col"
       >
         {children || (
-          <div className="space-y-4">
+          <div className="p-4 space-y-4">
             <h2 className="text-lg font-bold">{windowState.title}</h2>
             <p className="text-white/60">Mobile view for {windowState.title}.</p>
           </div>

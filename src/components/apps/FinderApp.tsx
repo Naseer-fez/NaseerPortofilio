@@ -433,8 +433,17 @@ export function FinderApp() {
                           : 'hover:bg-white/5 border border-transparent'
                       }`}
                     >
-                      <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-2 shadow-sm">
-                        {renderItemIcon(item.iconName, 'w-6 h-6')}
+                      <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-2 shadow-sm overflow-hidden">
+                        {item.type === 'picture' && item.realFilePath ? (
+                          <img
+                            src={item.realFilePath}
+                            alt={item.name}
+                            className="w-full h-full object-cover rounded-xl"
+                            loading="lazy"
+                          />
+                        ) : (
+                          renderItemIcon(item.iconName, 'w-6 h-6')
+                        )}
                       </div>
                       <span className="text-xs font-medium text-center text-white/90 line-clamp-2 break-all">
                         {item.name}
@@ -483,7 +492,18 @@ export function FinderApp() {
                         }`}
                       >
                         <div className="col-span-6 flex items-center space-x-2 truncate pr-2">
-                          {renderItemIcon(item.iconName, 'w-4 h-4 shrink-0')}
+                          {item.type === 'picture' && item.realFilePath ? (
+                            <div className="w-4 h-4 shrink-0 overflow-hidden rounded-xs bg-white/5 flex items-center justify-center">
+                              <img
+                                src={item.realFilePath}
+                                alt={item.name}
+                                className="w-full h-full object-cover"
+                                loading="lazy"
+                              />
+                            </div>
+                          ) : (
+                            renderItemIcon(item.iconName, 'w-4 h-4 shrink-0')
+                          )}
                           <span className="truncate">{item.name}</span>
                         </div>
                         <div className="col-span-3 text-white/50 text-[11px] font-mono truncate pr-2">

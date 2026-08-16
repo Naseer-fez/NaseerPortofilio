@@ -37,17 +37,18 @@ function formatMenuBarTime(now: Date = new Date()): string {
   return `${day} ${month} ${date} ${hours}:${minutes} ${ampm}`;
 }
 
-// LiveClock Subcomponent with SSR Hydration Safety
+// LiveClock Subcomponent with Dynamic System Synchronization
 export const LiveClock: React.FC = () => {
-  const [timeString, setTimeString] = useState<string>(() => formatMenuBarTime());
+  const [timeString, setTimeString] = useState<string>(() => formatMenuBarTime(new Date()));
 
   useEffect(() => {
-    setTimeString(formatMenuBarTime());
-    // Check every second but only trigger re-render when minute changes
-    const interval = setInterval(() => {
-      const next = formatMenuBarTime();
-      setTimeString(prev => prev === next ? prev : next);
-    }, 1000);
+    // Synchronize immediately on client mount
+    const updateTime = () => {
+      setTimeString(formatMenuBarTime(new Date()));
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -221,11 +222,12 @@ export const TopMenuBar: React.FC = () => {
         <span
           data-testid="active-app-name"
           style={{ fontSize: '12.5px', fontWeight: 600 }}
-          className="text-[12.5px] font-semibold tracking-tight text-neutral-900 dark:text-white px-2 py-0.5 rounded hover:bg-black/10 dark:hover:bg-white/15 cursor-default transition-colors"
+          className="text-[12.5px] font-semibold tracking-tight text-neutral-900 dark:text-white px-2 py-0.5 rounded hover:bg-black/10 dark:hover:bg-white/15 cursor-default transition-colors truncate max-w-[100px] sm:max-w-none inline-block"
         >
           <span
             data-testid="menu-bar-active-app"
             style={{ fontSize: '12.5px', fontWeight: 600 }}
+            className="truncate"
           >
             {activeAppName}
           </span>

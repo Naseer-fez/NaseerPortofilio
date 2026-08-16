@@ -168,6 +168,7 @@ export const VFS_ITEMS: VFSItem[] = [
     iconName: 'Image',
     description: 'Shaik Naseer John Ahmed — Profile Portrait',
     contentPreview: 'Developer avatar portrait in high definition.',
+    realFilePath: '/favicon.png',
   },
   {
     id: 'pic-bench-1',
@@ -245,6 +246,7 @@ export const VFS_ITEMS: VFSItem[] = [
     iconName: 'Image',
     description: 'macOS Sonoma Dynamic Glassmorphism Background',
     contentPreview: 'Ultra HD 3840x2160 native desktop wallpaper.',
+    realFilePath: '/logo.png',
   },
   {
     id: 'pic-nascloud-arch',
@@ -256,6 +258,7 @@ export const VFS_ITEMS: VFSItem[] = [
     iconName: 'Image',
     description: 'Outbound Tunnel Connection & NAT Traversal Vector Topology',
     contentPreview: 'Vector graphic detailing outbound socket handshake with coordination server.',
+    realFilePath: '/finder-data/apirlpy/benchmarks/5_rate_limit_security_integrity.svg',
   },
   {
     id: 'pic-rate-limiter',
@@ -267,6 +270,7 @@ export const VFS_ITEMS: VFSItem[] = [
     iconName: 'Image',
     description: 'P95/P99 latency distribution graph across 100k requests',
     contentPreview: 'Performance plot showing linear tail-latency scaling under heavy concurrent load.',
+    realFilePath: '/finder-data/apirlpy/benchmarks/1_single_worker_throughput_latency.svg',
   },
 
   // Downloads

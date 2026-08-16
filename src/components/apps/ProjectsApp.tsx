@@ -113,7 +113,7 @@ export function ProjectsApp() {
       {/* Top Controls Header */}
       <div className="p-4 border-b border-white/10 bg-white/[0.02] flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
         {/* Category Filter Pills */}
-        <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
+        <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 sm:pb-0 no-scrollbar max-w-full">
           {CATEGORIES.map(cat => {
             const isActive = activeCategory === cat.filterKey;
             const count =
@@ -126,7 +126,7 @@ export function ProjectsApp() {
                 key={cat.id}
                 data-testid={`project-filter-${cat.id}`}
                 onClick={() => handleCategorySelect(cat.filterKey)}
-                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap flex items-center space-x-1.5 ${
+                className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap flex items-center space-x-1.5 ${
                   isActive
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30 font-semibold'
                     : 'bg-white/10 text-white/70 hover:bg-white/15 hover:text-white'

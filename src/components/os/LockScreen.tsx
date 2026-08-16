@@ -97,7 +97,7 @@ export function LockScreen() {
               ease: [0.16, 1, 0.3, 1],
             },
           }}
-          drag={!isMobile ? "y" : false}
+          drag="y"
           dragConstraints={{ top: 0, bottom: 0 }}
           dragElastic={{ top: 0.7, bottom: 0.1 }}
           onDragEnd={(_e, info) => {
