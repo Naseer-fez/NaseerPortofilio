@@ -39,6 +39,7 @@ import { MobileStickyAudioBar } from '@/components/mobile/MobileStickyAudioBar';
 export default function DesktopPage() {
   const [mounted, setMounted] = useState(false);
   const windows = useOSStore((state) => state.windows);
+  const activeWindowId = useOSStore((state) => state.activeWindowId);
 
   useEffect(() => {
     setMounted(true);
@@ -59,17 +60,21 @@ export default function DesktopPage() {
           {/* Layer 2 (z-20..49): Window Manager */}
           <WindowManager />
 
-          {/* Mobile Layer: Mobile Bottom Sheets for Open Windows */}
+          {/* Mobile Layer: Mobile Bottom Sheet for Single Active Window (No background stacking) */}
           <div className="md:hidden">
-            {Object.values(windows || {}).map((win) => {
-              if (!win.isOpen) return null;
-              const AppComponent = APP_REGISTRY[win.id];
+            {(() => {
+              const activeWin = activeWindowId ? windows?.[activeWindowId] : null;
+              const openWins = Object.values(windows || {}).filter(w => w.isOpen);
+              const winToRender = (activeWin && activeWin.isOpen) ? activeWin : openWins[openWins.length - 1];
+
+              if (!winToRender || !winToRender.isOpen) return null;
+              const AppComponent = APP_REGISTRY[winToRender.id];
               return (
-                <MobileBottomSheet key={win.id} windowState={win}>
+                <MobileBottomSheet key={winToRender.id} windowState={winToRender}>
                   {AppComponent ? <AppComponent /> : null}
                 </MobileBottomSheet>
               );
-            })}
+            })()}
           </div>
 
           {/* Layer 3 (z-50): Top Menu Bar */}

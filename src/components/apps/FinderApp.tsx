@@ -127,6 +127,19 @@ export function FinderApp() {
     }
   };
 
+  const handleLaunchApp = (appId: string) => {
+    GlobalAudioManager.getInstance().playFx('window-open');
+    setIsMobileSheetOpen(false);
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      Object.keys(useOSStore.getState().windows || {}).forEach(id => {
+        if (id !== appId) {
+          useOSStore.getState().closeWindow(id as any);
+        }
+      });
+    }
+    openWindow(appId);
+  };
+
   const handleItemClick = (item: VFSItem) => {
     GlobalAudioManager.getInstance().playFx('click');
     setSelectedItemId(item.id);
@@ -135,8 +148,7 @@ export function FinderApp() {
 
   const handleItemDoubleClick = (item: VFSItem) => {
     if (item.type === 'app' && item.appId) {
-      GlobalAudioManager.getInstance().playFx('window-open');
-      openWindow(item.appId);
+      handleLaunchApp(item.appId);
     } else if (item.type === 'picture' && item.realFilePath) {
       GlobalAudioManager.getInstance().playFx('click');
       setFullScreenImage(item.realFilePath);
@@ -238,10 +250,7 @@ export function FinderApp() {
 
       {selectedItem.type === 'app' && selectedItem.appId && (
         <button
-          onClick={() => {
-            GlobalAudioManager.getInstance().playFx('window-open');
-            openWindow(selectedItem.appId!);
-          }}
+          onClick={() => handleLaunchApp(selectedItem.appId!)}
           className="w-full py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center justify-center space-x-1.5 shadow-md shadow-blue-600/30 transition-all mt-4 shrink-0"
         >
           <Eye size={14} />
@@ -361,6 +370,28 @@ export function FinderApp() {
             />
           </div>
         </div>
+      </div>
+
+      {/* Mobile Folder Selector Tabs (visible on mobile only) */}
+      <div className="md:hidden flex items-center space-x-1.5 px-3 py-2 border-b border-white/10 bg-white/[0.02] overflow-x-auto no-scrollbar shrink-0">
+        {VFS_FOLDERS.map(folder => {
+          const isActive = currentFolderId === folder.id;
+          return (
+            <button
+              key={folder.id}
+              data-testid={`finder-mobile-tab-${folder.id}`}
+              onClick={() => navigateToFolder(folder.id)}
+              className={`shrink-0 px-2.5 py-1 rounded-lg text-xs flex items-center space-x-1.5 whitespace-nowrap transition-all ${
+                isActive
+                  ? 'bg-blue-600 text-white font-semibold shadow-sm'
+                  : 'bg-white/5 text-white/70 hover:bg-white/10 hover:text-white'
+              }`}
+            >
+              {renderItemIcon(folder.iconName, 'w-3.5 h-3.5')}
+              <span>{folder.name}</span>
+            </button>
+          );
+        })}
       </div>
 
       <div className="flex-1 flex overflow-hidden">
