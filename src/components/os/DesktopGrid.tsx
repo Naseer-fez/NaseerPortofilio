@@ -66,7 +66,7 @@ export const DesktopGrid: React.FC = () => {
       data-testid="desktop-grid"
       style={{ gridAutoFlow: 'column' }}
       onPointerLeave={() => setHoveredAppId(null)}
-      className="absolute inset-0 h-full w-full pointer-events-none overflow-y-auto grid grid-cols-3 sm:grid-cols-4 md:block md:overflow-hidden gap-y-4 gap-x-2 p-4 pt-12 md:p-0 select-none"
+      className="absolute inset-0 h-full w-full pointer-events-none p-4 pt-12 flex flex-wrap content-start items-start justify-start gap-x-2 sm:gap-x-4 gap-y-4 md:block md:p-0 md:overflow-hidden select-none"
     >
       {DEFAULT_APPS.map((app, index) => {
         const isThisHovered = hoveredAppId === app.id;
@@ -74,22 +74,21 @@ export const DesktopGrid: React.FC = () => {
         const currentPos = desktopIconPositions[app.id] || getDefaultPosition(index);
 
         return (
-          <div key={app.id} className="flex justify-center md:inline">
-            <DesktopIcon
-              app={app}
-              index={index}
-              position={currentPos}
-              onPositionChange={(pos) => handlePositionChange(app.id, pos)}
-              isHovered={isThisHovered}
-              isOtherHovered={isAnotherHovered}
-              onHoverChange={(hovered) => setHoveredAppId(hovered ? app.id : null)}
-              isSelected={
-                selectedIconIds?.includes(app.id) || selectedIconId === app.id
-              }
-              onSelect={handleSelect}
-              onOpen={handleOpen}
-            />
-          </div>
+          <DesktopIcon
+            key={app.id}
+            app={app}
+            index={index}
+            position={currentPos}
+            onPositionChange={(pos) => handlePositionChange(app.id, pos)}
+            isHovered={isThisHovered}
+            isOtherHovered={isAnotherHovered}
+            onHoverChange={(hovered) => setHoveredAppId(hovered ? app.id : null)}
+            isSelected={
+              selectedIconIds?.includes(app.id) || selectedIconId === app.id
+            }
+            onSelect={handleSelect}
+            onOpen={handleOpen}
+          />
         );
       })}
     </div>

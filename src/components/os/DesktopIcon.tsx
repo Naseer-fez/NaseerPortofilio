@@ -216,7 +216,7 @@ export const DesktopIcon: React.FC<DesktopIconProps> = ({
       onKeyDown={handleKeyDown}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`group flex flex-col items-center justify-start w-[94px] h-[108px] p-2 rounded-2xl transition-transform duration-150 hover:scale-105 transition-all duration-200 ease-out outline-none select-none pointer-events-auto cursor-pointer ${isMobile ? 'relative' : 'absolute'} ${
+      className={`group flex flex-col items-center justify-start w-[84px] h-[98px] sm:w-[94px] sm:h-[108px] shrink-0 p-1.5 sm:p-2 rounded-2xl transition-transform duration-150 hover:scale-105 transition-all duration-200 ease-out outline-none select-none pointer-events-auto cursor-pointer static md:absolute ${
         isIdle ? 'animate-dock-breathe' : ''
       } ${
         isDragging
@@ -232,8 +232,8 @@ export const DesktopIcon: React.FC<DesktopIconProps> = ({
           : 'scale-100 hover:bg-white/15 border-transparent opacity-100 z-10'
       } border`}
       style={{
-        left: position && !isMobile ? `${currentX}px` : undefined,
-        top: position && !isMobile ? `${currentY}px` : undefined,
+        left: position ? `${currentX}px` : undefined,
+        top: position ? `${currentY}px` : undefined,
         animationDelay: isIdle ? `${index * 0.15}s` : undefined,
         transformOrigin: 'center center',
       }}

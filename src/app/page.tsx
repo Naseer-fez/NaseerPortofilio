@@ -90,13 +90,10 @@ export default function DesktopPage() {
           {/* Layer 5 (z-[9992]): Retro SONY Cassette Music Player Widget */}
           <RetroCassettePlayer />
 
-          {/* Layer 6 (z-[9995]): Spotlight Search */}
-          <SpotlightSearch />
+          {/* Layer 7 (z-[10000]): Lock Screen Layer */}
+          <LockScreen />
         </>
       ) : null}
-
-      {/* Layer 7 (z-[10000]): Lock Screen Layer */}
-      <LockScreen />
 
       {/* Layer 8 (z-[10001]): Kinetic Cursor */}
       <KineticCursor />

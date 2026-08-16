@@ -187,7 +187,7 @@ export function LockScreen() {
               {/* User Avatar with Glowing Ring */}
               <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full ring-2 ring-white/30 shadow-[0_0_20px_rgba(255,255,255,0.2)] flex items-center justify-center bg-gradient-to-tr from-stone-900 via-stone-800 to-stone-700 overflow-hidden group-hover:scale-105 transition-transform duration-200">
                 <img
-                  src="/logo.png"
+                  src="/favicon.png"
                   alt={PROFILE_DATA.name}
                   className="w-full h-full object-cover"
                   onError={(e) => {
