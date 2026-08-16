@@ -5,6 +5,7 @@ import { useOSStore } from '@/hooks/useOSStore';
 import { GlobalAudioManager } from '@/lib/audio/GlobalAudioManager';
 import { PROJECTS } from '@/data/projects';
 import { PROFILE_DATA } from '@/data/profile';
+import { CornerDownLeft } from 'lucide-react';
 
 interface TerminalEntry {
   id: string;
@@ -26,6 +27,18 @@ const COMMANDS = [
   'sudo',
   'cat',
   'matrix',
+];
+
+const QUICK_COMMANDS = [
+  'help',
+  'about',
+  'projects',
+  'skills',
+  'neofetch',
+  'matrix',
+  'date',
+  'contact',
+  'clear',
 ];
 
 const VIRTUAL_FILES: Record<string, string> = {
@@ -58,14 +71,14 @@ function NeofetchOutput() {
   }, []);
 
   return (
-    <div data-testid="neofetch-banner" className="my-2 select-text font-mono text-xs leading-relaxed">
-      <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-start">
-        <div className="sm:col-span-4 text-emerald-400 font-bold whitespace-pre">
+    <div data-testid="neofetch-banner" className="my-2 select-text font-mono text-[11px] sm:text-xs leading-relaxed">
+      <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4 items-start">
+        <div className="sm:col-span-4 text-emerald-400 font-bold whitespace-pre text-[10.5px] sm:text-xs leading-tight">
 {`   /\\_/\\
   ( o.o )  Portfolio OS
    > ^ <   Sonoma v2.4`}
         </div>
-        <div className="sm:col-span-8 space-y-0.5 text-white/90">
+        <div className="sm:col-span-8 space-y-0.5 text-white/90 text-[10.5px] sm:text-xs">
           <div><span className="text-blue-400 font-semibold">naseer@portfolio-os</span></div>
           <div className="text-white/30">-----------------------</div>
           <div><span className="text-purple-400 font-medium">OS:</span> macOS Sonoma (Web Edition)</div>
@@ -81,7 +94,7 @@ function NeofetchOutput() {
       </div>
 
       {/* ANSI Color palette swatches */}
-      <div className="flex space-x-1.5 mt-3 pt-2 border-t border-white/10">
+      <div className="flex space-x-1.5 mt-2.5 pt-2 border-t border-white/10">
         <div className="w-4 h-3 rounded-xs bg-stone-900" />
         <div className="w-4 h-3 rounded-xs bg-red-500" />
         <div className="w-4 h-3 rounded-xs bg-emerald-500" />
@@ -445,12 +458,33 @@ export function TerminalApp() {
         ))}
       </div>
 
-      {/* Active Prompt & Input */}
-      <div className="flex items-center space-x-2 pt-2 mt-auto">
-        <span data-testid="terminal-prompt" className="text-emerald-400 font-bold select-none">
-          dev@macbook
+      {/* Mobile-Friendly Quick Command Suggestion Chips */}
+      <div className="flex items-center space-x-1.5 overflow-x-auto no-scrollbar py-1.5 my-1 border-t border-white/10 shrink-0">
+        <span className="text-[10px] text-white/40 uppercase font-semibold shrink-0 pr-1 select-none">
+          Quick:
         </span>
-        <span className="text-purple-400 font-bold select-none">~</span>
+        {QUICK_COMMANDS.map(cmd => (
+          <button
+            key={cmd}
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              executeCommand(cmd);
+            }}
+            className="shrink-0 px-2 py-0.5 rounded-md bg-white/10 hover:bg-white/20 active:bg-blue-600 text-[11px] text-white/80 hover:text-white transition-all font-mono border border-white/10"
+          >
+            {cmd}
+          </button>
+        ))}
+      </div>
+
+      {/* Active Prompt & Input */}
+      <div className="flex items-center space-x-1.5 sm:space-x-2 pt-1 pb-1 shrink-0 bg-white/[0.02] rounded-lg px-2 border border-white/5">
+        <span data-testid="terminal-prompt" className="text-emerald-400 font-bold select-none shrink-0 text-[11px] sm:text-xs">
+          <span className="hidden sm:inline">dev@macbook ~</span>
+          <span className="sm:hidden">dev</span>
+        </span>
+        <span className="text-purple-400 font-bold select-none hidden sm:inline">~</span>
         <span className="text-white/50 select-none">$</span>
         <input
           ref={inputRef}
@@ -460,10 +494,27 @@ export function TerminalApp() {
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           autoFocus
+          autoCapitalize="none"
+          autoCorrect="off"
           spellCheck={false}
           autoComplete="off"
-          className="flex-1 bg-transparent text-stone-100 outline-none border-none p-0 font-mono text-xs focus:ring-0"
+          placeholder="type a command..."
+          className="flex-1 bg-transparent text-stone-100 outline-none border-none p-0 font-mono text-xs focus:ring-0 placeholder:text-white/20"
         />
+        {input.trim() && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              executeCommand(input);
+              setInput('');
+            }}
+            className="p-1 rounded bg-blue-600 hover:bg-blue-500 text-white transition-colors shrink-0"
+            aria-label="Run command"
+          >
+            <CornerDownLeft size={12} />
+          </button>
+        )}
       </div>
 
       <div ref={endRef} />

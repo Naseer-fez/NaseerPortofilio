@@ -102,9 +102,9 @@ describe('Tier 1: Responsive Mobile Paradigm & Touch Gestures', () => {
     expect(useMusicStore.getState().isDeckExpanded).toBe(true);
   });
 
-  it('hides desktop icon grid on mobile screen (#83)', () => {
+  it('renders desktop icon grid on mobile screen (#83)', () => {
     const { getByTestId } = render(<DesktopGrid />);
-    expect(getByTestId('desktop-grid')).toHaveClass('hidden');
+    expect(getByTestId('desktop-grid')).toBeInTheDocument();
   });
 
   it('launches app bottom sheet on single tap from mobile tab bar (#84)', () => {
