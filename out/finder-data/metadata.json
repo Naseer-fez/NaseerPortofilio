@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Applications",
+    "type": "folder",
+    "path": "/finder-data/Applications",
+    "icon": "folder"
+  },
+  {
+    "name": "Documents",
+    "type": "folder",
+    "path": "/finder-data/Documents",
+    "icon": "folder"
+  },
+  {
+    "name": "Downloads",
+    "type": "folder",
+    "path": "/finder-data/Downloads",
+    "icon": "folder"
+  },
+  {
+    "name": "Pictures",
+    "type": "folder",
+    "path": "/finder-data/Pictures",
+    "icon": "folder"
+  }
+]
