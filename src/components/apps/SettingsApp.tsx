@@ -24,9 +24,12 @@ export function SettingsApp() {
   const [dockMagnify, setDockMagnify] = useState(true);
   const [dockScale, setDockScale] = useState(1.4);
   const [accentColor, setAccentColor] = useState('#3b82f6');
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const wallpaperId = useOSStore(state => state.wallpaperId);
   const setWallpaper = useOSStore(state => state.setWallpaper);
+  const setCustomWallpaper = useOSStore(state => state.setCustomWallpaper);
+  const clearCustomWallpaper = useOSStore(state => state.clearCustomWallpaper);
   const theme = useOSStore(state => state.theme);
   const setTheme = useOSStore(state => state.setTheme);
   const soundEnabled = useOSStore(state => state.soundEnabled);
@@ -44,6 +47,25 @@ export function SettingsApp() {
   const handleWallpaperChange = (id: string) => {
     GlobalAudioManager.getInstance().playFx('click');
     setWallpaper(id);
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 10 * 1024 * 1024) {
+      setUploadError('File is too large. Maximum size is 10MB.');
+      return;
+    }
+    
+    if (!file.type.startsWith('image/')) {
+      setUploadError('Please select a valid image file.');
+      return;
+    }
+    
+    setUploadError(null);
+    GlobalAudioManager.getInstance().playFx('click');
+    await setCustomWallpaper(file);
   };
 
   const handleThemeChange = (newTheme: 'dark' | 'light' | 'system') => {
@@ -196,6 +218,42 @@ export function SettingsApp() {
                   </div>
                 );
               })}
+            </div>
+
+            <div className="pt-4 border-t border-white/10 mt-6">
+              <h4 className="text-sm font-bold text-white">Custom Wallpaper</h4>
+              <p className="text-[11px] text-white/60 mb-3">Upload a custom image (max 10MB)</p>
+              
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-3">
+                  <label className="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-semibold cursor-pointer transition-colors flex items-center gap-2 shadow-lg shadow-blue-500/20">
+                    <Image size={14} />
+                    <span>Choose Image</span>
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      className="hidden" 
+                      onChange={handleFileUpload} 
+                    />
+                  </label>
+                  
+                  {wallpaperId === 'custom' && (
+                    <button 
+                      onClick={() => {
+                        GlobalAudioManager.getInstance().playFx('click');
+                        clearCustomWallpaper();
+                      }}
+                      className="px-4 py-2 bg-white/10 hover:bg-red-500/20 text-white hover:text-red-400 rounded-lg text-xs font-semibold cursor-pointer transition-colors border border-white/10 hover:border-red-500/30"
+                    >
+                      Remove Custom
+                    </button>
+                  )}
+                </div>
+                
+                {uploadError && (
+                  <p className="text-xs text-red-400">{uploadError}</p>
+                )}
+              </div>
             </div>
           </div>
         )}

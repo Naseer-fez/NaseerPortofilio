@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useState, useRef } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { useOSStore } from '@/hooks/useOSStore';
 import { Wallpaper } from './Wallpaper';
 import { DesktopGrid } from './DesktopGrid';
@@ -28,6 +28,14 @@ export const DesktopCanvas: React.FC<DesktopCanvasProps> = ({
   const toggleTheme = useOSStore((state) => state.toggleTheme);
   const clearSelectedIcons = useOSStore((state) => state.clearSelectedIcons);
   const setSelectedIcons = useOSStore((state) => state.setSelectedIcons);
+  const loadCustomWallpaper = useOSStore((state) => state.loadCustomWallpaper);
+  const wallpaperId = useOSStore((state) => state.wallpaperId);
+
+  useEffect(() => {
+    if (wallpaperId === 'custom') {
+      loadCustomWallpaper();
+    }
+  }, []);
 
   const [marquee, setMarquee] = useState<{
     startX: number;

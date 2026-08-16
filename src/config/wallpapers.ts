@@ -178,6 +178,26 @@ export const WALLPAPERS: WallpaperItem[] = [
       shadow: '0 25px 50px -12px rgba(0, 0, 0, 0.85)',
     },
   },
+  {
+    id: 'custom',
+    name: 'Custom Wallpaper',
+    type: 'image',
+    fallbackGradient: 'radial-gradient(circle at 50% 50%, #18181b 0%, #09090b 60%, #000000 100%)',
+    darkOverlay: 'bg-black/30',
+    lightOverlay: 'bg-black/20',
+    themePreference: 'dark',
+    accentColor: '#60a5fa',
+    palette: {
+      primary: '#60a5fa',
+      secondary: '#1e1b4b',
+      accent: '#60a5fa',
+      surface: 'rgba(15, 23, 42, 0.90)',
+      border: 'rgba(59, 130, 246, 0.35)',
+      labelBg: '#f1f5f9',
+      labelText: '#0f172a',
+      shadow: '0 25px 50px -12px rgba(0, 0, 0, 0.75)',
+    },
+  },
 ];
 
 export const DEFAULT_WALLPAPER_ID = 'sonoma-dark';
@@ -269,6 +289,17 @@ export const CASSETTE_THEMES: Record<string, CassetteTheme> = {
     spoolColor: '#fafafa',
     tapeColor: '#221812',
     ledGlow: '#ffffff',
+  },
+  'custom': {
+    bodyBg: '#111420',
+    bodyBorder: '#3b82f6',
+    accent: '#3b82f6',
+    labelBg: '#f1f5f9',
+    labelBorder: '#cbd5e1',
+    labelText: '#0f172a',
+    spoolColor: '#f8fafc',
+    tapeColor: '#221812',
+    ledGlow: '#38bdf8',
   },
 };
 

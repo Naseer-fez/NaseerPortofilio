@@ -147,6 +147,7 @@ export interface OSStoreState {
   desktopMode: DesktopMode;
   theme: ThemeMode;
   wallpaperId: string;
+  customWallpaperUrl: string | null;
 
   // Audio Configuration
   soundEnabled: boolean;
@@ -185,6 +186,9 @@ export interface OSStoreActions {
   setTheme: (theme: ThemeMode) => void;
   toggleTheme: () => void;
   setWallpaper: (wallpaperId: string) => void;
+  setCustomWallpaper: (file: File) => Promise<void>;
+  loadCustomWallpaper: () => Promise<void>;
+  clearCustomWallpaper: () => void;
 
   // Sound Actions
   setSoundEnabled: (enabled: boolean) => void;

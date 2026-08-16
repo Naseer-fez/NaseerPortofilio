@@ -15,6 +15,8 @@ export function LockScreen() {
   const isLocked = useOSStore((state) => state.isLocked);
   const unlock = useOSStore((state) => state.unlock);
   const wallpaperId = useOSStore((state) => state.wallpaperId);
+  const customWallpaperUrl = useOSStore((state) => state.customWallpaperUrl);
+  const loadCustomWallpaper = useOSStore((state) => state.loadCustomWallpaper);
   const soundEnabled = useOSStore((state) => state.soundEnabled);
 
   const [currentTime, setCurrentTime] = useState<Date>(() => new Date());
@@ -26,6 +28,12 @@ export function LockScreen() {
     }, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (wallpaperId === 'custom' && !customWallpaperUrl) {
+      loadCustomWallpaper();
+    }
+  }, [wallpaperId, customWallpaperUrl, loadCustomWallpaper]);
 
   const currentWallpaper = getWallpaperById(wallpaperId);
 
@@ -107,14 +115,21 @@ export function LockScreen() {
               className="w-full h-full transition-all duration-700"
               style={{ background: currentWallpaper.fallbackGradient }}
             >
-              {currentWallpaper.src && (
+              {wallpaperId === 'custom' && customWallpaperUrl ? (
+                <img
+                  src={customWallpaperUrl}
+                  alt="Custom Wallpaper"
+                  className="w-full h-full object-cover"
+                  loading="eager"
+                />
+              ) : currentWallpaper.src ? (
                 <img
                   src={currentWallpaper.src}
                   alt={currentWallpaper.name}
                   className="w-full h-full object-cover"
                   loading="eager"
                 />
-              )}
+              ) : null}
             </div>
             <div className="absolute inset-0 bg-black/45 backdrop-blur-[10px]" />
           </div>

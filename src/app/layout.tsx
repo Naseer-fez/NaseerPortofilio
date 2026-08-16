@@ -27,10 +27,14 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: 'Naseer Portfolio',
   description:
-    'A macOS-inspired desktop operating system portfolio showcase built with Next.js, Tailwind CSS, Framer Motion, and Web Audio.',
+    'Shaik Naseer John Ahmed — macOS Interactive Desktop Operating System portfolio showcase built with Next.js, Tailwind CSS, Framer Motion, and Web Audio.',
   manifest: '/manifest.json',
   icons: {
-    icon: '/favicon.png',
+    icon: [
+      { url: '/favicon.png', type: 'image/png' },
+      { url: '/icon.png', type: 'image/png' },
+      { url: '/favicon.ico' },
+    ],
     shortcut: '/favicon.png',
     apple: '/favicon.png',
   },

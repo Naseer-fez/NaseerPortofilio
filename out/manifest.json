@@ -1,7 +1,7 @@
 {
-  "name": "Shaik Naseer John Ahmed — Portfolio OS",
-  "short_name": "Naseer OS",
-  "description": "Interactive macOS Portfolio Operating System Showcase",
+  "name": "Naseer Portfolio",
+  "short_name": "Naseer Portfolio",
+  "description": "Shaik Naseer John Ahmed — macOS Interactive Portfolio Operating System Showcase",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0c0a09",

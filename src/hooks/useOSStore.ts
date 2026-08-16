@@ -16,6 +16,7 @@ import {
   calculateCascadePosition,
   createInitialWindowState,
 } from '@/lib/constants/apps';
+import { wallpaperStorage } from '@/lib/wallpaperStorage';
 
 const MENU_BAR_HEIGHT = 28;
 const MIN_OVERHANG_VISIBLE = 100;
@@ -78,6 +79,7 @@ export const useOSStore = create<OSStore>()(
       desktopMode: initialPersisted.desktopMode,
       theme: initialPersisted.theme,
       wallpaperId: initialPersisted.wallpaperId,
+      customWallpaperUrl: null,
       soundEnabled: initialPersisted.soundEnabled,
       soundVolume: initialPersisted.soundVolume,
       contextMenu: null,
@@ -467,6 +469,51 @@ export const useOSStore = create<OSStore>()(
         set({ wallpaperId });
         if (typeof window !== 'undefined' && window.localStorage) {
           window.localStorage.setItem('os-wallpaper', wallpaperId);
+        }
+      },
+
+      setCustomWallpaper: async (file: File) => {
+        try {
+          await wallpaperStorage.saveWallpaper(file);
+          const url = URL.createObjectURL(file);
+          set({
+            wallpaperId: 'custom',
+            customWallpaperUrl: url
+          });
+          if (typeof window !== 'undefined' && window.localStorage) {
+            window.localStorage.setItem('os-wallpaper', 'custom');
+          }
+        } catch (error) {
+          console.error('Failed to save custom wallpaper', error);
+        }
+      },
+
+      loadCustomWallpaper: async () => {
+        try {
+          const blob = await wallpaperStorage.getWallpaper();
+          if (blob) {
+            const url = URL.createObjectURL(blob);
+            set({ customWallpaperUrl: url });
+          } else {
+            const state = get();
+            if (state.wallpaperId === 'custom') {
+              state.setWallpaper('sonoma-dark');
+            }
+          }
+        } catch (error) {
+          console.error('Failed to load custom wallpaper', error);
+        }
+      },
+
+      clearCustomWallpaper: () => {
+        wallpaperStorage.clearWallpaper();
+        const state = get();
+        if (state.customWallpaperUrl) {
+          URL.revokeObjectURL(state.customWallpaperUrl);
+        }
+        set({ customWallpaperUrl: null });
+        if (state.wallpaperId === 'custom') {
+          state.setWallpaper('sonoma-dark');
         }
       },
 

@@ -16,6 +16,7 @@ export const Wallpaper: React.FC<WallpaperProps> = ({
 }) => {
   const storeWallpaperId = useOSStore((state) => state.wallpaperId);
   const theme = useOSStore((state) => state.theme);
+  const customWallpaperUrl = useOSStore((state) => state.customWallpaperUrl);
 
   const activeWallpaperId = propWallpaperId || storeWallpaperId || 'sonoma-dark';
   const currentWallpaper = getWallpaperById(activeWallpaperId);
@@ -41,14 +42,21 @@ export const Wallpaper: React.FC<WallpaperProps> = ({
             background: currentWallpaper.fallbackGradient,
           }}
         >
-          {currentWallpaper.src && (
+          {activeWallpaperId === 'custom' && customWallpaperUrl ? (
+            <img
+              src={customWallpaperUrl}
+              alt="Custom Wallpaper"
+              className="w-full h-full object-cover"
+              loading="eager"
+            />
+          ) : currentWallpaper.src ? (
             <img
               src={currentWallpaper.src}
               alt={currentWallpaper.name}
               className="w-full h-full object-cover"
               loading="eager"
             />
-          )}
+          ) : null}
         </motion.div>
       </AnimatePresence>
 
