@@ -1,18 +1,15 @@
 'use client';
 
-import React, { Suspense } from 'react';
-import dynamic from 'next/dynamic';
+import React from 'react';
 import { useOSStore } from '@/hooks/useOSStore';
 import { WindowFrame } from './WindowFrame';
-import { useBreakpoint } from '@/hooks/useBreakpoint';
 
-// Code-split: each app only loads when its window opens
-const TerminalApp = dynamic(() => import('@/components/apps/TerminalApp').then(m => ({ default: m.TerminalApp })), { ssr: false });
-const ProjectsApp = dynamic(() => import('@/components/apps/ProjectsApp').then(m => ({ default: m.ProjectsApp })), { ssr: false });
-const AboutApp = dynamic(() => import('@/components/apps/AboutApp').then(m => ({ default: m.AboutApp })), { ssr: false });
-const FinderApp = dynamic(() => import('@/components/apps/FinderApp').then(m => ({ default: m.FinderApp })), { ssr: false });
-const SettingsApp = dynamic(() => import('@/components/apps/SettingsApp').then(m => ({ default: m.SettingsApp })), { ssr: false });
-const MailApp = dynamic(() => import('@/components/apps/MailApp').then(m => ({ default: m.MailApp })), { ssr: false });
+import { TerminalApp } from '@/components/apps/TerminalApp';
+import { ProjectsApp } from '@/components/apps/ProjectsApp';
+import { AboutApp } from '@/components/apps/AboutApp';
+import { FinderApp } from '@/components/apps/FinderApp';
+import { SettingsApp } from '@/components/apps/SettingsApp';
+import { MailApp } from '@/components/apps/MailApp';
 
 export const APP_REGISTRY: Record<string, React.ComponentType<any>> = {
   terminal: TerminalApp,

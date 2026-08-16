@@ -348,25 +348,6 @@
       "githubUrl": "https://github.com/Naseer-fez/Fitness_Tracker",
       "demoUrl": "https://github.com/Naseer-fez/Fitness_Tracker"
     },
-    {
-      "title": "My-Codes Multi-Repo Orchestrator",
-      "category": "DEVOPS",
-      "featured": false,
-      "description": "Automated Git submodule synchronization harness managing 16 independent repositories with atomic commits and dynamic documentation.",
-      "technologies": [
-        "PowerShell",
-        "Git",
-        "CI/CD Automation",
-        "Shell Scripting"
-      ],
-      "architecture": "Automated submodule synchronization script (sync_repos.ps1) parsing repository URL manifests, performing atomic submodule additions/commits, and dynamically generating markdown catalog tables.",
-      "metrics": [
-        "16 Submodule Synchronization",
-        "Atomic Git Commit Engine",
-        "Automated Documentation Pipeline"
-      ],
-      "githubUrl": "https://github.com/Naseer-fez/My-Codes",
-      "demoUrl": "https://github.com/Naseer-fez/My-Codes"
-    }
+    
   ]
 }

@@ -4,12 +4,14 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, ChevronUp, Lock } from 'lucide-react';
 import { useOSStore } from '@/hooks/useOSStore';
+import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { getWallpaperById } from '@/config/wallpapers';
 import { KineticBrandTitle } from '@/components/typography/KineticBrandTitle';
 import { GlobalAudioManager } from '@/lib/audio/GlobalAudioManager';
 import { PROFILE_DATA } from '@/data/profile';
 
 export function LockScreen() {
+  const { isMobile } = useBreakpoint();
   const isLocked = useOSStore((state) => state.isLocked);
   const unlock = useOSStore((state) => state.unlock);
   const wallpaperId = useOSStore((state) => state.wallpaperId);
@@ -87,7 +89,7 @@ export function LockScreen() {
               ease: [0.16, 1, 0.3, 1],
             },
           }}
-          drag="y"
+          drag={!isMobile ? "y" : false}
           dragConstraints={{ top: 0, bottom: 0 }}
           dragElastic={{ top: 0.7, bottom: 0.1 }}
           onDragEnd={(_e, info) => {
@@ -99,12 +101,21 @@ export function LockScreen() {
           className="fixed inset-0 z-[10000] w-screen h-screen overflow-hidden flex flex-col justify-between items-center select-none cursor-pointer touch-none p-6 sm:p-8"
         >
           {/* Background Wallpaper */}
-          <div className="absolute inset-0 -z-10 w-full h-full">
+          <div className="absolute inset-0 -z-10 w-full h-full overflow-hidden">
             <div
               data-testid="lock-screen-wallpaper"
-              className="w-full h-full"
+              className="w-full h-full transition-all duration-700"
               style={{ background: currentWallpaper.fallbackGradient }}
-            />
+            >
+              {currentWallpaper.src && (
+                <img
+                  src={currentWallpaper.src}
+                  alt={currentWallpaper.name}
+                  className="w-full h-full object-cover"
+                  loading="eager"
+                />
+              )}
+            </div>
             <div className="absolute inset-0 bg-black/45 backdrop-blur-[10px]" />
           </div>
 
@@ -115,6 +126,7 @@ export function LockScreen() {
               <span>NaseerOS Locked</span>
             </div>
             <span
+              id="lock-screen-live-clock"
               data-testid="lock-screen-clock"
               suppressHydrationWarning
               className="text-6xl sm:text-7xl md:text-8xl font-semibold tracking-tight text-white/95 font-sans drop-shadow-[0_8px_20px_rgba(0,0,0,0.6)]"
@@ -122,6 +134,7 @@ export function LockScreen() {
               {timeString}
             </span>
             <span
+              id="lock-screen-live-date"
               data-testid="lock-screen-date"
               suppressHydrationWarning
               className="text-sm sm:text-base md:text-lg font-medium text-white/80 mt-0.5 drop-shadow-md"
@@ -145,11 +158,11 @@ export function LockScreen() {
               />
             </div>
 
-            {/* macOS User Avatar & Unlock Card */}
+            {/* macOS User Avatar & Unlock Card - Instant rendering without pop-in */}
             <motion.div
-              initial={{ scale: 0.96, opacity: 0 }}
+              initial={false}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.1, duration: 0.35 }}
+              transition={{ duration: 0.2 }}
               onClick={(e) => {
                 e.stopPropagation();
                 handleUnlock();

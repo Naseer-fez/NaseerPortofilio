@@ -439,30 +439,6 @@ export const PROJECTS: ProjectItem[] = [
       { label: 'Calculations', value: 'Volume / Overload' },
       { label: 'Interface', value: 'CLI Analytics' },
     ],
-  },
-  {
-    id: 'my-codes-orchestrator',
-    title: 'My-Codes Multi-Repo Orchestrator',
-    category: 'DevOps',
-    tagline: 'Automated Git Submodule Synchronization Harness Managing 16 Repositories',
-    description:
-      'Automated submodule synchronization script parsing repository manifests, performing atomic submodule additions/commits, and dynamically generating markdown catalog tables.',
-    highlights: [
-      'Batch submodule synchronization across 16 public repositories in parallel',
-      'Automated manifest parser reading URLs and configuring Git remote subtrees',
-      'Dynamic markdown documentation generator creating formatted catalog tables',
-      'Atomic commit and staging pipelines ensuring clean version control trees',
-    ],
-    techStack: ['PowerShell', 'Git', 'CI/CD Automation', 'Shell Scripting', 'DevOps'],
-    gradient: 'from-blue-700 via-indigo-700 to-purple-800',
-    iconName: 'FolderGit2',
-    demoUrl: 'https://github.com/Naseer-fez/My-Codes',
-    githubUrl: 'https://github.com/Naseer-fez/My-Codes',
-    featured: false,
-    metrics: [
-      { label: 'Submodules', value: '16 Repositories' },
-      { label: 'Automation', value: 'Atomic Commits' },
-      { label: 'Pipeline', value: 'Doc Generation' },
-    ],
-  },
+  }
+  
 ];

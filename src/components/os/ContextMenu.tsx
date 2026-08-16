@@ -3,8 +3,10 @@
 import React, { useEffect, useRef } from 'react';
 import { useOSStore } from '@/hooks/useOSStore';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useBreakpoint } from '@/hooks/useBreakpoint';
 
 export const ContextMenu: React.FC = () => {
+  const { isMobile } = useBreakpoint();
   const contextMenu = useOSStore((state) => state.contextMenu);
   const closeContextMenu = useOSStore((state) => state.closeContextMenu);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -34,7 +36,7 @@ export const ContextMenu: React.FC = () => {
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.96 }}
-        transition={{ duration: 0.12 }}
+        transition={{ duration: isMobile ? 0 : 0.12 }}
         className="fixed z-[9995] w-56 rounded-lg bg-white/80 dark:bg-neutral-900/80 backdrop-blur-2xl border border-black/10 dark:border-white/15 shadow-2xl py-1 text-[13px] text-neutral-800 dark:text-neutral-200 select-none pointer-events-auto"
         style={{
           top: `${contextMenu.y}px`,

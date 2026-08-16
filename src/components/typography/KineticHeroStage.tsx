@@ -4,6 +4,7 @@ import React, { useRef, useEffect } from 'react';
 import { useOSStore } from '@/hooks/useOSStore';
 import { SplitText } from './SplitText';
 import { solveEulerStep, calculateGaussianFalloff, SpringState } from '@/lib/physics/eulerSolver';
+import { useBreakpoint } from '@/hooks/useBreakpoint';
 
 interface KineticHeroStageProps {
   heading?: string;
@@ -11,11 +12,12 @@ interface KineticHeroStageProps {
 }
 
 export function KineticHeroStage({
-  heading = 'CREATIVE DEVELOPER',
+  heading = 'Naseer',
   subheading = 'BACKEND & SYSTEMS ARCHITECT',
 }: KineticHeroStageProps) {
   const desktopMode = useOSStore(state => state.desktopMode);
   const windows = useOSStore(state => state.windows);
+  const { isMobile } = useBreakpoint();
   const stageRef = useRef<HTMLDivElement>(null);
 
   const charStatesRef = useRef<Map<HTMLElement, { xState: SpringState; yState: SpringState; scaleState: SpringState; origin: { x: number; y: number }; charIndex: number }>>(new Map());
@@ -26,7 +28,7 @@ export function KineticHeroStage({
 
   useEffect(() => {
     const stage = stageRef.current;
-    if (!stage) return;
+    if (!stage || isMobile) return;
 
     const charSpans = Array.from(stage.querySelectorAll<HTMLElement>('[data-char]'));
     charStatesRef.current.clear();

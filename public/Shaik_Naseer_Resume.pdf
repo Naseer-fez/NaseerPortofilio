@@ -1,0 +1,351 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 3 0 R >>
+endobj
+2 0 obj
+<< /Type /Outlines /Count 0 >>
+endobj
+3 0 obj
+<< /Type /Pages /Kids [4 0 R] /Count 1 >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 3 0 R /MediaBox [0 0 595.28 841.89] /Contents 7 0 R /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+7 0 obj
+<< /Length 6654 >>
+stream
+0.150 0.450 0.950 rg
+0.00 835.89 595.28 6.00 re f
+0.080 0.120 0.200 rg
+BT
+/F2 20 Tf
+45.00 799.89 Td
+(SHAIK NASEER JOHN AHMED) Tj
+ET
+0.150 0.400 0.850 rg
+BT
+/F2 10 Tf
+45.00 783.89 Td
+(Backend & Systems Engineer | Distributed Architectures & High-Concurrency Systems) Tj
+ET
+0.350 0.400 0.480 rg
+BT
+/F1 8.5 Tf
+45.00 769.89 Td
+(Hyderabad, India  |  feznaseer777@gmail.com  |  github.com/Naseer-fez  |  linkedin.com/in/shaik-naseer-633010323) Tj
+ET
+0.820 0.850 0.900 RG
+1.00 w
+45.00 759.89 m 550.28 759.89 l S
+0.100 0.300 0.750 rg
+BT
+/F2 10.5 Tf
+45.00 741.89 Td
+(EXECUTIVE SUMMARY) Tj
+ET
+0.200 0.500 0.900 RG
+1.20 w
+45.00 737.89 m 550.28 737.89 l S
+0.200 0.220 0.260 rg
+BT
+/F1 8.5 Tf
+45.00 727.89 Td
+(Backend and systems developer specializing in Python, high-throughput streaming I/O, concurrency control,) Tj
+ET
+0.200 0.220 0.260 rg
+BT
+/F1 8.5 Tf
+45.00 716.89 Td
+(and database architecture. Creator of open-source packages on PyPI, robust WSGI backends, and low-latency data) Tj
+ET
+0.200 0.220 0.260 rg
+BT
+/F1 8.5 Tf
+45.00 705.89 Td
+(pipelines with expertise in WAL-mode SQLite, PostgreSQL concurrency, and scalable systems engineering.) Tj
+ET
+0.100 0.300 0.750 rg
+BT
+/F2 10.5 Tf
+45.00 676.89 Td
+(EDUCATION) Tj
+ET
+0.200 0.500 0.900 RG
+1.20 w
+45.00 672.89 m 550.28 672.89 l S
+0.100 0.120 0.180 rg
+BT
+/F2 9.5 Tf
+45.00 662.89 Td
+(Vignana Bharathi Institute of Technology \(VBIT\)) Tj
+ET
+0.350 0.400 0.480 rg
+BT
+/F2 8.5 Tf
+450.28 662.89 Td
+(2024 -- 2028 \(Expected\)) Tj
+ET
+0.250 0.300 0.360 rg
+BT
+/F1 8.5 Tf
+45.00 651.89 Td
+(Bachelor of Technology \(B.Tech\) in Computer Science and Business Systems \(CSBS\) -- Hyderabad, India) Tj
+ET
+0.350 0.400 0.450 rg
+BT
+/F1 8.0 Tf
+53.00 641.89 Td
+(- Core Focus: Systems Programming, Operating Systems, Database Management, Data Structures & Distributed Algorithms.) Tj
+ET
+0.100 0.300 0.750 rg
+BT
+/F2 10.5 Tf
+45.00 615.89 Td
+(TECHNICAL SKILLS MATRIX) Tj
+ET
+0.200 0.500 0.900 RG
+1.20 w
+45.00 611.89 m 550.28 611.89 l S
+0.120 0.160 0.220 rg
+BT
+/F2 8.5 Tf
+45.00 601.89 Td
+(Languages & Core:) Tj
+ET
+0.250 0.280 0.340 rg
+BT
+/F1 8.5 Tf
+165.00 601.89 Td
+(Python, SQL \(PostgreSQL, MySQL, SQLite\), C, C++, JavaScript, TypeScript, HTML5, CSS3, Shell) Tj
+ET
+0.120 0.160 0.220 rg
+BT
+/F2 8.5 Tf
+45.00 590.89 Td
+(Backend & Frameworks:) Tj
+ET
+0.250 0.280 0.340 rg
+BT
+/F1 8.5 Tf
+165.00 590.89 Td
+(Flask, Flask-JWT-Extended, SQLAlchemy ORM, Gunicorn, Waitress WSGI, stream-zip, rapidfuzz, NumPy) Tj
+ET
+0.120 0.160 0.220 rg
+BT
+/F2 8.5 Tf
+45.00 579.89 Td
+(Storage & Databases:) Tj
+ET
+0.250 0.280 0.340 rg
+BT
+/F1 8.5 Tf
+165.00 579.89 Td
+(PostgreSQL, MySQL, SQLite \(WAL Mode\), In-Memory Caching, Reentrant Locking, Dirty-Flag Invalidation) Tj
+ET
+0.120 0.160 0.220 rg
+BT
+/F2 8.5 Tf
+45.00 568.89 Td
+(DevOps & Cloud:) Tj
+ET
+0.250 0.280 0.340 rg
+BT
+/F1 8.5 Tf
+165.00 568.89 Td
+(Docker Containerization, Linux CLI, Git, GitHub Actions CI/CD, Cloudflare Tunnel, PyPI Publishing) Tj
+ET
+0.100 0.300 0.750 rg
+BT
+/F2 10.5 Tf
+45.00 537.89 Td
+(EXPERIENCE & LEADERSHIP) Tj
+ET
+0.200 0.500 0.900 RG
+1.20 w
+45.00 533.89 m 550.28 533.89 l S
+0.100 0.120 0.180 rg
+BT
+/F2 9.5 Tf
+45.00 523.89 Td
+(Helping Hands NGO & Departmental Coding Club -- VBIT) Tj
+ET
+0.350 0.400 0.480 rg
+BT
+/F2 8.5 Tf
+470.28 523.89 Td
+(2024 -- Present) Tj
+ET
+0.180 0.450 0.850 rg
+BT
+/F2 8.5 Tf
+45.00 512.89 Td
+(General Secretary & Technical Lead) Tj
+ET
+0.250 0.280 0.340 rg
+BT
+/F1 8.0 Tf
+53.00 502.89 Td
+(- Architected and deployed student database management systems and automated digital registration portals.) Tj
+ET
+0.250 0.280 0.340 rg
+BT
+/F1 8.0 Tf
+53.00 492.89 Td
+(- Conducted code review sessions and mentored junior developers in Python algorithms and clean code practices.) Tj
+ET
+0.250 0.280 0.340 rg
+BT
+/F1 8.0 Tf
+53.00 482.89 Td
+(- Spearheaded technical events, charity hackathons, and departmental coding symposiums across the institute.) Tj
+ET
+0.100 0.120 0.180 rg
+BT
+/F2 9.5 Tf
+45.00 470.89 Td
+(Open-Source Software & Python Package Maintainer) Tj
+ET
+0.350 0.400 0.480 rg
+BT
+/F2 8.5 Tf
+470.28 470.89 Td
+(2024 -- Present) Tj
+ET
+0.180 0.450 0.850 rg
+BT
+/F2 8.5 Tf
+45.00 459.89 Td
+(Independent Developer & Publisher) Tj
+ET
+0.250 0.280 0.340 rg
+BT
+/F1 8.0 Tf
+53.00 449.89 Td
+(- Published and actively maintaining open-source tools on the official Python Package Index \(PyPI\).) Tj
+ET
+0.250 0.280 0.340 rg
+BT
+/F1 8.0 Tf
+53.00 439.89 Td
+(- Engineered automated packaging pipelines with PyPA build, Twine validation, and GitHub Actions CI matrix.) Tj
+ET
+0.100 0.300 0.750 rg
+BT
+/F2 10.5 Tf
+45.00 411.89 Td
+(FEATURED TECHNICAL PROJECTS) Tj
+ET
+0.200 0.500 0.900 RG
+1.20 w
+45.00 407.89 m 550.28 407.89 l S
+0.100 0.140 0.220 rg
+BT
+/F2 8.8 Tf
+45.00 397.89 Td
+(PyPackGen -- Automated PyPI Scaffolding Engine) Tj
+ET
+0.350 0.450 0.650 rg
+BT
+/F1 7.5 Tf
+384.68 397.89 Td
+([Python, Packaging CLI, PyPI API, AST]) Tj
+ET
+0.250 0.280 0.340 rg
+BT
+/F1 8.0 Tf
+53.00 387.89 Td
+(- Architected CLI scaffolding utility automating compliant Python packaging structures, LICENSE/pyproject.toml generation, and PyPI release workflows with zero configuration overhead.) Tj
+ET
+0.100 0.140 0.220 rg
+BT
+/F2 8.8 Tf
+45.00 376.89 Td
+(OmniTrack -- Concurrency-Safe Asset Logistics Platform) Tj
+ET
+0.350 0.450 0.650 rg
+BT
+/F1 7.5 Tf
+384.68 376.89 Td
+([Flask, SQLAlchemy, SQLite WAL, HTML5]) Tj
+ET
+0.250 0.280 0.340 rg
+BT
+/F1 8.0 Tf
+53.00 366.89 Td
+(- Engineered a multi-tenant inventory & asset management engine featuring optimistic locking, transactional audit journals, and automated reconciliation under high concurrent requests.) Tj
+ET
+0.100 0.140 0.220 rg
+BT
+/F2 8.8 Tf
+45.00 355.89 Td
+(ZipFlow -- High-Throughput Chunked Streaming Archive Engine) Tj
+ET
+0.350 0.450 0.650 rg
+BT
+/F1 7.5 Tf
+398.48 355.89 Td
+([Python, stream-zip, Generator I/O]) Tj
+ET
+0.250 0.280 0.340 rg
+BT
+/F1 8.0 Tf
+53.00 345.89 Td
+(- Developed a low-memory ZIP archive streaming engine capable of assembling and piping multi-gigabyte archives on-the-fly with constant O\(1\) memory footprint and dynamic compression.) Tj
+ET
+0.100 0.140 0.220 rg
+BT
+/F2 8.8 Tf
+45.00 334.89 Td
+(PyFaker -- High-Throughput Synthetic Data Generation Tool) Tj
+ET
+0.350 0.450 0.650 rg
+BT
+/F1 7.5 Tf
+398.48 334.89 Td
+([Python, RegEx, Synthetic Data Gen]) Tj
+ET
+0.250 0.280 0.340 rg
+BT
+/F1 8.0 Tf
+53.00 324.89 Td
+(- Built a high-performance mock dataset generator capable of producing millions of structured records per minute for backend load testing and benchmark simulations.) Tj
+ET
+0.850 0.880 0.920 RG
+0.80 w
+45.00 28.00 m 550.28 28.00 l S
+0.450 0.500 0.580 rg
+BT
+/F1 7.5 Tf
+45.00 18.00 Td
+(Shaik Naseer John Ahmed -- Portfolio OS Verified Resume) Tj
+ET
+0.450 0.500 0.580 rg
+BT
+/F1 7.5 Tf
+390.28 18.00 Td
+(Generated & Hosted on Naseer.dev Showcase) Tj
+ET
+endstream
+endobj
+xref
+0 8
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000110 00000 n 
+0000000167 00000 n 
+0000000309 00000 n 
+0000000406 00000 n 
+0000000508 00000 n 
+trailer
+<< /Size 8 /Root 1 0 R >>
+startxref
+7214
+%%EOF

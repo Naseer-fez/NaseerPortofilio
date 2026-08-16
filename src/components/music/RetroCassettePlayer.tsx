@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useMusicStore } from '@/hooks/useMusicStore';
 import { useOSStore } from '@/hooks/useOSStore';
 import { GlobalAudioManager } from '@/lib/audio/GlobalAudioManager';
+import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { CassetteReel } from './CassetteReel';
 import { InteractiveScrubber } from './InteractiveScrubber';
 import {
@@ -23,6 +24,7 @@ import {
 import { getCassetteTheme } from '@/config/wallpapers';
 
 export function RetroCassettePlayer() {
+  const { isMobile } = useBreakpoint();
   const playlist = useMusicStore((state) => state.playlist);
   const currentIndex = useMusicStore((state) => state.currentIndex);
   const status = useMusicStore((state) => state.status);
@@ -55,6 +57,8 @@ export function RetroCassettePlayer() {
     src: '/audio/midnight-cupertino.mp3',
     coverArt: '',
   };
+
+  if (isMobile) return null;
 
   const isPlaying = status === 'playing';
   const isPaused = status === 'paused';

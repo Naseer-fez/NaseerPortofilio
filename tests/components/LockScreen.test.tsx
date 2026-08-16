@@ -90,4 +90,16 @@ describe('Lock Screen Component', () => {
     const bg = screen.getByTestId('lock-screen-wallpaper');
     expect(bg.style.background).toContain('radial-gradient');
   });
+
+  it('renders live clock and date with pre-hydration IDs and full profile info immediately', () => {
+    render(<LockScreen />);
+    const clock = document.getElementById('lock-screen-live-clock');
+    const date = document.getElementById('lock-screen-live-date');
+    expect(clock).toBeInTheDocument();
+    expect(date).toBeInTheDocument();
+
+    // Verify avatar card is fully rendered with name and role
+    expect(screen.getByText('Backend & Systems Engineer')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: /Naseer/i })).toBeInTheDocument();
+  });
 });

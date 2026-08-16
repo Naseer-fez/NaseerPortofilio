@@ -28,6 +28,45 @@ function normalizeZIndices(windows: Record<string, AppWindow>): number {
   return 20 + sorted.length;
 }
 
+function getInitialPersistedState() {
+  const defaults = {
+    theme: 'dark' as ThemeMode,
+    wallpaperId: 'sonoma-dark',
+    soundEnabled: true,
+    soundVolume: 0.5,
+    desktopMode: 'workspace' as DesktopMode,
+    desktopIconPositions: {} as Record<string, Position>,
+    cassettePosition: { x: 0, y: 0 } as Position,
+  };
+
+  if (typeof window === 'undefined') {
+    return defaults;
+  }
+
+  try {
+    const rawWallpaper = window.localStorage.getItem('os-wallpaper');
+    const rawTheme = window.localStorage.getItem('os-theme');
+    const rawState =
+      window.localStorage.getItem('macos-portfolio-os-state-v4') ||
+      window.localStorage.getItem('macos-portfolio-os-state');
+    const parsed = rawState ? JSON.parse(rawState)?.state : {};
+
+    return {
+      theme: (rawTheme || parsed?.theme || 'dark') as ThemeMode,
+      wallpaperId: rawWallpaper || parsed?.wallpaperId || 'sonoma-dark',
+      soundEnabled: typeof parsed?.soundEnabled === 'boolean' ? parsed.soundEnabled : true,
+      soundVolume: typeof parsed?.soundVolume === 'number' ? parsed.soundVolume : 0.5,
+      desktopMode: (parsed?.desktopMode || 'workspace') as DesktopMode,
+      desktopIconPositions: parsed?.desktopIconPositions || {},
+      cassettePosition: parsed?.cassettePosition || { x: 0, y: 0 },
+    };
+  } catch {
+    return defaults;
+  }
+}
+
+const initialPersisted = getInitialPersistedState();
+
 export const useOSStore = create<OSStore>()(
   persist(
     (set, get) => ({
@@ -36,18 +75,18 @@ export const useOSStore = create<OSStore>()(
       activeWindowId: null,
       baseZIndex: 20,
       maxZIndex: 25,
-      desktopMode: 'workspace',
-      theme: 'dark',
-      wallpaperId: 'sonoma-dark',
-      soundEnabled: true,
-      soundVolume: 0.5,
+      desktopMode: initialPersisted.desktopMode,
+      theme: initialPersisted.theme,
+      wallpaperId: initialPersisted.wallpaperId,
+      soundEnabled: initialPersisted.soundEnabled,
+      soundVolume: initialPersisted.soundVolume,
       contextMenu: null,
       spotlightOpen: false,
       controlCenterOpen: false,
       isLocked: true,
       selectedIconIds: [],
-      desktopIconPositions: {},
-      cassettePosition: { x: 0, y: 0 },
+      desktopIconPositions: initialPersisted.desktopIconPositions,
+      cassettePosition: initialPersisted.cassettePosition,
 
       // Actions
       openWindow: (id: string, initialConfig?: Partial<AppWindow>) => {

@@ -15,8 +15,6 @@ import {
   Linkedin,
   Twitter,
   MapPin,
-  CheckCircle,
-  ExternalLink,
   Sparkles,
 } from 'lucide-react';
 
@@ -37,23 +35,13 @@ export function AboutApp() {
     setDownloading(true);
     setTimeout(() => {
       setDownloading(false);
-      // Trigger a synthetic download
-      const blob = new Blob([
-        `${PROFILE_DATA.name.toUpperCase()} — ${PROFILE_DATA.title.toUpperCase()}\n\n` +
-        `Location: ${PROFILE_DATA.location}\nEmail: ${PROFILE_DATA.email}\nGitHub: ${PROFILE_DATA.github}\n\n` +
-        `SUMMARY:\n${PROFILE_DATA.bio.join('\n\n')}\n\n` +
-        `EXPERIENCE & LEADERSHIP:\n` +
-        PROFILE_DATA.timeline.map(t => `${t.role} | ${t.company} (${t.year})\n${t.bullets.map(b => `  - ${b}`).join('\n')}`).join('\n\n')
-      ], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url;
-      a.download = 'Shaik_Naseer_John_Ahmed_Resume.txt';
+      a.href = '/resume.pdf';
+      a.download = 'Shaik_Naseer_John_Ahmed_Resume.pdf';
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }, 600);
+    }, 300);
   };
 
   const handleContactClick = () => {
@@ -294,7 +282,7 @@ export function AboutApp() {
           </div>
         )}
 
-        {/* TAB 3: SKILLS MATRIX */}
+        {/* TAB 3: SKILLS MATRIX - Clean 100% filled bars without tags or percentages */}
         {activeTab === 'skills' && (
           <div className="space-y-6 max-w-4xl mx-auto py-2">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -312,21 +300,17 @@ export function AboutApp() {
                     {cat.skills.map(skill => {
                       const testId = `skills-progress-bar-${skill.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
                       return (
-                        <div key={skill.name} className="space-y-1">
+                        <div key={skill.name} className="space-y-1.5">
                           <div className="flex items-center justify-between text-xs">
-                            <span className="font-semibold text-white/90">{skill.name}</span>
-                            <div className="flex items-center space-x-2">
-                              <span className="text-[10px] text-white/50 font-mono">{skill.tag}</span>
-                              <span className="font-bold text-blue-400 font-mono text-[11px]">{skill.level}%</span>
-                            </div>
+                            <span className="font-medium text-white/90">{skill.name}</span>
                           </div>
 
-                          {/* Animated Progress Bar */}
-                          <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+                          {/* 100% Fully Filled Glowing Bar */}
+                          <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
                             <div
                               data-testid={testId}
-                              className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-500"
-                              style={{ width: `${skill.level}%` }}
+                              className="h-full w-full rounded-full bg-gradient-to-r from-blue-500 via-indigo-500 to-cyan-400 shadow-[0_0_8px_rgba(59,130,246,0.35)] transition-all duration-500"
+                              style={{ width: '100%' }}
                             />
                           </div>
                         </div>
@@ -348,13 +332,24 @@ export function AboutApp() {
                 <p className="text-xs font-semibold text-blue-400">{PROFILE_DATA.title}</p>
                 <p className="text-xs text-white/50">{PROFILE_DATA.location} &bull; {PROFILE_DATA.email}</p>
               </div>
-              <button
-                onClick={handleDownloadResume}
-                className="mt-3 sm:mt-0 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center space-x-2 shadow-lg shadow-blue-600/30 transition-all"
-              >
-                <Download size={14} />
-                <span>Download Resume (PDF)</span>
-              </button>
+              <div className="mt-3 sm:mt-0 flex items-center gap-2">
+                <a
+                  href="/resume.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white font-semibold text-xs flex items-center space-x-1.5 transition-all"
+                >
+                  <FileText size={13} />
+                  <span>View PDF</span>
+                </a>
+                <button
+                  onClick={handleDownloadResume}
+                  className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center space-x-2 shadow-lg shadow-blue-600/30 transition-all"
+                >
+                  <Download size={14} />
+                  <span>Download Resume (PDF)</span>
+                </button>
+              </div>
             </div>
 
             <div className="space-y-2">

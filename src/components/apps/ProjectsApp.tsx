@@ -32,7 +32,7 @@ const CATEGORIES = [
   { id: 'full-stack', label: 'Full Stack', filterKey: 'Full Stack' },
   { id: 'cloud', label: 'Cloud', filterKey: 'Cloud' },
   { id: 'database', label: 'Database', filterKey: 'Database' },
-  { id: 'devops', label: 'DevOps', filterKey: 'DevOps' },
+  // { id: 'devops', label: 'DevOps', filterKey: 'DevOps' },
   { id: 'creative', label: 'Creative', filterKey: 'Creative' },
 ];
 

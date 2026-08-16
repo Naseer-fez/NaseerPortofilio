@@ -6,6 +6,7 @@ import { Wallpaper } from './Wallpaper';
 import { DesktopGrid } from './DesktopGrid';
 import { ContextMenu } from './ContextMenu';
 import { DEFAULT_APPS } from '@/lib/constants/apps';
+import { useBreakpoint } from '@/hooks/useBreakpoint';
 
 interface DesktopCanvasProps {
   children?: React.ReactNode;
@@ -18,6 +19,7 @@ export const DesktopCanvas: React.FC<DesktopCanvasProps> = ({
   className,
   withWallpaper = true,
 }) => {
+  const { isMobile } = useBreakpoint();
   const desktopMode = useOSStore((state) => state.desktopMode);
   const setDesktopMode = useOSStore((state) => state.setDesktopMode);
   const setContextMenu = useOSStore((state) => state.setContextMenu);
@@ -55,6 +57,8 @@ export const DesktopCanvas: React.FC<DesktopCanvasProps> = ({
       if (clearSelectedIcons) clearSelectedIcons();
       window.dispatchEvent(new CustomEvent('os:deselect-icons'));
 
+      if (isMobile) return;
+
       setMarquee({
         startX: e.clientX,
         startY: e.clientY,
@@ -62,12 +66,12 @@ export const DesktopCanvas: React.FC<DesktopCanvasProps> = ({
         currentY: e.clientY,
       });
     },
-    [setContextMenu, clearSelectedIcons]
+    [setContextMenu, clearSelectedIcons, isMobile]
   );
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
-      if (!marquee) return;
+      if (!marquee || isMobile) return;
       setMarquee((prev) =>
         prev ? { ...prev, currentX: e.clientX, currentY: e.clientY } : null
       );
@@ -97,7 +101,7 @@ export const DesktopCanvas: React.FC<DesktopCanvasProps> = ({
         setSelectedIcons(selected);
       }
     },
-    [marquee, setSelectedIcons]
+    [marquee, setSelectedIcons, isMobile]
   );
 
   const handlePointerUp = useCallback(() => {

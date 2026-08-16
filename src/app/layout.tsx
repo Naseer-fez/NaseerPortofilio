@@ -29,9 +29,12 @@ export const metadata: Metadata = {
 const themeScript = `
 (function() {
   try {
+    var rawTheme = localStorage.getItem('os-theme');
     var stored = localStorage.getItem('macos-portfolio-os-state-v4') || localStorage.getItem('macos-portfolio-os-state');
     var isDark = true;
-    if (stored) {
+    if (rawTheme) {
+      isDark = rawTheme === 'dark';
+    } else if (stored) {
       var parsed = JSON.parse(stored);
       if (parsed.state && parsed.state.theme) {
         isDark = parsed.state.theme === 'dark';

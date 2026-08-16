@@ -3,6 +3,7 @@
 import React, { useRef, useEffect } from 'react';
 import { SplitText } from './SplitText';
 import { solveEulerStep, calculateGaussianFalloff, SpringState } from '@/lib/physics/eulerSolver';
+import { useBreakpoint } from '@/hooks/useBreakpoint';
 
 export interface KineticBrandTitleProps {
   text?: string;
@@ -19,6 +20,7 @@ export function KineticBrandTitle({
   influenceRadius = 240,
   maxDisplacement = 45,
 }: KineticBrandTitleProps) {
+  const { isMobile } = useBreakpoint();
   const containerRef = useRef<HTMLDivElement>(null);
   const charStatesRef = useRef<
     Map<
@@ -39,7 +41,7 @@ export function KineticBrandTitle({
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container || isMobile) return;
 
     const charSpans = Array.from(container.querySelectorAll<HTMLElement>('[data-char]'));
     charStatesRef.current.clear();
